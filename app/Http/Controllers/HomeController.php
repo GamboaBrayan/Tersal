@@ -11,7 +11,7 @@ class HomeController extends Controller
 {
     public function index()
     {
-        $brands = Brand::orderBy('name')->get();
+        $brands = Brand::where('show_on_home', true)->orderBy('name')->get();
         
         $promotions = Tire::with('brand')
             ->whereNotNull('offer_price')

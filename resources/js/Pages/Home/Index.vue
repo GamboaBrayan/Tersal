@@ -123,6 +123,19 @@ const getDiscountPercentage = (price, offerPrice) => {
         </div>
       </section>
 
+      <!-- Brands Marquee -->
+      <section v-if="brands && brands.length > 0" class="py-10 bg-white border-b border-gray-100 overflow-hidden">
+        <div class="marquee-container group flex w-full">
+          <!-- We repeat the block enough times to fill any screen even with 1 or 2 brands -->
+          <div v-for="n in 10" :key="n" class="marquee-content flex shrink-0 gap-12 pr-12 items-center justify-start min-w-max" :style="{ animationDuration: Math.max(brands.length * 4, 10) + 's' }">
+            <Link :href="`/catalog?brand_id=${brand.id}`" v-for="brand in brands" :key="`${n}-${brand.id}`" class="shrink-0 flex items-center justify-center w-32 h-20 transition-all duration-300 opacity-70 hover:opacity-100 cursor-pointer">
+              <img v-if="brand.logo_url" :src="'/storage/' + brand.logo_url" :alt="brand.name" class="max-w-full max-h-full object-contain grayscale hover:grayscale-0 transition-all duration-300" />
+              <span v-else class="text-xl font-black text-gray-400 hover:text-gray-900 transition-colors">{{ brand.name }}</span>
+            </Link>
+          </div>
+        </div>
+      </section>
+
       <!-- Promociones -->
       <section class="py-16 bg-gray-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -195,3 +208,16 @@ const getDiscountPercentage = (price, offerPrice) => {
     <Footer />
   </div>
 </template>
+
+<style scoped>
+.marquee-container:hover .marquee-content {
+  animation-play-state: paused;
+}
+.marquee-content {
+  animation: marquee 30s linear infinite;
+}
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-100%); }
+}
+</style>

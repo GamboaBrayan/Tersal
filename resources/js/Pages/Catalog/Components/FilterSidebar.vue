@@ -5,7 +5,10 @@ import { ChevronDown, HelpCircle } from 'lucide-vue-next';
 
 const props = defineProps({
   brands: Array,
-  filters: Object
+  filters: Object,
+  widths: Array,
+  profiles: Array,
+  rims: Array
 });
 
 const currentFilters = ref({
@@ -19,6 +22,7 @@ const currentFilters = ref({
 });
 
 const showTooltip = ref(false);
+const isBrandsExpanded = ref(true);
 
 const applyFilters = () => {
   router.get('/catalog', currentFilters.value, { preserveState: true });
@@ -45,15 +49,50 @@ const clearFilters = () => {
 
 <template>
   <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+    <!-- Clear Filters Header -->
+    <div class="mb-6 flex justify-end">
+      <button type="button" @click="clearFilters" class="text-xs text-action hover:text-red-800 font-bold hover:underline cursor-pointer flex items-center gap-1">
+        Borrar Filtros
+      </button>
+    </div>
+
+    <!-- Medidas -->
+    <div class="mb-8">
+      <h3 class="font-bold text-primary mb-4">Medidas</h3>
+      <div class="space-y-4">
+        <div>
+          <label class="text-xs text-gray-500 mb-1 block">Ancho</label>
+          <select v-model="currentFilters.width" @change="applyFilters" class="w-full h-10 px-3 rounded border border-gray-200 text-sm focus:ring-1 focus:ring-primary focus:border-primary">
+            <option :value="null">Todos</option>
+            <option v-for="w in widths" :key="w" :value="w">{{ w }}</option>
+          </select>
+        </div>
+        <div>
+          <label class="text-xs text-gray-500 mb-1 block">Perfil</label>
+          <select v-model="currentFilters.profile" @change="applyFilters" class="w-full h-10 px-3 rounded border border-gray-200 text-sm focus:ring-1 focus:ring-primary focus:border-primary">
+            <option :value="null">Todos</option>
+            <option v-for="p in profiles" :key="p" :value="p">{{ p }}</option>
+          </select>
+        </div>
+        <div>
+          <label class="text-xs text-gray-500 mb-1 block">Aro</label>
+          <select v-model="currentFilters.rim" @change="applyFilters" class="w-full h-10 px-3 rounded border border-gray-200 text-sm focus:ring-1 focus:ring-primary focus:border-primary">
+            <option :value="null">Todos</option>
+            <option v-for="r in rims" :key="r" :value="r">{{ r }}</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
     <!-- Brands -->
     <div class="mb-8">
       <div class="flex items-center justify-between mb-4">
-        <h3 class="font-bold text-primary">Marca</h3>
-        <button type="button" @click="clearFilters" class="text-xs text-action hover:text-red-800 font-bold hover:underline cursor-pointer">
-          Borrar filtros
+        <button type="button" @click="isBrandsExpanded = !isBrandsExpanded" class="flex items-center gap-2 font-bold text-primary focus:outline-none hover:text-gray-900 transition-colors w-full text-left">
+          Marca
+          <ChevronDown :class="{'rotate-180': isBrandsExpanded}" class="w-4 h-4 transition-transform ml-auto" />
         </button>
       </div>
-      <div class="space-y-3">
+      <div v-show="isBrandsExpanded" class="space-y-3 max-h-48 overflow-y-auto pr-2 [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 [&::-webkit-scrollbar-thumb]:rounded-full">
         <label class="flex items-center gap-3 cursor-pointer group">
           <input type="radio" v-model="currentFilters.brand_id" :value="null" @change="applyFilters" class="w-4 h-4 text-primary border-gray-300 focus:ring-primary">
           <span class="text-sm text-gray-600 group-hover:text-gray-900">Todas las marcas</span>

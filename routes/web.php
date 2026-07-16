@@ -57,6 +57,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         // Brands
         Route::get('/brands', [DashboardController::class, 'brands'])->name('brands');
         Route::post('/brands', [DashboardController::class, 'storeBrand'])->name('brands.store');
+        Route::post('/brands/{brand}', [DashboardController::class, 'updateBrand'])->name('brands.update');
         Route::delete('/brands/{brand}', [DashboardController::class, 'destroyBrand'])->name('brands.destroy');
     });
 });

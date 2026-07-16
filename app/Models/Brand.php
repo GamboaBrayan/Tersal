@@ -9,7 +9,7 @@ class Brand extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'logo_url'];
+    protected $fillable = ['name', 'logo_url', 'show_on_home'];
 
     public function tires()
     {

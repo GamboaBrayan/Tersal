@@ -161,11 +161,44 @@ class DashboardController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255|unique:brands,name',
+            'logo' => 'nullable|image|max:2048',
+            'show_on_home' => 'boolean',
         ]);
 
-        Brand::create($validated);
+        $data = [
+            'name' => $validated['name'],
+            'show_on_home' => $request->boolean('show_on_home', true),
+        ];
+
+        if ($request->hasFile('logo')) {
+            $data['logo_url'] = $request->file('logo')->store('brands', 'public');
+        }
+
+        Brand::create($data);
 
         return redirect()->back()->with('success', 'Marca creada exitosamente.');
+    }
+
+    public function updateBrand(Request $request, Brand $brand)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255|unique:brands,name,' . $brand->id,
+            'logo' => 'nullable|image|max:2048',
+            'show_on_home' => 'boolean',
+        ]);
+
+        $data = [
+            'name' => $validated['name'],
+            'show_on_home' => $request->boolean('show_on_home', true),
+        ];
+
+        if ($request->hasFile('logo')) {
+            $data['logo_url'] = $request->file('logo')->store('brands', 'public');
+        }
+
+        $brand->update($data);
+
+        return redirect()->back()->with('success', 'Marca actualizada exitosamente.');
     }
 
     public function destroyBrand(Brand $brand)

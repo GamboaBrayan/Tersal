@@ -9,7 +9,10 @@ import FilterSidebar from './Components/FilterSidebar.vue';
 defineProps({
   tires: Object,
   brands: Array,
-  filters: Object
+  filters: Object,
+  widths: Array,
+  profiles: Array,
+  rims: Array
 });
 </script>
 
@@ -37,7 +40,7 @@ defineProps({
       <div class="flex flex-col lg:flex-row gap-8">
         <!-- Sidebar -->
         <aside class="w-full lg:w-1/4 flex-shrink-0">
-          <FilterSidebar :brands="brands" :filters="filters" />
+          <FilterSidebar :brands="brands" :filters="filters" :widths="widths" :profiles="profiles" :rims="rims" />
         </aside>
 
         <!-- Product Grid -->

@@ -60,10 +60,17 @@ class CatalogController extends Controller
 
         $tires = $query->latest()->paginate(12)->withQueryString();
         $brands = Brand::orderBy('name')->get();
+        
+        $widths = Tire::where('status', true)->whereNotNull('width')->distinct()->orderBy('width')->pluck('width');
+        $profiles = Tire::where('status', true)->whereNotNull('profile')->distinct()->orderBy('profile')->pluck('profile');
+        $rims = Tire::where('status', true)->whereNotNull('rim')->distinct()->orderBy('rim')->pluck('rim');
 
         return Inertia::render('Catalog/Index', [
             'tires' => $tires,
             'brands' => $brands,
+            'widths' => $widths,
+            'profiles' => $profiles,
+            'rims' => $rims,
             'filters' => $request->only(['width', 'profile', 'rim', 'brand_id', 'terrain_type', 'price_min', 'price_max', 'search'])
         ]);
     }
