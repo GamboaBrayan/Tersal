@@ -38,12 +38,12 @@ defineProps({
       </div>
 
       <div class="flex flex-col lg:flex-row gap-8">
-        <!-- Sidebar -->
+        <!-- Barra Lateral (Filtros) -->
         <aside class="w-full lg:w-1/4 flex-shrink-0">
           <FilterSidebar :brands="brands" :filters="filters" :widths="widths" :profiles="profiles" :rims="rims" />
         </aside>
 
-        <!-- Product Grid -->
+        <!-- Cuadrícula de Productos -->
         <div class="w-full lg:w-3/4">
           <div v-if="tires?.data?.length > 0" class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
             <ProductCard v-for="tire in tires.data" :key="tire.id" :tire="tire" />
@@ -57,7 +57,7 @@ defineProps({
             <p class="text-gray-500">Intenta ajustando los filtros de búsqueda.</p>
           </div>
 
-          <!-- Pagination -->
+          <!-- Paginación -->
           <div class="mt-12 flex justify-center" v-if="tires?.next_page_url || tires?.prev_page_url">
             <div class="flex gap-2">
               <Link v-if="tires.prev_page_url" :href="tires.prev_page_url" class="px-6 py-3 bg-white border border-gray-200 rounded-lg text-sm font-bold text-gray-700 hover:bg-gray-50 transition-colors">

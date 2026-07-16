@@ -99,7 +99,7 @@ const deleteBrand = () => {
     <Head title="Marcas" />
     
     <div class="px-4 sm:px-8 py-6 sm:py-10">
-      <!-- Header -->
+      <!-- Encabezado -->
       <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 sm:mb-8 gap-4">
         <div>
           <h1 class="text-2xl sm:text-3xl font-black text-gray-900">Marcas de Llantas</h1>
@@ -110,7 +110,7 @@ const deleteBrand = () => {
         </button>
       </div>
 
-      <!-- Table (full width) -->
+      <!-- Tabla de Marcas -->
       <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
         <div class="p-5 sm:p-6 border-b border-gray-100 flex items-center justify-between">
           <h2 class="text-lg font-bold text-gray-900">Listado de Marcas</h2>
@@ -163,7 +163,7 @@ const deleteBrand = () => {
       </div>
     </div>
 
-    <!-- Brand Add/Edit Modal -->
+    <!-- Modal: Agregar/Editar Marca -->
     <div v-if="showBrandModal" class="fixed inset-0 z-[90] flex items-center justify-center bg-gray-900/40 backdrop-blur-sm p-4">
       <div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden transform transition-all">
         <div class="px-6 py-4 border-b border-gray-100 flex justify-between items-center bg-gray-50">
@@ -208,7 +208,7 @@ const deleteBrand = () => {
       </div>
     </div>
 
-    <!-- Delete Modal -->
+    <!-- Modal: Confirmar Eliminación -->
     <div v-if="showDeleteModal" class="fixed inset-0 z-[100] flex items-center justify-center bg-gray-900/40 backdrop-blur-sm p-4">
       <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden transform transition-all">
         <div class="p-6">

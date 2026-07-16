@@ -49,7 +49,7 @@ const clearFilters = () => {
 
 <template>
   <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-    <!-- Clear Filters Header -->
+    <!-- Cabecera de Filtros -->
     <div class="mb-6 flex justify-end">
       <button type="button" @click="clearFilters" class="text-xs text-action hover:text-red-800 font-bold hover:underline cursor-pointer flex items-center gap-1">
         Borrar Filtros
@@ -84,7 +84,7 @@ const clearFilters = () => {
       </div>
     </div>
 
-    <!-- Brands -->
+    <!-- Sección Marcas -->
     <div class="mb-8">
       <div class="flex items-center justify-between mb-4">
         <button type="button" @click="isBrandsExpanded = !isBrandsExpanded" class="flex items-center gap-2 font-bold text-primary focus:outline-none hover:text-gray-900 transition-colors w-full text-left">
@@ -104,15 +104,13 @@ const clearFilters = () => {
       </div>
     </div>
 
-    <!-- Terrain -->
+    <!-- Sección Terreno -->
     <div class="mb-8">
       <div class="flex items-center gap-2 mb-4">
         <h3 class="font-bold text-primary">Terreno</h3>
-        <!-- Tooltip trigger -->
         <div class="relative cursor-pointer" @click="showTooltip = !showTooltip" @mouseenter="showTooltip = true" @mouseleave="showTooltip = false">
           <HelpCircle class="w-4 h-4 text-white bg-gray-900 rounded-full fill-gray-900" />
           
-          <!-- Tooltip content -->
           <div :class="[showTooltip ? 'opacity-100 visible' : 'opacity-0 invisible']" class="absolute left-1/2 -translate-x-1/2 bottom-full mb-2 w-64 p-3 bg-gray-900 text-white text-xs rounded-xl shadow-lg transition-all z-20">
             <div class="font-bold mb-1 border-b border-gray-700 pb-1 flex justify-between items-center">
               <span>Tipos de Terreno:</span>
@@ -122,7 +120,6 @@ const clearFilters = () => {
               <li><strong class="text-action">A/T:</strong> 50% Asfalto, 50% Tierra</li>
               <li><strong class="text-action">M/T:</strong> Off-Road, Barro extremo</li>
             </ul>
-            <!-- Arrow -->
             <div class="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-gray-900"></div>
           </div>
         </div>
@@ -140,7 +137,7 @@ const clearFilters = () => {
       </div>
     </div>
 
-    <!-- Price -->
+    <!-- Sección Precio -->
     <div>
       <h3 class="font-bold text-primary mb-4">Precio</h3>
       <div class="flex gap-4">

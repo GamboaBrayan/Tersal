@@ -43,7 +43,7 @@ const getDiscountPercentage = (price, offerPrice) => {
     <WhatsAppFloatingBtn />
 
     <main class="flex-grow">
-      <!-- Hero Section -->
+      <!-- Sección Principal (Hero) -->
       <section class="relative pt-20 pb-32">
         <div class="absolute inset-0 z-0">
           <img src="https://images.unsplash.com/photo-1580273916550-e323be2ae537?auto=format&fit=crop&q=80&w=1920" class="w-full h-full object-cover" alt="Tire Background">
@@ -59,9 +59,9 @@ const getDiscountPercentage = (price, offerPrice) => {
             Encuentra el ajuste perfecto para tu vehículo con nuestra búsqueda técnica avanzada. Marcas premium, instalación experta, sin complicaciones.
           </p>
 
-          <!-- Finder Container -->
+          <!-- Buscador -->
           <div class="max-w-4xl mx-auto p-2 sm:p-4 text-left">
-            <!-- Tabs -->
+            <!-- Pestañas -->
             <div class="flex border-b border-gray-200 mb-6">
               <button @click="activeTab = 'medida'" :class="{'border-gray-900 text-gray-900': activeTab === 'medida', 'border-transparent text-gray-500 hover:text-gray-700': activeTab !== 'medida'}" class="flex-1 pb-4 text-sm font-bold uppercase tracking-wider border-b-2 transition-colors text-center">
                 Por Medida
@@ -71,7 +71,7 @@ const getDiscountPercentage = (price, offerPrice) => {
               </button>
             </div>
 
-            <!-- Tab Content: Medida -->
+            <!-- Contenido: Búsqueda por Medida -->
             <div v-if="activeTab === 'medida'">
               <div class="flex justify-end mb-2">
                 <Link href="/guide" class="text-action text-sm font-semibold flex items-center gap-1 hover:underline">
@@ -108,7 +108,7 @@ const getDiscountPercentage = (price, offerPrice) => {
               </form>
             </div>
 
-            <!-- Tab Content: Vehiculo -->
+            <!-- Contenido: Búsqueda por Vehículo -->
             <div v-if="activeTab === 'vehiculo'" class="text-center py-10">
               <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gray-100 mb-4">
                 <Search class="w-8 h-8 text-gray-400" />
@@ -123,10 +123,9 @@ const getDiscountPercentage = (price, offerPrice) => {
         </div>
       </section>
 
-      <!-- Brands Marquee -->
+      <!-- Carrusel de Marcas -->
       <section v-if="brands && brands.length > 0" class="py-10 bg-white border-b border-gray-100 overflow-hidden">
         <div class="marquee-container group flex w-full">
-          <!-- We repeat the block enough times to fill any screen even with 1 or 2 brands -->
           <div v-for="n in 10" :key="n" class="marquee-content flex shrink-0 gap-12 pr-12 items-center justify-start min-w-max" :style="{ animationDuration: Math.max(brands.length * 4, 10) + 's' }">
             <Link :href="`/catalog?brand_id=${brand.id}`" v-for="brand in brands" :key="`${n}-${brand.id}`" class="shrink-0 flex items-center justify-center w-32 h-20 transition-all duration-300 opacity-70 hover:opacity-100 cursor-pointer">
               <img v-if="brand.logo_url" :src="'/storage/' + brand.logo_url" :alt="brand.name" class="max-w-full max-h-full object-contain grayscale hover:grayscale-0 transition-all duration-300" />
@@ -174,7 +173,7 @@ const getDiscountPercentage = (price, offerPrice) => {
         </div>
       </section>
 
-      <!-- Infographic -->
+      <!-- Pasos de Compra -->
       <section class="py-16 bg-white border-t border-gray-100">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 class="text-3xl font-black text-gray-900 mb-12">Cómo comprar por WhatsApp en 3 pasos</h2>
