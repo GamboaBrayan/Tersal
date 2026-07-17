@@ -24,13 +24,15 @@ const currentFilters = ref({
 const showTooltip = ref(false);
 const isBrandsExpanded = ref(true);
 
+const emit = defineEmits(['applied']);
+
 const applyFilters = () => {
   router.get('/catalog', currentFilters.value, { preserveState: true });
+  emit('applied');
 };
 
 const setTerrain = (terrain) => {
   currentFilters.value.terrain_type = currentFilters.value.terrain_type === terrain ? null : terrain;
-  applyFilters();
 };
 
 const clearFilters = () => {
@@ -62,21 +64,21 @@ const clearFilters = () => {
       <div class="space-y-4">
         <div>
           <label class="text-xs text-gray-500 mb-1 block">Ancho</label>
-          <select v-model="currentFilters.width" @change="applyFilters" class="w-full h-10 px-3 rounded border border-gray-200 text-sm focus:ring-1 focus:ring-primary focus:border-primary">
+          <select v-model="currentFilters.width" class="w-full h-10 px-3 rounded border border-gray-200 text-sm focus:ring-1 focus:ring-primary focus:border-primary">
             <option :value="null">Todos</option>
             <option v-for="w in widths" :key="w" :value="w">{{ w }}</option>
           </select>
         </div>
         <div>
-          <label class="text-xs text-gray-500 mb-1 block">Perfil</label>
-          <select v-model="currentFilters.profile" @change="applyFilters" class="w-full h-10 px-3 rounded border border-gray-200 text-sm focus:ring-1 focus:ring-primary focus:border-primary">
+          <label class="text-xs text-gray-500 mb-1 block">Alto</label>
+          <select v-model="currentFilters.profile" class="w-full h-10 px-3 rounded border border-gray-200 text-sm focus:ring-1 focus:ring-primary focus:border-primary">
             <option :value="null">Todos</option>
             <option v-for="p in profiles" :key="p" :value="p">{{ p }}</option>
           </select>
         </div>
         <div>
-          <label class="text-xs text-gray-500 mb-1 block">Aro</label>
-          <select v-model="currentFilters.rim" @change="applyFilters" class="w-full h-10 px-3 rounded border border-gray-200 text-sm focus:ring-1 focus:ring-primary focus:border-primary">
+          <label class="text-xs text-gray-500 mb-1 block">Rin</label>
+          <select v-model="currentFilters.rim" class="w-full h-10 px-3 rounded border border-gray-200 text-sm focus:ring-1 focus:ring-primary focus:border-primary">
             <option :value="null">Todos</option>
             <option v-for="r in rims" :key="r" :value="r">{{ r }}</option>
           </select>
@@ -94,11 +96,11 @@ const clearFilters = () => {
       </div>
       <div v-show="isBrandsExpanded" class="space-y-3 max-h-48 overflow-y-auto pr-2 [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 [&::-webkit-scrollbar-thumb]:rounded-full">
         <label class="flex items-center gap-3 cursor-pointer group">
-          <input type="radio" v-model="currentFilters.brand_id" :value="null" @change="applyFilters" class="w-4 h-4 text-primary border-gray-300 focus:ring-primary">
+          <input type="radio" v-model="currentFilters.brand_id" :value="null" class="w-4 h-4 text-primary border-gray-300 focus:ring-primary">
           <span class="text-sm text-gray-600 group-hover:text-gray-900">Todas las marcas</span>
         </label>
         <label v-for="brand in brands" :key="brand.id" class="flex items-center gap-3 cursor-pointer group">
-          <input type="radio" v-model="currentFilters.brand_id" :value="brand.id" @change="applyFilters" class="w-4 h-4 text-primary border-gray-300 focus:ring-primary">
+          <input type="radio" v-model="currentFilters.brand_id" :value="brand.id" class="w-4 h-4 text-primary border-gray-300 focus:ring-primary">
           <span class="text-sm text-gray-600 group-hover:text-gray-900">{{ brand.name }}</span>
         </label>
       </div>
@@ -143,13 +145,20 @@ const clearFilters = () => {
       <div class="flex gap-4">
         <div class="flex-1">
           <label class="text-xs text-gray-500 mb-1 block">Mínimo (S/.)</label>
-          <input type="number" v-model="currentFilters.price_min" @blur="applyFilters" class="w-full h-10 px-3 rounded border border-gray-200 text-sm focus:ring-1 focus:ring-primary focus:border-primary">
+          <input type="number" v-model="currentFilters.price_min" class="w-full h-10 px-3 rounded border border-gray-200 text-sm focus:ring-1 focus:ring-primary focus:border-primary">
         </div>
         <div class="flex-1">
           <label class="text-xs text-gray-500 mb-1 block">Máximo (S/.)</label>
-          <input type="number" v-model="currentFilters.price_max" @blur="applyFilters" class="w-full h-10 px-3 rounded border border-gray-200 text-sm focus:ring-1 focus:ring-primary focus:border-primary">
+          <input type="number" v-model="currentFilters.price_max" class="w-full h-10 px-3 rounded border border-gray-200 text-sm focus:ring-1 focus:ring-primary focus:border-primary">
         </div>
       </div>
+    </div>
+
+    <!-- Botón Aplicar -->
+    <div class="mt-8">
+      <button @click="applyFilters" class="w-full h-12 bg-action text-white font-bold rounded-lg hover:bg-red-700 transition-colors shadow-md flex items-center justify-center gap-2">
+        APLICAR FILTROS
+      </button>
     </div>
   </div>
 </template>

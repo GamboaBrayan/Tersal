@@ -44,25 +44,20 @@ const getDiscountPercentage = (price, offerPrice) => {
 
     <main class="flex-grow">
       <!-- Sección Principal (Hero) -->
-      <section class="relative pt-20 pb-32">
-        <div class="absolute inset-0 z-0">
-          <img src="https://images.unsplash.com/photo-1580273916550-e323be2ae537?auto=format&fit=crop&q=80&w=1920" class="w-full h-full object-cover" alt="Tire Background">
-          <div class="absolute inset-0 bg-white/75 backdrop-blur-[2px]"></div>
-          <div class="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-gray-50 to-transparent"></div>
+      <section class="relative">
+        <div class="absolute inset-0 z-0 bg-gray-900">
+          <img src="/images/hero2.png" class="w-full h-full object-cover object-center" alt="Tire Background">
         </div>
+        
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
-          <h1 class="text-5xl md:text-6xl font-black text-gray-900 tracking-tight mb-4">
-            Rendimiento y Precisión <br class="hidden md:block"/>
-            <span class="text-action">en Cada Kilómetro.</span>
-          </h1>
-          <p class="text-lg text-gray-600 max-w-2xl mx-auto mb-12">
-            Encuentra el ajuste perfecto para tu vehículo con nuestra búsqueda técnica avanzada. Marcas premium, instalación experta, sin complicaciones.
-          </p>
+          <!-- Spacer to show the image -->
+          <div class="h-[150px] sm:h-[200px] md:h-[200px] lg:h-[320px]"></div>
 
-          <!-- Buscador -->
-          <div class="max-w-4xl mx-auto p-2 sm:p-4 text-left">
-            <!-- Pestañas -->
-            <div class="flex border-b border-gray-200 mb-6">
+          <!-- Buscador overlapping exactly 50% on the bottom border minus 3 pixels -->
+          <div class="transform translate-y-[calc(50%-3px)] relative z-20">
+            <div class="max-w-4xl mx-auto p-6 sm:p-8 text-left bg-white/95 backdrop-blur-md shadow-2xl rounded-3xl border border-white/20">
+              <!-- Pestañas -->
+              <div class="flex border-b border-gray-200 mb-6">
               <button @click="activeTab = 'medida'" :class="{'border-gray-900 text-gray-900': activeTab === 'medida', 'border-transparent text-gray-500 hover:text-gray-700': activeTab !== 'medida'}" class="flex-1 pb-4 text-sm font-bold uppercase tracking-wider border-b-2 transition-colors text-center">
                 Por Medida
               </button>
@@ -88,14 +83,14 @@ const getDiscountPercentage = (price, offerPrice) => {
                     </select>
                   </div>
                   <div>
-                    <label class="block text-xs font-bold text-gray-700 uppercase tracking-wide mb-2">Perfil</label>
+                    <label class="block text-xs font-bold text-gray-700 uppercase tracking-wide mb-2">Alto</label>
                     <select v-model="searchFilters.profile" class="w-full h-12 px-4 rounded-lg border border-gray-300 bg-white focus:ring-2 focus:ring-action focus:border-transparent text-gray-900">
                       <option value="">Todos</option>
                       <option v-for="p in profiles" :key="p" :value="p">{{ p }}</option>
                     </select>
                   </div>
                   <div>
-                    <label class="block text-xs font-bold text-gray-700 uppercase tracking-wide mb-2">Aro</label>
+                    <label class="block text-xs font-bold text-gray-700 uppercase tracking-wide mb-2">Rin</label>
                     <select v-model="searchFilters.rim" class="w-full h-12 px-4 rounded-lg border border-gray-300 bg-white focus:ring-2 focus:ring-action focus:border-transparent text-gray-900">
                       <option value="">Todos</option>
                       <option v-for="r in rims" :key="r" :value="r">{{ r }}</option>
@@ -121,10 +116,11 @@ const getDiscountPercentage = (price, offerPrice) => {
             </div>
           </div>
         </div>
+        </div>
       </section>
 
       <!-- Carrusel de Marcas -->
-      <section v-if="brands && brands.length > 0" class="py-10 bg-white border-b border-gray-100 overflow-hidden">
+      <section v-if="brands && brands.length > 0" class="pt-[320px] md:pt-[240px] lg:pt-[200px] pb-10 bg-white border-b border-gray-100 overflow-hidden relative z-0">
         <div class="marquee-container group flex w-full">
           <div v-for="n in 10" :key="n" class="marquee-content flex shrink-0 gap-12 pr-12 items-center justify-start min-w-max" :style="{ animationDuration: Math.max(brands.length * 4, 10) + 's' }">
             <Link :href="`/catalog?brand_id=${brand.id}`" v-for="brand in brands" :key="`${n}-${brand.id}`" class="shrink-0 flex items-center justify-center w-32 h-20 transition-all duration-300 opacity-70 hover:opacity-100 cursor-pointer">

@@ -7,8 +7,8 @@ import { ref } from 'vue';
 
 <template>
   <div class="w-full">
-    <!-- Top Contact Bar -->
-    <div class="bg-red-600 text-white py-2 text-xs md:text-sm hidden md:block">
+    <!-- Top Contact Bar (Oculta a pedido del usuario) -->
+    <div v-if="false" class="bg-red-600 text-white py-2 text-xs md:text-sm hidden md:block">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center">
         <!-- Left Side: Contact Info -->
         <div class="flex items-center gap-4 lg:gap-6">
@@ -26,36 +26,32 @@ import { ref } from 'vue';
           </div>
         </div>
         
-        <!-- Right Side: Links -->
-        <div class="flex items-center gap-4 lg:gap-6 font-semibold">
-          <Link href="/contacto" class="flex items-center gap-2 hover:text-red-100 transition-colors">
-            <MapPin class="w-4 h-4" /> 
-            <span>Ubícanos</span>
-          </Link>
-        </div>
+
       </div>
     </div>
 
-    <!-- Main Header -->
-    <header class="bg-white/80 backdrop-blur-md sticky top-0 z-40 border-b border-gray-100 shadow-sm">
+    <!-- Main Header Wrapper -->
+    <div :class="{ 'absolute w-full z-50 left-0': $page.url === '/' }">
+      <header :class="$page.url === '/' ? 'bg-transparent border-none' : 'bg-white/80 backdrop-blur-md sticky top-0 z-40 border-b border-gray-100 shadow-sm'">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
         <!-- Logo -->
         <div class="flex items-center flex-1">
           <Link href="/" class="flex items-center">
-            <img src="/images/logo.png" alt="Tersal Logo" class="h-14 w-auto object-contain" />
+            <img :src="$page.url === '/' ? '/images/logo2.png' : '/images/logo.png'" alt="Tersal Logo" class="h-16 w-auto object-contain" />
           </Link>
         </div>
 
         <!-- Center Nav -->
-        <nav class="hidden md:flex justify-center space-x-8 text-sm font-semibold uppercase tracking-wider text-gray-600">
-          <Link href="/" :class="{ 'text-primary border-b-2 border-primary': $page.url === '/' }" class="hover:text-primary py-7 transition-colors">Inicio</Link>
-          <Link href="/catalog" :class="{ 'text-primary border-b-2 border-primary': $page.url.startsWith('/catalog') }" class="hover:text-primary py-7 transition-colors">Catálogo</Link>
-          <Link href="/guide" :class="{ 'text-primary border-b-2 border-primary': $page.url.startsWith('/guide') }" class="hover:text-primary py-7 transition-colors">Guía de Neumáticos</Link>
+        <nav :class="[$page.url === '/' ? 'text-white' : 'text-gray-900', 'hidden md:flex justify-center space-x-8 text-sm font-semibold uppercase tracking-wider']">
+          <Link href="/catalog" :class="{ 'text-primary border-b-2 border-primary': $page.url.startsWith('/catalog') }" class="hover:text-action py-7 transition-colors">Catálogo</Link>
+          <Link href="/guide" :class="{ 'text-primary border-b-2 border-primary': $page.url.startsWith('/guide') }" class="hover:text-action py-7 transition-colors">Guía de Neumáticos</Link>
+          <Link href="/contacto" :class="{ 'text-primary border-b-2 border-primary': $page.url.startsWith('/contacto') }" class="hover:text-action py-7 transition-colors">Contacto</Link>
         </nav>
 
         <!-- Right Spacer -->
         <div class="hidden md:flex flex-1"></div>
       </div>
-    </header>
+      </header>
+    </div>
   </div>
 </template>

@@ -54,7 +54,7 @@ const toggleFaq = (index) => {
             <!-- Graphic -->
             <div class="w-full lg:w-1/3 flex justify-center relative">
               <div class="relative bg-gray-900 rounded-3xl shadow-2xl overflow-hidden aspect-square flex items-center justify-center w-full max-w-md">
-                <img src="https://i.pinimg.com/736x/43/cc/bb/43ccbbb96280ef18d5ac0341f25b2e34.jpg" class="w-full h-full object-cover opacity-90" alt="Tire Graphic">
+                <img src="https://i.pinimg.com/736x/43/cc/bb/43ccbbb96280ef18d5ac0341f25b2e34.jpg" class="w-full h-full object-cover opacity-90" alt="Tire Graphic" referrerpolicy="no-referrer">
               </div>
             </div>
 

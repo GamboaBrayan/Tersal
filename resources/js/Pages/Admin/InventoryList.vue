@@ -1,23 +1,26 @@
 <script setup>
 import { Head, Link, router } from '@inertiajs/vue3';
 import AdminLayout from './Components/AdminLayout.vue';
-import { ref, computed } from 'vue';
-import { Edit2, Trash2, Search, Plus, AlertCircle, Package } from 'lucide-vue-next';
+import { ref, watch } from 'vue';
+import { Edit2, Trash2, Search, Plus, AlertCircle, Package, Upload, ChevronLeft, ChevronRight } from 'lucide-vue-next';
 
 const props = defineProps({
-  tires: Array
+  tires: Object,
+  filters: Object
 });
 
-const searchQuery = ref('');
+const searchQuery = ref(props.filters?.search || '');
 
-const filteredTires = computed(() => {
-  if (!searchQuery.value) return props.tires;
-  const q = searchQuery.value.toLowerCase();
-  return props.tires.filter(tire => {
-    return tire.model.toLowerCase().includes(q) || 
-           (tire.brand && tire.brand.name.toLowerCase().includes(q)) ||
-           `${tire.width}/${tire.profile} R${tire.rim}`.includes(q);
-  });
+let searchTimeout;
+watch(searchQuery, (value) => {
+  clearTimeout(searchTimeout);
+  searchTimeout = setTimeout(() => {
+    router.get('/admin/inventory', { search: value }, {
+      preserveState: true,
+      preserveScroll: true,
+      replace: true
+    });
+  }, 300);
 });
 
 const showDeleteModal = ref(false);
@@ -38,6 +41,60 @@ const deleteTire = () => {
     });
   }
 };
+
+const importInput = ref(null);
+const isImporting = ref(false);
+const importProgress = ref(0);
+let progressInterval = null;
+
+const startProgressPolling = () => {
+  importProgress.value = 0;
+  progressInterval = setInterval(async () => {
+    try {
+      const response = await fetch('/admin/import-progress');
+      const data = await response.json();
+      if (data.progress !== null) {
+        importProgress.value = data.progress;
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  }, 1000);
+};
+
+const stopProgressPolling = () => {
+  if (progressInterval) {
+    clearInterval(progressInterval);
+    progressInterval = null;
+  }
+};
+
+const handleImport = (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  
+  isImporting.value = true;
+  startProgressPolling();
+  const formData = new FormData();
+  formData.append('file', file);
+  
+  router.post('/admin/inventory/import', formData, {
+    onSuccess: () => {
+      stopProgressPolling();
+      importProgress.value = 100;
+      setTimeout(() => {
+        isImporting.value = false;
+        importProgress.value = 0;
+      }, 3000);
+      if (importInput.value) importInput.value.value = '';
+    },
+    onError: () => {
+      stopProgressPolling();
+      isImporting.value = false;
+      if (importInput.value) importInput.value.value = '';
+    }
+  });
+};
 </script>
 
 <template>
@@ -48,9 +105,15 @@ const deleteTire = () => {
       <!-- Header -->
       <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 sm:mb-8">
         <h1 class="text-2xl sm:text-3xl font-black text-gray-900">Inventario de Llantas</h1>
-        <Link href="/admin/inventory/create" class="inline-flex items-center gap-2 h-12 px-6 bg-action text-white font-bold rounded-xl hover:bg-red-700 transition-colors shadow-sm w-full sm:w-auto justify-center">
-          <Plus class="w-5 h-5" /> Nuevo Neumático
-        </Link>
+        <div class="flex items-center gap-2">
+          <input type="file" ref="importInput" @change="handleImport" class="hidden" accept=".xlsx,.xls,.csv" />
+          <button @click="$refs.importInput.click()" :disabled="isImporting" class="inline-flex items-center justify-center w-12 h-12 bg-gray-100 text-gray-700 font-bold rounded-xl hover:bg-gray-200 transition-all shadow-sm hover:-translate-y-0.5 flex-shrink-0 disabled:opacity-50" title="Importar Excel">
+            <Upload class="w-6 h-6" />
+          </button>
+          <Link href="/admin/inventory/create" class="inline-flex items-center justify-center w-12 h-12 bg-action text-white font-bold rounded-xl hover:bg-red-700 transition-colors shadow-sm flex-shrink-0" title="Nuevo Neumático">
+            <Plus class="w-6 h-6" />
+          </Link>
+        </div>
       </div>
 
       <!-- Search Bar -->
@@ -69,6 +132,7 @@ const deleteTire = () => {
           <table class="w-full text-left border-collapse min-w-[700px]">
             <thead>
               <tr class="bg-gray-50 border-b border-gray-200 text-xs uppercase tracking-wider text-gray-500 font-bold">
+                <th class="p-4">Código</th>
                 <th class="p-4">Neumático</th>
                 <th class="p-4">Medida</th>
                 <th class="p-4">Precio</th>
@@ -77,7 +141,10 @@ const deleteTire = () => {
               </tr>
             </thead>
             <tbody class="divide-y divide-gray-100">
-              <tr v-for="tire in filteredTires" :key="tire.id" class="hover:bg-gray-50 transition-colors">
+              <tr v-for="tire in tires.data" :key="tire.id" class="hover:bg-gray-50 transition-colors">
+                <td class="p-4 font-bold text-gray-600 text-xs whitespace-nowrap">
+                  {{ tire.product_code || '-' }}
+                </td>
                 <td class="p-4">
                   <div class="flex items-center gap-4">
                     <div class="w-10 h-10 sm:w-12 sm:h-12 bg-gray-100 rounded-lg overflow-hidden flex-shrink-0 flex items-center justify-center">
@@ -86,6 +153,9 @@ const deleteTire = () => {
                     </div>
                     <div>
                       <div class="font-bold text-gray-900 text-sm sm:text-base">{{ tire.brand?.name }} {{ tire.model }}</div>
+                      <div class="text-xs text-gray-500 font-medium mb-1" v-if="tire.year || tire.version">
+                        {{ tire.year }} {{ tire.version }}
+                      </div>
                       <div class="text-xs text-gray-500 line-clamp-1">{{ tire.description || 'Sin descripción' }}</div>
                     </div>
                   </div>
@@ -116,13 +186,47 @@ const deleteTire = () => {
                   </div>
                 </td>
               </tr>
-              <tr v-if="filteredTires.length === 0">
-                <td colspan="5" class="p-8 text-center text-gray-500 text-sm sm:text-base">
+              <tr v-if="tires.data.length === 0">
+                <td colspan="6" class="p-8 text-center text-gray-500 text-sm sm:text-base">
                   No se encontraron neumáticos.
                 </td>
               </tr>
             </tbody>
           </table>
+        </div>
+      </div>
+      
+      <!-- Footer: Total and Pagination -->
+      <div class="mt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div class="text-sm font-bold text-gray-500">
+          Total: <span class="text-gray-900">{{ tires.total || 0 }}</span> neumáticos
+        </div>
+        
+        <div class="flex flex-wrap justify-center gap-1 sm:gap-2" v-if="tires.links && tires.links.length > 3">
+          <template v-for="(link, idx) in tires.links" :key="idx">
+            <Link 
+              v-if="link.url"
+              :href="link.url" 
+              :class="[
+                'px-3 py-2 sm:px-4 sm:py-2 border rounded-lg text-xs sm:text-sm font-bold transition-colors flex items-center justify-center',
+                link.active ? 'bg-primary text-white border-primary' : 'bg-white border-gray-200 text-gray-700 hover:bg-gray-50'
+              ]"
+            >
+              <ChevronLeft v-if="link.label.toLowerCase().includes('previous')" class="w-4 h-4" />
+              <ChevronRight v-else-if="link.label.toLowerCase().includes('next')" class="w-4 h-4" />
+              <span v-else v-html="link.label"></span>
+            </Link>
+            <span 
+              v-else
+              :class="[
+                'px-3 py-2 sm:px-4 sm:py-2 border border-gray-200 rounded-lg text-xs sm:text-sm font-bold text-gray-400 bg-gray-50 flex items-center justify-center'
+              ]"
+            >
+              <ChevronLeft v-if="link.label.toLowerCase().includes('previous')" class="w-4 h-4" />
+              <ChevronRight v-else-if="link.label.toLowerCase().includes('next')" class="w-4 h-4" />
+              <span v-else v-html="link.label"></span>
+            </span>
+          </template>
         </div>
       </div>
     </div>
@@ -149,6 +253,24 @@ const deleteTire = () => {
             Sí, Eliminar
           </button>
         </div>
+      </div>
+    </div>
+
+    <!-- Toast de Progreso de Importación -->
+    <div v-if="isImporting" class="fixed top-4 right-4 z-[200] bg-white rounded-xl shadow-2xl border border-gray-100 p-4 min-w-[280px] flex items-center gap-4 animate-bounce-in">
+      <div class="relative w-10 h-10 flex items-center justify-center flex-shrink-0">
+        <svg class="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
+          <path class="text-gray-100" stroke-width="3" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+          <path class="text-primary transition-all duration-300" stroke-dasharray="100, 100" :stroke-dashoffset="100 - importProgress" stroke-width="3" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+        </svg>
+        <span class="absolute text-[10px] font-bold text-gray-700" v-if="importProgress < 100">{{ importProgress }}%</span>
+        <span class="absolute text-green-500" v-else>
+          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+        </span>
+      </div>
+      <div>
+        <h4 class="text-sm font-bold text-gray-900">{{ importProgress < 100 ? 'Importando Llantas...' : '¡Importación Completada!' }}</h4>
+        <p class="text-xs text-gray-500">{{ importProgress < 100 ? 'Por favor espera, no cierres esta ventana.' : 'Todos los datos han sido cargados.' }}</p>
       </div>
     </div>
   </AdminLayout>

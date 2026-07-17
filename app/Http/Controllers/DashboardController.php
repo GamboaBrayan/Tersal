@@ -7,7 +7,9 @@ use App\Models\Brand;
 use App\Models\Setting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Cache;
 use Inertia\Inertia;
+use Rap2hpoutre\FastExcel\FastExcel;
 
 class DashboardController extends Controller
 {
@@ -22,12 +24,26 @@ class DashboardController extends Controller
         ]);
     }
 
-    public function inventory()
+    public function inventory(Request $request)
     {
-        $tires = Tire::with('brand')->latest()->get();
+        $query = Tire::with('brand')->latest();
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('model', 'like', "%{$search}%")
+                  ->orWhere('width', 'like', "%{$search}%")
+                  ->orWhereHas('brand', function($b) use ($search) {
+                      $b->where('name', 'like', "%{$search}%");
+                  });
+            });
+        }
+
+        $tires = $query->paginate(15)->withQueryString();
 
         return Inertia::render('Admin/InventoryList', [
-            'tires' => $tires
+            'tires' => $tires,
+            'filters' => $request->only(['search'])
         ]);
     }
 
@@ -54,6 +70,8 @@ class DashboardController extends Controller
         $validated = $request->validate([
             'brand_id' => 'required|exists:brands,id',
             'model' => 'required|string|max:255',
+            'year' => 'nullable|string|max:50',
+            'version' => 'nullable|string|max:255',
             'width' => 'required|integer',
             'profile' => 'required|integer',
             'rim' => 'required|integer',
@@ -87,6 +105,8 @@ class DashboardController extends Controller
         $validated = $request->validate([
             'brand_id' => 'required|exists:brands,id',
             'model' => 'required|string|max:255',
+            'year' => 'nullable|string|max:50',
+            'version' => 'nullable|string|max:255',
             'width' => 'required|integer',
             'profile' => 'required|integer',
             'rim' => 'required|integer',
@@ -149,11 +169,20 @@ class DashboardController extends Controller
         return redirect()->back()->with('success', 'Configuración actualizada exitosamente.');
     }
 
-    public function brands()
+    public function brands(Request $request)
     {
-        $brands = Brand::withCount('tires')->orderBy('name')->get();
+        $query = Brand::withCount('tires')->orderBy('name');
+        
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where('name', 'like', "%{$search}%");
+        }
+
+        $brands = $query->paginate(15)->withQueryString();
+        
         return Inertia::render('Admin/Brands', [
-            'brands' => $brands
+            'brands' => $brands,
+            'filters' => $request->only(['search'])
         ]);
     }
 
@@ -205,5 +234,96 @@ class DashboardController extends Controller
     {
         $brand->delete();
         return redirect()->back()->with('success', 'Marca eliminada exitosamente.');
+    }
+
+    public function importBrands(Request $request)
+    {
+        $request->validate(['file' => 'required|file|mimes:xlsx,xls,csv,txt']);
+        
+        $filePath = $request->file('file')->getRealPath();
+        
+        $totalRows = 0;
+        (new FastExcel)->import($filePath, function ($line) use (&$totalRows) {
+            $totalRows++;
+        });
+
+        $cacheKey = 'import_progress_' . auth()->id();
+        Cache::put($cacheKey, 0);
+
+        $currentRow = 0;
+        (new FastExcel)->import($filePath, function ($row) use ($totalRows, &$currentRow, $cacheKey) {
+            $brandName = $row['MARCA'] ?? null;
+            if ($brandName) {
+                Brand::firstOrCreate(
+                    ['name' => trim($brandName)],
+                    ['show_on_home' => true]
+                );
+            }
+            
+            $currentRow++;
+            if ($currentRow % 10 === 0 || $currentRow === $totalRows) {
+                Cache::put($cacheKey, round(($currentRow / max(1, $totalRows)) * 100));
+            }
+        });
+        
+        Cache::forget($cacheKey);
+        
+        return redirect()->back()->with('success', 'Marcas importadas correctamente.');
+    }
+
+    public function importInventory(Request $request)
+    {
+        $request->validate(['file' => 'required|file|mimes:xlsx,xls,csv,txt']);
+        
+        $filePath = $request->file('file')->getRealPath();
+        
+        $totalRows = 0;
+        (new FastExcel)->import($filePath, function ($line) use (&$totalRows) {
+            $totalRows++;
+        });
+
+        $cacheKey = 'import_progress_' . auth()->id();
+        Cache::put($cacheKey, 0);
+
+        $currentRow = 0;
+        (new FastExcel)->import($filePath, function ($row) use ($totalRows, &$currentRow, $cacheKey) {
+            $currentRow++;
+            if ($currentRow % 10 === 0 || $currentRow === $totalRows) {
+                Cache::put($cacheKey, round(($currentRow / max(1, $totalRows)) * 100));
+            }
+
+            $brandName = $row['MARCA'] ?? null;
+            if (!$brandName) return;
+            
+            $brand = Brand::firstOrCreate(
+                ['name' => trim($brandName)],
+                ['show_on_home' => true]
+            );
+            
+            Tire::create([
+                'brand_id' => $brand->id,
+                'model' => $row['MODELO'] ?? 'S/M',
+                'version' => $row['VERSIÓN'] ?? null,
+                'year' => $row['AÑO'] ?? null,
+                'width' => intval($row['ANCHO'] ?? 0),
+                'profile' => intval($row['ALTO'] ?? 0),
+                'rim' => intval($row['RIN'] ?? 0),
+                'price' => floatval($row['PRECIO'] ?? 0),
+                'stock' => 10,
+                'load_index' => 0,
+                'speed_rating' => 'N/A',
+                'status' => true
+            ]);
+        });
+        
+        Cache::forget($cacheKey);
+        
+        return redirect()->back()->with('success', 'Neumáticos importados correctamente.');
+    }
+
+    public function importProgress()
+    {
+        $progress = Cache::get('import_progress_' . auth()->id(), null);
+        return response()->json(['progress' => $progress]);
     }
 }

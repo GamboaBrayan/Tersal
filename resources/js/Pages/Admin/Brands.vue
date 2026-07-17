@@ -1,11 +1,26 @@
 <script setup>
-import { Head, useForm, router } from '@inertiajs/vue3';
+import { Head, useForm, router, Link } from '@inertiajs/vue3';
 import AdminLayout from './Components/AdminLayout.vue';
-import { Plus, Trash2, AlertCircle, Tag, Check, X as XIcon, Edit, Save } from 'lucide-vue-next';
-import { ref } from 'vue';
+import { Plus, Trash2, AlertCircle, Tag, Check, X as XIcon, Edit, Save, Upload, Search, ChevronLeft, ChevronRight } from 'lucide-vue-next';
+import { ref, watch } from 'vue';
 
 const props = defineProps({
-  brands: Array
+  brands: Object,
+  filters: Object
+});
+
+const searchQuery = ref(props.filters?.search || '');
+
+let searchTimeout;
+watch(searchQuery, (value) => {
+  clearTimeout(searchTimeout);
+  searchTimeout = setTimeout(() => {
+    router.get('/admin/brands', { search: value }, {
+      preserveState: true,
+      preserveScroll: true,
+      replace: true
+    });
+  }, 300);
 });
 
 const form = useForm({
@@ -92,6 +107,60 @@ const deleteBrand = () => {
     });
   }
 };
+
+const importInput = ref(null);
+const isImporting = ref(false);
+const importProgress = ref(0);
+let progressInterval = null;
+
+const startProgressPolling = () => {
+  importProgress.value = 0;
+  progressInterval = setInterval(async () => {
+    try {
+      const response = await fetch('/admin/import-progress');
+      const data = await response.json();
+      if (data.progress !== null) {
+        importProgress.value = data.progress;
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  }, 1000);
+};
+
+const stopProgressPolling = () => {
+  if (progressInterval) {
+    clearInterval(progressInterval);
+    progressInterval = null;
+  }
+};
+
+const handleImport = (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  
+  isImporting.value = true;
+  startProgressPolling();
+  const formData = new FormData();
+  formData.append('file', file);
+  
+  router.post('/admin/brands/import', formData, {
+    onSuccess: () => {
+      stopProgressPolling();
+      importProgress.value = 100;
+      setTimeout(() => {
+        isImporting.value = false;
+        importProgress.value = 0;
+      }, 3000);
+      if (importInput.value) importInput.value.value = '';
+    },
+    onError: () => {
+      stopProgressPolling();
+      isImporting.value = false;
+      if (importInput.value) importInput.value.value = '';
+    }
+  });
+};
 </script>
 
 <template>
@@ -105,16 +174,32 @@ const deleteBrand = () => {
           <h1 class="text-2xl sm:text-3xl font-black text-gray-900">Marcas de Llantas</h1>
           <p class="text-sm sm:text-base text-gray-500 mt-2">Gestiona el catálogo de marcas de tus neumáticos.</p>
         </div>
-        <button @click="openCreateModal" class="inline-flex items-center justify-center gap-2 h-12 px-6 sm:px-8 bg-action text-white font-bold rounded-xl hover:bg-red-700 transition-all shadow-md hover:-translate-y-0.5 whitespace-nowrap">
-          <Plus class="w-5 h-5" /> Agregar Marca
-        </button>
+        <div class="flex items-center gap-2">
+          <input type="file" ref="importInput" @change="handleImport" class="hidden" accept=".xlsx,.xls,.csv" />
+          <button @click="$refs.importInput.click()" :disabled="isImporting" class="inline-flex items-center justify-center w-12 h-12 bg-gray-100 text-gray-700 font-bold rounded-xl hover:bg-gray-200 transition-all shadow-sm hover:-translate-y-0.5 flex-shrink-0 disabled:opacity-50" title="Importar Excel">
+            <Upload class="w-6 h-6" />
+          </button>
+          <button @click="openCreateModal" class="inline-flex items-center justify-center w-12 h-12 bg-action text-white font-bold rounded-xl hover:bg-red-700 transition-all shadow-md hover:-translate-y-0.5 flex-shrink-0" title="Agregar Marca">
+            <Plus class="w-6 h-6" />
+          </button>
+        </div>
+      </div>
+
+      <!-- Search Bar -->
+      <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 mb-6 flex items-center">
+        <div class="relative w-full max-w-md">
+          <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+            <Search class="h-5 w-5 text-gray-400" />
+          </div>
+          <input v-model="searchQuery" type="text" placeholder="Buscar marcas..." class="h-12 w-full pl-10 pr-4 rounded-xl border border-gray-200 bg-gray-50 text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all">
+        </div>
       </div>
 
       <!-- Tabla de Marcas -->
       <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
         <div class="p-5 sm:p-6 border-b border-gray-100 flex items-center justify-between">
           <h2 class="text-lg font-bold text-gray-900">Listado de Marcas</h2>
-          <span class="bg-blue-50 text-primary text-[10px] sm:text-xs font-bold px-3 py-1 rounded-full">{{ brands.length }} Marcas</span>
+          <span class="bg-blue-50 text-primary text-[10px] sm:text-xs font-bold px-3 py-1 rounded-full">{{ brands.total }} Marcas</span>
         </div>
         <div class="overflow-x-auto">
           <table class="w-full text-left border-collapse table-fixed min-w-[500px]">
@@ -126,7 +211,7 @@ const deleteBrand = () => {
               </tr>
             </thead>
             <tbody class="divide-y divide-gray-100">
-              <tr v-for="brand in brands" :key="brand.id" class="hover:bg-gray-50 transition-colors">
+              <tr v-for="brand in brands.data" :key="brand.id" class="hover:bg-gray-50 transition-colors">
                 <td class="p-4">
                   <div class="flex items-center gap-3">
                     <div class="w-12 h-12 rounded-lg border border-gray-200 bg-white flex items-center justify-center flex-shrink-0 p-1">
@@ -152,13 +237,47 @@ const deleteBrand = () => {
                   </button>
                 </td>
               </tr>
-              <tr v-if="brands.length === 0">
+              <tr v-if="brands.data.length === 0">
                 <td colspan="3" class="p-8 text-center text-gray-500 text-sm sm:text-base">
                   No hay marcas registradas.
                 </td>
               </tr>
             </tbody>
           </table>
+        </div>
+      </div>
+      
+      <!-- Footer: Total and Pagination -->
+      <div class="mt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div class="text-sm font-bold text-gray-500">
+          Total: <span class="text-gray-900">{{ brands.total || 0 }}</span> marcas
+        </div>
+        
+        <div class="flex flex-wrap justify-center gap-1 sm:gap-2" v-if="brands.links && brands.links.length > 3">
+          <template v-for="(link, idx) in brands.links" :key="idx">
+            <Link 
+              v-if="link.url"
+              :href="link.url" 
+              :class="[
+                'px-3 py-2 sm:px-4 sm:py-2 border rounded-lg text-xs sm:text-sm font-bold transition-colors flex items-center justify-center',
+                link.active ? 'bg-primary text-white border-primary' : 'bg-white border-gray-200 text-gray-700 hover:bg-gray-50'
+              ]"
+            >
+              <ChevronLeft v-if="link.label.toLowerCase().includes('previous')" class="w-4 h-4" />
+              <ChevronRight v-else-if="link.label.toLowerCase().includes('next')" class="w-4 h-4" />
+              <span v-else v-html="link.label"></span>
+            </Link>
+            <span 
+              v-else
+              :class="[
+                'px-3 py-2 sm:px-4 sm:py-2 border border-gray-200 rounded-lg text-xs sm:text-sm font-bold text-gray-400 bg-gray-50 flex items-center justify-center'
+              ]"
+            >
+              <ChevronLeft v-if="link.label.toLowerCase().includes('previous')" class="w-4 h-4" />
+              <ChevronRight v-else-if="link.label.toLowerCase().includes('next')" class="w-4 h-4" />
+              <span v-else v-html="link.label"></span>
+            </span>
+          </template>
         </div>
       </div>
     </div>
@@ -230,6 +349,24 @@ const deleteBrand = () => {
             Sí, Eliminar
           </button>
         </div>
+      </div>
+    </div>
+
+    <!-- Toast de Progreso de Importación -->
+    <div v-if="isImporting" class="fixed top-4 right-4 z-[200] bg-white rounded-xl shadow-2xl border border-gray-100 p-4 min-w-[280px] flex items-center gap-4 animate-bounce-in">
+      <div class="relative w-10 h-10 flex items-center justify-center flex-shrink-0">
+        <svg class="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
+          <path class="text-gray-100" stroke-width="3" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+          <path class="text-primary transition-all duration-300" stroke-dasharray="100, 100" :stroke-dashoffset="100 - importProgress" stroke-width="3" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+        </svg>
+        <span class="absolute text-[10px] font-bold text-gray-700" v-if="importProgress < 100">{{ importProgress }}%</span>
+        <span class="absolute text-green-500" v-else>
+          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+        </span>
+      </div>
+      <div>
+        <h4 class="text-sm font-bold text-gray-900">{{ importProgress < 100 ? 'Importando Marcas...' : '¡Importación Completada!' }}</h4>
+        <p class="text-xs text-gray-500">{{ importProgress < 100 ? 'Por favor espera, no cierres esta ventana.' : 'Todos los datos han sido cargados.' }}</p>
       </div>
     </div>
   </AdminLayout>

@@ -12,19 +12,30 @@ class Tire extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
-        'brand_id', 'model', 'width', 'profile', 'rim', 
+        'brand_id', 'model', 'year', 'version', 'width', 'profile', 'rim', 
         'load_index', 'speed_rating', 'terrain_type', 'is_run_flat', 
         'description', 'price', 'offer_price', 'stock', 
-        'images_json', 'status'
+        'images_json', 'status', 'product_code'
     ];
 
     protected $casts = [
         'is_run_flat' => 'boolean',
         'status' => 'boolean',
         'images_json' => 'array',
+        'price' => 'decimal:2',
+        'offer_price' => 'decimal:2',
     ];
 
     protected $appends = ['has_discount', 'is_available'];
+
+    protected static function booted()
+    {
+        static::created(function ($tire) {
+            // Generate product code using ID padded with zeros (e.g. TT000001)
+            $tire->product_code = 'TT' . str_pad($tire->id, 6, '0', STR_PAD_LEFT);
+            $tire->saveQuietly();
+        });
+    }
 
     public function brand()
     {

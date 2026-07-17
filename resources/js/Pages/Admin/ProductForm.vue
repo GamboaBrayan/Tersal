@@ -14,6 +14,8 @@ const isEditing = !!props.tire;
 const form = useForm({
   brand_id: props.tire?.brand_id || '',
   model: props.tire?.model || '',
+  year: props.tire?.year || '',
+  version: props.tire?.version || '',
   width: props.tire?.width || '',
   profile: props.tire?.profile || '',
   rim: props.tire?.rim || '',
@@ -107,6 +109,19 @@ const submit = () => {
                 </div>
               </div>
 
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 mb-4 sm:mb-6">
+                <div>
+                  <label class="block text-sm font-bold text-gray-700 mb-1">Año</label>
+                  <input type="text" v-model="form.year" class="w-full h-12 px-4 rounded-xl border border-gray-200 bg-gray-50 focus:ring-2 focus:ring-primary focus:border-transparent text-sm sm:text-base">
+                  <div v-if="form.errors.year" class="text-red-500 text-xs mt-1">{{ form.errors.year }}</div>
+                </div>
+                <div>
+                  <label class="block text-sm font-bold text-gray-700 mb-1">Versión</label>
+                  <input type="text" v-model="form.version" class="w-full h-12 px-4 rounded-xl border border-gray-200 bg-gray-50 focus:ring-2 focus:ring-primary focus:border-transparent text-sm sm:text-base">
+                  <div v-if="form.errors.version" class="text-red-500 text-xs mt-1">{{ form.errors.version }}</div>
+                </div>
+              </div>
+
               <div class="grid grid-cols-3 gap-3 sm:gap-6 mb-4 sm:mb-6">
                 <div>
                   <label class="block text-sm font-bold text-gray-700 mb-1">Ancho</label>
@@ -114,12 +129,12 @@ const submit = () => {
                   <div v-if="form.errors.width" class="text-red-500 text-xs mt-1">{{ form.errors.width }}</div>
                 </div>
                 <div>
-                  <label class="block text-sm font-bold text-gray-700 mb-1">Perfil</label>
+                  <label class="block text-sm font-bold text-gray-700 mb-1">Alto</label>
                   <input type="number" min="0" v-model="form.profile" required class="w-full h-12 px-2 sm:px-4 rounded-xl border border-gray-200 bg-gray-50 focus:ring-2 focus:ring-primary focus:border-transparent text-sm sm:text-base">
                   <div v-if="form.errors.profile" class="text-red-500 text-xs mt-1">{{ form.errors.profile }}</div>
                 </div>
                 <div>
-                  <label class="block text-sm font-bold text-gray-700 mb-1">Aro (R)</label>
+                  <label class="block text-sm font-bold text-gray-700 mb-1">Rin</label>
                   <input type="number" min="0" v-model="form.rim" required class="w-full h-12 px-2 sm:px-4 rounded-xl border border-gray-200 bg-gray-50 focus:ring-2 focus:ring-primary focus:border-transparent text-sm sm:text-base">
                   <div v-if="form.errors.rim" class="text-red-500 text-xs mt-1">{{ form.errors.rim }}</div>
                 </div>

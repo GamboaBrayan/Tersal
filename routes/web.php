@@ -44,6 +44,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
         
         // Inventory
         Route::get('/inventory', [DashboardController::class, 'inventory'])->name('inventory');
+        Route::post('/inventory/import', [DashboardController::class, 'importInventory'])->name('inventory.import');
+        Route::get('/import-progress', [DashboardController::class, 'importProgress'])->name('import.progress');
         Route::post('/inventory', [DashboardController::class, 'store'])->name('inventory.store');
         Route::get('/inventory/create', [DashboardController::class, 'create'])->name('inventory.create');
         Route::get('/inventory/{tire}/edit', [DashboardController::class, 'edit'])->name('inventory.edit');
@@ -56,6 +58,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
         // Brands
         Route::get('/brands', [DashboardController::class, 'brands'])->name('brands');
+        Route::post('/brands/import', [DashboardController::class, 'importBrands'])->name('brands.import');
         Route::post('/brands', [DashboardController::class, 'storeBrand'])->name('brands.store');
         Route::post('/brands/{brand}', [DashboardController::class, 'updateBrand'])->name('brands.update');
         Route::delete('/brands/{brand}', [DashboardController::class, 'destroyBrand'])->name('brands.destroy');

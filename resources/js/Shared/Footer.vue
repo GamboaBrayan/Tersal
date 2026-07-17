@@ -10,7 +10,7 @@ import { Facebook, Instagram } from 'lucide-vue-next';
         <!-- Col 1 -->
         <div>
           <div class="flex items-center gap-2 mb-6">
-            <img src="/images/logo.png" alt="Tersal Logo" class="h-16 w-auto object-contain px-4 py-2 rounded-xl" />
+            <img src="/images/logo2.png" alt="Tersal Logo" class="h-16 w-auto object-contain px-4 py-2 rounded-xl" />
           </div>
           <p class="text-white-200 text-sm mb-4">Encuentra el ajuste perfecto para tu vehículo con nuestra búsqueda técnica avanzada. Marcas premium, instalación experta, sin complicaciones.</p>
           <p class="text-xs text-white-300">&copy; {{ new Date().getFullYear() }} TERSAL. Todos los derechos reservados.</p>

@@ -50,34 +50,36 @@ import { Phone, Mail, MapPin, Clock, MessageCircle, Map as MapIcon } from 'lucid
               </div>
             </div>
 
-            <a :href="'https://wa.me/' + $page.props.global_whatsapp + '?text=' + encodeURIComponent('¡Hola! Estoy navegando en la web de Tersal y necesito ayuda o asesoría con un servicio/neumático.')" target="_blank" class="mt-8 w-full h-14 flex items-center justify-center gap-2 bg-action text-white font-bold rounded-xl hover:bg-red-700 transition-colors shadow-sm">
-              <MessageCircle class="w-5 h-5" /> Escribir al WhatsApp
-            </a>
-          </div>
+          <a :href="'https://wa.me/' + $page.props.global_whatsapp + '?text=' + encodeURIComponent('¡Hola! Estoy navegando en la web de Tersal y necesito ayuda o asesoría con un servicio/neumático.')" target="_blank" class="mt-8 w-full h-14 flex items-center justify-center gap-2 bg-action text-white font-bold rounded-xl hover:bg-red-700 transition-colors shadow-sm">
+            <MessageCircle class="w-5 h-5" /> Escribir al WhatsApp
+          </a>
+        </div>
+        </div>
 
-          <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
-            <h2 class="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2">
-              <Clock class="w-5 h-5 text-gray-500" /> Horario de Servicio
-            </h2>
-            
-            <div class="space-y-4 text-gray-600">
-              <div class="flex justify-between items-center py-2 border-b border-gray-50">
-                <span>Lunes - Viernes</span>
-                <span class="font-bold text-gray-900">08:00 - 18:00</span>
-              </div>
-              <div class="flex justify-between items-center py-2 border-b border-gray-50">
-                <span>Sábado</span>
-                <span class="font-bold text-gray-900">09:00 - 14:00</span>
-              </div>
-              <div class="flex justify-between items-center py-2">
-                <span>Domingo</span>
-                <span class="bg-red-50 text-action text-xs font-bold px-2 py-1 rounded">Cerrado</span>
-              </div>
+        <!-- Right: Horario de Servicio -->
+        <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
+          <h2 class="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+            <Clock class="w-5 h-5 text-gray-500" /> Horario de Servicio
+          </h2>
+          
+          <div class="space-y-4 text-gray-600">
+            <div class="flex justify-between items-center py-2 border-b border-gray-50">
+              <span>Lunes - Viernes</span>
+              <span class="font-bold text-gray-900">08:00 - 18:00</span>
+            </div>
+            <div class="flex justify-between items-center py-2 border-b border-gray-50">
+              <span>Sábado</span>
+              <span class="font-bold text-gray-900">09:00 - 14:00</span>
+            </div>
+            <div class="flex justify-between items-center py-2">
+              <span>Domingo</span>
+              <span class="bg-red-50 text-action text-xs font-bold px-2 py-1 rounded">Cerrado</span>
             </div>
           </div>
         </div>
 
-        <!-- Right: Map -->
+        <!-- Right: Map (Oculto temporalmente) -->
+        <!--
         <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 flex flex-col">
           <h2 class="text-xl font-bold text-gray-900 mb-2 flex items-center gap-2">
             <MapPin class="w-5 h-5 text-gray-500" /> Ubicación
@@ -98,6 +100,7 @@ import { Phone, Mail, MapPin, Clock, MessageCircle, Map as MapIcon } from 'lucid
             <MapPin class="w-5 h-5" /> Abrir en Google Maps
           </a>
         </div>
+        -->
       </div>
     </main>
 

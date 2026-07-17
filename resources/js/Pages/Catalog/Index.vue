@@ -1,10 +1,14 @@
 <script setup>
+import { ref } from 'vue';
 import { Head, Link } from '@inertiajs/vue3';
+import { ChevronLeft, ChevronRight, Filter } from 'lucide-vue-next';
 import Header from '../../Shared/Header.vue';
 import Footer from '../../Shared/Footer.vue';
 import WhatsAppFloatingBtn from '../../Shared/WhatsAppFloatingBtn.vue';
 import ProductCard from './Components/ProductCard.vue';
 import FilterSidebar from './Components/FilterSidebar.vue';
+
+const isMobileFiltersOpen = ref(false);
 
 defineProps({
   tires: Object,
@@ -28,8 +32,13 @@ defineProps({
           {{ tires?.total || 0 }} resultados <span v-if="filters.width" class="text-primary ml-2">{{ filters.width }}/{{ filters.profile }} R{{ filters.rim }}</span>
         </h1>
         <div class="flex items-center gap-3">
+          <!-- Botón de filtros móvil -->
+          <button @click="isMobileFiltersOpen = !isMobileFiltersOpen" class="lg:hidden h-10 px-4 flex items-center justify-center gap-2 bg-gray-100 rounded border border-gray-300 text-sm font-bold text-gray-700">
+            <Filter class="w-4 h-4" /> Filtros
+          </button>
+
           <span class="text-sm font-medium text-gray-600 hidden sm:inline">Ordenar por:</span>
-          <select class="h-10 px-4 rounded border border-gray-300 text-sm focus:ring-1 focus:ring-primary focus:border-primary bg-white">
+          <select class="h-10 px-4 rounded border border-gray-300 text-sm focus:ring-1 focus:ring-primary focus:border-primary bg-white hidden sm:block">
             <option>Recomendados</option>
             <option>Menor Precio</option>
             <option>Mayor Precio</option>
@@ -39,8 +48,8 @@ defineProps({
 
       <div class="flex flex-col lg:flex-row gap-8">
         <!-- Barra Lateral (Filtros) -->
-        <aside class="w-full lg:w-1/4 flex-shrink-0">
-          <FilterSidebar :brands="brands" :filters="filters" :widths="widths" :profiles="profiles" :rims="rims" />
+        <aside :class="{'hidden lg:block': !isMobileFiltersOpen, 'block': isMobileFiltersOpen}" class="w-full lg:w-1/4 flex-shrink-0">
+          <FilterSidebar :brands="brands" :filters="filters" :widths="widths" :profiles="profiles" :rims="rims" @applied="isMobileFiltersOpen = false" />
         </aside>
 
         <!-- Cuadrícula de Productos -->
@@ -58,14 +67,32 @@ defineProps({
           </div>
 
           <!-- Paginación -->
-          <div class="mt-12 flex justify-center" v-if="tires?.next_page_url || tires?.prev_page_url">
-            <div class="flex gap-2">
-              <Link v-if="tires.prev_page_url" :href="tires.prev_page_url" class="px-6 py-3 bg-white border border-gray-200 rounded-lg text-sm font-bold text-gray-700 hover:bg-gray-50 transition-colors">
-                &larr; Anterior
-              </Link>
-              <Link v-if="tires.next_page_url" :href="tires.next_page_url" class="px-6 py-3 bg-white border border-gray-200 rounded-lg text-sm font-bold text-gray-700 hover:bg-gray-50 transition-colors">
-                Siguiente &rarr;
-              </Link>
+          <div class="mt-12 flex justify-center" v-if="tires?.links && tires.links.length > 3">
+            <div class="flex flex-wrap justify-center gap-1 sm:gap-2">
+              <template v-for="(link, idx) in tires.links" :key="idx">
+                <Link 
+                  v-if="link.url"
+                  :href="link.url" 
+                  :class="[
+                    'px-4 py-2 border rounded-lg text-sm font-bold transition-colors flex items-center justify-center',
+                    link.active ? 'bg-primary text-white border-primary' : 'bg-white border-gray-200 text-gray-700 hover:bg-gray-50'
+                  ]"
+                >
+                  <ChevronLeft v-if="link.label.toLowerCase().includes('previous')" class="w-4 h-4" />
+                  <ChevronRight v-else-if="link.label.toLowerCase().includes('next')" class="w-4 h-4" />
+                  <span v-else v-html="link.label"></span>
+                </Link>
+                <span 
+                  v-else
+                  :class="[
+                    'px-4 py-2 border border-gray-200 rounded-lg text-sm font-bold text-gray-400 bg-gray-50 flex items-center justify-center'
+                  ]"
+                >
+                  <ChevronLeft v-if="link.label.toLowerCase().includes('previous')" class="w-4 h-4" />
+                  <ChevronRight v-else-if="link.label.toLowerCase().includes('next')" class="w-4 h-4" />
+                  <span v-else v-html="link.label"></span>
+                </span>
+              </template>
             </div>
           </div>
         </div>

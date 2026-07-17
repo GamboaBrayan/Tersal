@@ -7,6 +7,9 @@ export default {
     ],
     theme: {
         extend: {
+            fontFamily: {
+                sans: ['Poppins', 'sans-serif'],
+            },
             colors: {
                 primary: '#0A1BCC',    // Azure/Electric Blue
                 action: '#D61A1A',     // Vibrant Red
