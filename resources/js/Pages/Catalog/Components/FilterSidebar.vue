@@ -26,6 +26,35 @@ const isBrandsExpanded = ref(true);
 
 const emit = defineEmits(['applied']);
 
+const isWidthDropdownOpen = ref(false);
+const isProfileDropdownOpen = ref(false);
+const isRimDropdownOpen = ref(false);
+
+const widthSearchQuery = ref('');
+const profileSearchQuery = ref('');
+const rimSearchQuery = ref('');
+
+import { computed } from 'vue';
+
+const filteredWidths = computed(() => {
+  if (!widthSearchQuery.value) return props.widths || [];
+  return (props.widths || []).filter(w => String(w).includes(widthSearchQuery.value));
+});
+
+const filteredProfiles = computed(() => {
+  if (!profileSearchQuery.value) return props.profiles || [];
+  return (props.profiles || []).filter(p => String(p).includes(profileSearchQuery.value));
+});
+
+const filteredRims = computed(() => {
+  if (!rimSearchQuery.value) return props.rims || [];
+  return (props.rims || []).filter(r => String(r).includes(rimSearchQuery.value));
+});
+
+const selectWidth = (val) => { currentFilters.value.width = val; isWidthDropdownOpen.value = false; };
+const selectProfile = (val) => { currentFilters.value.profile = val; isProfileDropdownOpen.value = false; };
+const selectRim = (val) => { currentFilters.value.rim = val; isRimDropdownOpen.value = false; };
+
 const applyFilters = () => {
   router.get('/catalog', currentFilters.value, { preserveState: true });
   emit('applied');
@@ -62,28 +91,130 @@ const clearFilters = () => {
     <div class="mb-8">
       <h3 class="font-bold text-primary mb-4">Medidas</h3>
       <div class="space-y-4">
-        <div>
+        <!-- Ancho -->
+        <div :class="['relative', isWidthDropdownOpen ? 'z-50' : 'z-30']">
           <label class="text-xs text-gray-500 mb-1 block">Ancho</label>
-          <select v-model="currentFilters.width" class="w-full h-10 px-3 rounded border border-gray-200 text-sm focus:ring-1 focus:ring-primary focus:border-primary">
-            <option :value="null">Todos</option>
-            <option v-for="w in widths" :key="w" :value="w">{{ w }}</option>
-          </select>
+          <div 
+            @click="isWidthDropdownOpen = !isWidthDropdownOpen; if(isWidthDropdownOpen) widthSearchQuery = ''"
+            class="w-full h-10 px-3 rounded border border-gray-200 bg-white cursor-pointer flex items-center justify-between text-sm text-gray-900 relative"
+          >
+            <span :class="{'text-gray-400': !currentFilters.width}">{{ currentFilters.width || 'Todos' }}</span>
+            <ChevronDown class="w-4 h-4 text-gray-500" />
+          </div>
+          
+          <div v-if="isWidthDropdownOpen" class="absolute mt-1 w-full max-h-60 overflow-hidden bg-white border border-gray-200 shadow-xl rounded-lg flex flex-col left-0 z-50">
+            <div class="p-2 border-b border-gray-100 bg-gray-50">
+              <input 
+                type="text" 
+                v-model="widthSearchQuery" 
+                placeholder="Buscar..." 
+                class="w-full px-2 py-1.5 border border-gray-300 rounded text-sm focus:ring-1 focus:ring-primary focus:border-primary outline-none"
+                @click.stop
+              >
+            </div>
+            <div class="p-2 overflow-y-auto">
+              <div class="grid grid-cols-2 gap-1">
+                <button 
+                  @click.stop="selectWidth(null)"
+                  type="button"
+                  class="text-left px-2 py-1.5 text-sm rounded hover:bg-gray-100 transition-colors"
+                >Todos</button>
+                <button 
+                  v-for="w in filteredWidths" 
+                  :key="w"
+                  @click.stop="selectWidth(w)"
+                  type="button"
+                  class="text-left px-2 py-1.5 text-sm rounded hover:bg-gray-100 transition-colors"
+                >{{ w }}</button>
+              </div>
+            </div>
+          </div>
+          <div v-if="isWidthDropdownOpen" @click="isWidthDropdownOpen = false" class="fixed inset-0 z-40 bg-transparent cursor-default"></div>
         </div>
-        <div>
+
+        <!-- Alto -->
+        <div :class="['relative', isProfileDropdownOpen ? 'z-40' : 'z-20']">
           <label class="text-xs text-gray-500 mb-1 block">Alto</label>
-          <select v-model="currentFilters.profile" class="w-full h-10 px-3 rounded border border-gray-200 text-sm focus:ring-1 focus:ring-primary focus:border-primary">
-            <option :value="null">Todos</option>
-            <option v-for="p in profiles" :key="p" :value="p">{{ p }}</option>
-          </select>
+          <div 
+            @click="isProfileDropdownOpen = !isProfileDropdownOpen; if(isProfileDropdownOpen) profileSearchQuery = ''"
+            class="w-full h-10 px-3 rounded border border-gray-200 bg-white cursor-pointer flex items-center justify-between text-sm text-gray-900 relative"
+          >
+            <span :class="{'text-gray-400': !currentFilters.profile}">{{ currentFilters.profile || 'Todos' }}</span>
+            <ChevronDown class="w-4 h-4 text-gray-500" />
+          </div>
+          
+          <div v-if="isProfileDropdownOpen" class="absolute mt-1 w-full max-h-60 overflow-hidden bg-white border border-gray-200 shadow-xl rounded-lg flex flex-col left-0 z-50">
+            <div class="p-2 border-b border-gray-100 bg-gray-50">
+              <input 
+                type="text" 
+                v-model="profileSearchQuery" 
+                placeholder="Buscar..." 
+                class="w-full px-2 py-1.5 border border-gray-300 rounded text-sm focus:ring-1 focus:ring-primary focus:border-primary outline-none"
+                @click.stop
+              >
+            </div>
+            <div class="p-2 overflow-y-auto">
+              <div class="grid grid-cols-2 gap-1">
+                <button 
+                  @click.stop="selectProfile(null)"
+                  type="button"
+                  class="text-left px-2 py-1.5 text-sm rounded hover:bg-gray-100 transition-colors"
+                >Todos</button>
+                <button 
+                  v-for="p in filteredProfiles" 
+                  :key="p"
+                  @click.stop="selectProfile(p)"
+                  type="button"
+                  class="text-left px-2 py-1.5 text-sm rounded hover:bg-gray-100 transition-colors"
+                >{{ p }}</button>
+              </div>
+            </div>
+          </div>
+          <div v-if="isProfileDropdownOpen" @click="isProfileDropdownOpen = false" class="fixed inset-0 z-40 bg-transparent cursor-default"></div>
         </div>
-        <div>
+
+        <!-- Rin -->
+        <div :class="['relative', isRimDropdownOpen ? 'z-30' : 'z-10']">
           <label class="text-xs text-gray-500 mb-1 block">Rin</label>
-          <select v-model="currentFilters.rim" class="w-full h-10 px-3 rounded border border-gray-200 text-sm focus:ring-1 focus:ring-primary focus:border-primary">
-            <option :value="null">Todos</option>
-            <option v-for="r in rims" :key="r" :value="r">{{ r }}</option>
-          </select>
+          <div 
+            @click="isRimDropdownOpen = !isRimDropdownOpen; if(isRimDropdownOpen) rimSearchQuery = ''"
+            class="w-full h-10 px-3 rounded border border-gray-200 bg-white cursor-pointer flex items-center justify-between text-sm text-gray-900 relative"
+          >
+            <span :class="{'text-gray-400': !currentFilters.rim}">{{ currentFilters.rim || 'Todos' }}</span>
+            <ChevronDown class="w-4 h-4 text-gray-500" />
+          </div>
+          
+          <div v-if="isRimDropdownOpen" class="absolute mt-1 w-full max-h-60 overflow-hidden bg-white border border-gray-200 shadow-xl rounded-lg flex flex-col left-0 z-50">
+            <div class="p-2 border-b border-gray-100 bg-gray-50">
+              <input 
+                type="text" 
+                v-model="rimSearchQuery" 
+                placeholder="Buscar..." 
+                class="w-full px-2 py-1.5 border border-gray-300 rounded text-sm focus:ring-1 focus:ring-primary focus:border-primary outline-none"
+                @click.stop
+              >
+            </div>
+            <div class="p-2 overflow-y-auto">
+              <div class="grid grid-cols-2 gap-1">
+                <button 
+                  @click.stop="selectRim(null)"
+                  type="button"
+                  class="text-left px-2 py-1.5 text-sm rounded hover:bg-gray-100 transition-colors"
+                >Todos</button>
+                <button 
+                  v-for="r in filteredRims" 
+                  :key="r"
+                  @click.stop="selectRim(r)"
+                  type="button"
+                  class="text-left px-2 py-1.5 text-sm rounded hover:bg-gray-100 transition-colors"
+                >{{ r }}</button>
+              </div>
+            </div>
+          </div>
+          <div v-if="isRimDropdownOpen" @click="isRimDropdownOpen = false" class="fixed inset-0 z-40 bg-transparent cursor-default"></div>
         </div>
       </div>
+      
     </div>
 
     <!-- Sección Marcas -->

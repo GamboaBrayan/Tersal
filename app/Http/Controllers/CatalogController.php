@@ -58,7 +58,87 @@ class CatalogController extends Controller
             });
         }
 
-        $tires = $query->latest()->paginate(12)->withQueryString();
+        $isVehicleSearch = $request->filled('vehicle_make') && $request->filled('vehicle_model') && $request->filled('vehicle_year');
+        
+        $recommendedSizes = [];
+        $alternativeSizes = [];
+        $recommendedTires = [];
+        $alternativeTires = [];
+
+        if ($isVehicleSearch) {
+            $apiData = \App\Http\Controllers\VehicleSearchController::getTiresForVehicle(
+                $request->vehicle_make,
+                $request->vehicle_model,
+                $request->vehicle_year,
+                $request->vehicle_trim // Can be null
+            );
+            
+            if (is_array($apiData)) {
+                foreach ($apiData as $config) {
+                    if (isset($config['wheels'])) {
+                        foreach ($config['wheels'] as $wheel) {
+                            if (isset($wheel['front']['tire'])) {
+                                $sizeStr = $wheel['front']['tire'];
+                                // Match e.g. "185/65R15" or "185/65ZR15"
+                                preg_match('/^(\d+)\/(\d+)[A-Z]+(\d+)/i', $sizeStr, $matches);
+                                if (count($matches) >= 4) {
+                                    $sizeObj = [
+                                        'width' => $matches[1],
+                                        'profile' => $matches[2],
+                                        'rim' => $matches[3]
+                                    ];
+                                    
+                                    $isStock = isset($wheel['is_stock']) ? $wheel['is_stock'] : true;
+                                    if ($isStock) {
+                                        $recommendedSizes[] = $sizeObj;
+                                    } else {
+                                        $alternativeSizes[] = $sizeObj;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            
+            // Remove duplicates
+            $recommendedSizes = array_unique($recommendedSizes, SORT_REGULAR);
+            $alternativeSizes = array_unique($alternativeSizes, SORT_REGULAR);
+            
+            // Fetch tires for recommended
+            if (count($recommendedSizes) > 0) {
+                $recQuery = Tire::with('brand')->where('status', true);
+                $recQuery->where(function($q) use ($recommendedSizes) {
+                    foreach ($recommendedSizes as $size) {
+                        $q->orWhere(function($sub) use ($size) {
+                            $sub->where('width', $size['width'])
+                                ->where('profile', $size['profile'])
+                                ->where('rim', $size['rim']);
+                        });
+                    }
+                });
+                $recommendedTires = $recQuery->get();
+            }
+            
+            // Fetch tires for alternatives
+            if (count($alternativeSizes) > 0) {
+                $altQuery = Tire::with('brand')->where('status', true);
+                $altQuery->where(function($q) use ($alternativeSizes) {
+                    foreach ($alternativeSizes as $size) {
+                        $q->orWhere(function($sub) use ($size) {
+                            $sub->where('width', $size['width'])
+                                ->where('profile', $size['profile'])
+                                ->where('rim', $size['rim']);
+                        });
+                    }
+                });
+                $alternativeTires = $altQuery->get();
+            }
+            
+            $tires = null; // No normal pagination for vehicle search
+        } else {
+            $tires = $query->latest()->paginate(12)->withQueryString();
+        }
         $brands = Brand::orderBy('name')->get();
         
         $widths = Tire::where('status', true)->whereNotNull('width')->distinct()->orderBy('width')->pluck('width');
@@ -67,11 +147,16 @@ class CatalogController extends Controller
 
         return Inertia::render('Catalog/Index', [
             'tires' => $tires,
+            'isVehicleSearch' => $isVehicleSearch,
+            'recommendedTires' => $recommendedTires,
+            'alternativeTires' => $alternativeTires,
+            'recommendedSizes' => array_values($recommendedSizes),
+            'alternativeSizes' => array_values($alternativeSizes),
             'brands' => $brands,
             'widths' => $widths,
             'profiles' => $profiles,
             'rims' => $rims,
-            'filters' => $request->only(['width', 'profile', 'rim', 'brand_id', 'terrain_type', 'price_min', 'price_max', 'search'])
+            'filters' => $request->only(['width', 'profile', 'rim', 'brand_id', 'terrain_type', 'price_min', 'price_max', 'search', 'vehicle_make', 'vehicle_model', 'vehicle_year', 'vehicle_trim'])
         ]);
     }
 

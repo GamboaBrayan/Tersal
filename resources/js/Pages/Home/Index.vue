@@ -1,12 +1,13 @@
 <script setup>
 import { Head, Link, router } from '@inertiajs/vue3';
-import { ref } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import Header from '../../Shared/Header.vue';
 import Footer from '../../Shared/Footer.vue';
 import WhatsAppFloatingBtn from '../../Shared/WhatsAppFloatingBtn.vue';
-import { Search, Info, CheckCircle2, MessageCircle, Truck } from 'lucide-vue-next';
+import { Search, Info, CheckCircle2, MessageCircle, Truck, ChevronDown } from 'lucide-vue-next';
+import axios from 'axios';
 
-defineProps({
+const props = defineProps({
   brands: Array,
   promotions: Array,
   widths: Array,
@@ -22,6 +23,33 @@ const searchFilters = ref({
   rim: ''
 });
 
+const isWidthDropdownOpen = ref(false);
+const isProfileDropdownOpen = ref(false);
+const isRimDropdownOpen = ref(false);
+
+const widthSearchQuery = ref('');
+const profileSearchQuery = ref('');
+const rimSearchQuery = ref('');
+
+const filteredWidths = computed(() => {
+  if (!widthSearchQuery.value) return props.widths;
+  return props.widths.filter(w => String(w).includes(widthSearchQuery.value));
+});
+
+const filteredProfiles = computed(() => {
+  if (!profileSearchQuery.value) return props.profiles;
+  return props.profiles.filter(p => String(p).includes(profileSearchQuery.value));
+});
+
+const filteredRims = computed(() => {
+  if (!rimSearchQuery.value) return props.rims;
+  return props.rims.filter(r => String(r).includes(rimSearchQuery.value));
+});
+
+const selectWidth = (val) => { searchFilters.value.width = val; isWidthDropdownOpen.value = false; };
+const selectProfile = (val) => { searchFilters.value.profile = val; isProfileDropdownOpen.value = false; };
+const selectRim = (val) => { searchFilters.value.rim = val; isRimDropdownOpen.value = false; };
+
 const searchByMeasure = () => {
   const params = {};
   if (searchFilters.value.width) params.width = searchFilters.value.width;
@@ -33,6 +61,103 @@ const searchByMeasure = () => {
 const getDiscountPercentage = (price, offerPrice) => {
   if (!price || !offerPrice) return 0;
   return Math.round(((price - offerPrice) / price) * 100);
+};
+
+// --- VEHICLE SEARCH LOGIC ---
+const vehicleMakes = ref([]);
+const vehicleModels = ref([]);
+const vehicleYears = ref([]);
+
+const selectedVehicle = ref({
+  make: '',
+  model: '',
+  year: ''
+});
+
+const isMakeDropdownOpen = ref(false);
+const isModelDropdownOpen = ref(false);
+const isYearDropdownOpen = ref(false);
+
+const makeSearchQuery = ref('');
+const modelSearchQuery = ref('');
+
+const groupedMakes = computed(() => {
+  if (!vehicleMakes.value) return [];
+  const makesArray = Array.isArray(vehicleMakes.value) ? vehicleMakes.value : [];
+  let sorted = makesArray.sort((a, b) => a.name.localeCompare(b.name));
+  
+  if (makeSearchQuery.value) {
+    const q = makeSearchQuery.value.toLowerCase();
+    sorted = sorted.filter(m => m.name.toLowerCase().includes(q));
+  }
+  
+  return sorted;
+});
+
+const filteredModels = computed(() => {
+  if (!vehicleModels.value) return [];
+  const modelsArray = Array.isArray(vehicleModels.value) ? vehicleModels.value : [];
+  
+  if (modelSearchQuery.value) {
+    const q = modelSearchQuery.value.toLowerCase();
+    return modelsArray.filter(m => m.name.toLowerCase().includes(q));
+  }
+  
+  return modelsArray;
+});
+
+onMounted(() => {
+  fetchMakes();
+});
+
+const fetchMakes = async () => {
+  try {
+    const response = await axios.get('/api/vehicles/makes');
+    vehicleMakes.value = response.data;
+  } catch (error) {
+    console.error('Error fetching makes:', error);
+  }
+};
+
+const selectMake = async (makeName) => {
+  selectedVehicle.value.make = makeName;
+  selectedVehicle.value.model = '';
+  selectedVehicle.value.year = '';
+  isMakeDropdownOpen.value = false;
+  vehicleModels.value = [];
+  
+  try {
+    const response = await axios.get('/api/vehicles/models', { params: { make: makeName } });
+    vehicleModels.value = response.data;
+  } catch (error) { console.error(error); }
+};
+
+const selectModel = async (modelName) => {
+  selectedVehicle.value.model = modelName;
+  selectedVehicle.value.year = '';
+  isModelDropdownOpen.value = false;
+  vehicleYears.value = [];
+  
+  try {
+    const response = await axios.get('/api/vehicles/years', { 
+      params: { make: selectedVehicle.value.make, model: modelName } 
+    });
+    vehicleYears.value = response.data;
+  } catch (error) { console.error(error); }
+};
+
+const selectYear = (yearName) => {
+  selectedVehicle.value.year = yearName;
+  isYearDropdownOpen.value = false;
+};
+
+const searchByVehicle = () => {
+  if (!selectedVehicle.value.year) return;
+  router.get('/catalog', {
+    vehicle_make: selectedVehicle.value.make,
+    vehicle_model: selectedVehicle.value.model,
+    vehicle_year: selectedVehicle.value.year
+  });
 };
 </script>
 
@@ -75,27 +200,160 @@ const getDiscountPercentage = (price, offerPrice) => {
               </div>
               <form @submit.prevent="searchByMeasure">
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                  <div>
+                  
+                  <!-- Dropdown Ancho -->
+                  <div :class="['relative', isWidthDropdownOpen ? 'z-50' : 'z-10']">
                     <label class="block text-xs font-bold text-gray-700 uppercase tracking-wide mb-2">Ancho</label>
-                    <select v-model="searchFilters.width" class="w-full h-12 px-4 rounded-lg border border-gray-300 bg-white focus:ring-2 focus:ring-action focus:border-transparent text-gray-900">
-                      <option value="">Todos</option>
-                      <option v-for="w in widths" :key="w" :value="w">{{ w }}</option>
-                    </select>
+                    <div 
+                      @click="isWidthDropdownOpen = !isWidthDropdownOpen; if(isWidthDropdownOpen) widthSearchQuery = ''"
+                      class="w-full h-12 px-4 rounded-lg border border-gray-300 bg-white cursor-pointer flex items-center justify-between text-gray-900 relative"
+                    >
+                      <span :class="{'text-gray-400': !searchFilters.width}">{{ searchFilters.width || 'Todos' }}</span>
+                      <ChevronDown class="w-4 h-4 text-gray-500" />
+                    </div>
+                    
+                    <div v-if="isWidthDropdownOpen" class="absolute mt-1 w-full sm:w-[300px] max-h-80 overflow-hidden bg-white border border-gray-200 shadow-2xl rounded-xl flex flex-col left-0 z-50">
+                      <!-- Buscador interno -->
+                      <div class="p-3 border-b border-gray-100 bg-gray-50">
+                        <div class="relative">
+                          <Search class="w-4 h-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                          <input 
+                            type="text" 
+                            v-model="widthSearchQuery" 
+                            placeholder="Buscar ancho..." 
+                            class="w-full pl-9 pr-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-action focus:border-action outline-none transition-shadow"
+                            @click.stop
+                          >
+                        </div>
+                      </div>
+
+                      <div class="p-4 overflow-y-auto max-h-60">
+                        <div class="grid grid-cols-3 gap-2">
+                          <button 
+                            @click.stop="selectWidth('')"
+                            type="button"
+                            class="text-center px-2 py-2 text-sm rounded hover:bg-red-50 hover:text-action transition-colors truncate"
+                          >Todos</button>
+                          <button 
+                            v-for="w in filteredWidths" 
+                            :key="w"
+                            @click.stop="selectWidth(w)"
+                            type="button"
+                            class="text-center px-2 py-2 text-sm rounded hover:bg-red-50 hover:text-action transition-colors truncate"
+                          >
+                            {{ w }}
+                          </button>
+                          <div v-if="filteredWidths.length === 0" class="col-span-full text-center text-gray-500 py-4 text-sm">
+                            No se encontraron medidas
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div v-if="isWidthDropdownOpen" @click="isWidthDropdownOpen = false" class="fixed inset-0 z-40 bg-transparent cursor-default w-screen h-screen"></div>
                   </div>
-                  <div>
+
+                  <!-- Dropdown Alto -->
+                  <div :class="['relative', isProfileDropdownOpen ? 'z-50' : 'z-10']">
                     <label class="block text-xs font-bold text-gray-700 uppercase tracking-wide mb-2">Alto</label>
-                    <select v-model="searchFilters.profile" class="w-full h-12 px-4 rounded-lg border border-gray-300 bg-white focus:ring-2 focus:ring-action focus:border-transparent text-gray-900">
-                      <option value="">Todos</option>
-                      <option v-for="p in profiles" :key="p" :value="p">{{ p }}</option>
-                    </select>
+                    <div 
+                      @click="isProfileDropdownOpen = !isProfileDropdownOpen; if(isProfileDropdownOpen) profileSearchQuery = ''"
+                      class="w-full h-12 px-4 rounded-lg border border-gray-300 bg-white cursor-pointer flex items-center justify-between text-gray-900 relative"
+                    >
+                      <span :class="{'text-gray-400': !searchFilters.profile}">{{ searchFilters.profile || 'Todos' }}</span>
+                      <ChevronDown class="w-4 h-4 text-gray-500" />
+                    </div>
+                    
+                    <div v-if="isProfileDropdownOpen" class="absolute mt-1 w-full sm:w-[300px] max-h-80 overflow-hidden bg-white border border-gray-200 shadow-2xl rounded-xl flex flex-col left-0 z-50">
+                      <!-- Buscador interno -->
+                      <div class="p-3 border-b border-gray-100 bg-gray-50">
+                        <div class="relative">
+                          <Search class="w-4 h-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                          <input 
+                            type="text" 
+                            v-model="profileSearchQuery" 
+                            placeholder="Buscar alto..." 
+                            class="w-full pl-9 pr-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-action focus:border-action outline-none transition-shadow"
+                            @click.stop
+                          >
+                        </div>
+                      </div>
+
+                      <div class="p-4 overflow-y-auto max-h-60">
+                        <div class="grid grid-cols-3 gap-2">
+                          <button 
+                            @click.stop="selectProfile('')"
+                            type="button"
+                            class="text-center px-2 py-2 text-sm rounded hover:bg-red-50 hover:text-action transition-colors truncate"
+                          >Todos</button>
+                          <button 
+                            v-for="p in filteredProfiles" 
+                            :key="p"
+                            @click.stop="selectProfile(p)"
+                            type="button"
+                            class="text-center px-2 py-2 text-sm rounded hover:bg-red-50 hover:text-action transition-colors truncate"
+                          >
+                            {{ p }}
+                          </button>
+                          <div v-if="filteredProfiles.length === 0" class="col-span-full text-center text-gray-500 py-4 text-sm">
+                            No se encontraron medidas
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div v-if="isProfileDropdownOpen" @click="isProfileDropdownOpen = false" class="fixed inset-0 z-40 bg-transparent cursor-default w-screen h-screen"></div>
                   </div>
-                  <div>
+
+                  <!-- Dropdown Rin -->
+                  <div :class="['relative', isRimDropdownOpen ? 'z-50' : 'z-10']">
                     <label class="block text-xs font-bold text-gray-700 uppercase tracking-wide mb-2">Rin</label>
-                    <select v-model="searchFilters.rim" class="w-full h-12 px-4 rounded-lg border border-gray-300 bg-white focus:ring-2 focus:ring-action focus:border-transparent text-gray-900">
-                      <option value="">Todos</option>
-                      <option v-for="r in rims" :key="r" :value="r">{{ r }}</option>
-                    </select>
+                    <div 
+                      @click="isRimDropdownOpen = !isRimDropdownOpen; if(isRimDropdownOpen) rimSearchQuery = ''"
+                      class="w-full h-12 px-4 rounded-lg border border-gray-300 bg-white cursor-pointer flex items-center justify-between text-gray-900 relative"
+                    >
+                      <span :class="{'text-gray-400': !searchFilters.rim}">{{ searchFilters.rim || 'Todos' }}</span>
+                      <ChevronDown class="w-4 h-4 text-gray-500" />
+                    </div>
+                    
+                    <div v-if="isRimDropdownOpen" class="absolute mt-1 w-full sm:w-[300px] max-h-80 overflow-hidden bg-white border border-gray-200 shadow-2xl rounded-xl flex flex-col left-0 z-50">
+                      <!-- Buscador interno -->
+                      <div class="p-3 border-b border-gray-100 bg-gray-50">
+                        <div class="relative">
+                          <Search class="w-4 h-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                          <input 
+                            type="text" 
+                            v-model="rimSearchQuery" 
+                            placeholder="Buscar rin..." 
+                            class="w-full pl-9 pr-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-action focus:border-action outline-none transition-shadow"
+                            @click.stop
+                          >
+                        </div>
+                      </div>
+
+                      <div class="p-4 overflow-y-auto max-h-60">
+                        <div class="grid grid-cols-3 gap-2">
+                          <button 
+                            @click.stop="selectRim('')"
+                            type="button"
+                            class="text-center px-2 py-2 text-sm rounded hover:bg-red-50 hover:text-action transition-colors truncate"
+                          >Todos</button>
+                          <button 
+                            v-for="r in filteredRims" 
+                            :key="r"
+                            @click.stop="selectRim(r)"
+                            type="button"
+                            class="text-center px-2 py-2 text-sm rounded hover:bg-red-50 hover:text-action transition-colors truncate"
+                          >
+                            {{ r }}
+                          </button>
+                          <div v-if="filteredRims.length === 0" class="col-span-full text-center text-gray-500 py-4 text-sm">
+                            No se encontraron medidas
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div v-if="isRimDropdownOpen" @click="isRimDropdownOpen = false" class="fixed inset-0 z-40 bg-transparent cursor-default w-screen h-screen"></div>
                   </div>
+
                 </div>
                 <button type="submit" class="w-full h-12 flex items-center justify-center gap-2 bg-action text-white font-bold rounded-lg hover:bg-red-700 transition-colors shadow-md cursor-pointer">
                   <Search class="w-5 h-5" /> BUSCAR NEUMÁTICOS
@@ -104,15 +362,144 @@ const getDiscountPercentage = (price, offerPrice) => {
             </div>
 
             <!-- Contenido: Búsqueda por Vehículo -->
-            <div v-if="activeTab === 'vehiculo'" class="text-center py-10">
-              <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gray-100 mb-4">
-                <Search class="w-8 h-8 text-gray-400" />
-              </div>
-              <h3 class="text-xl font-bold text-gray-900 mb-2">Búsqueda por vehículo</h3>
-              <p class="text-gray-500 mb-6">Esta función estará disponible próximamente en nuestra nueva actualización, donde podrás vincular la marca y versión de tu auto a la medida exacta.</p>
-              <button @click="activeTab = 'medida'" class="px-6 py-2 bg-gray-100 text-gray-700 font-bold rounded hover:bg-gray-200 transition-colors">
-                Buscar por Medida
-              </button>
+            <div v-if="activeTab === 'vehiculo'">
+              <form @submit.prevent="searchByVehicle">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                  
+                  <!-- Dropdown Marca -->
+                  <div :class="['relative', isMakeDropdownOpen ? 'z-50' : 'z-10']">
+                    <label class="block text-xs font-bold text-gray-700 uppercase tracking-wide mb-2">Marca</label>
+                    <div 
+                      @click="isMakeDropdownOpen = !isMakeDropdownOpen; if(isMakeDropdownOpen) makeSearchQuery = ''"
+                      class="w-full h-12 px-4 rounded-lg border border-gray-300 bg-white cursor-pointer flex items-center justify-between text-gray-900 relative"
+                    >
+                      <span :class="{'text-gray-400': !selectedVehicle.make}">{{ selectedVehicle.make || 'Seleccionar Marca' }}</span>
+                      <ChevronDown class="w-4 h-4 text-gray-500" />
+                    </div>
+                    
+                    <!-- Desplegable -->
+                    <div v-if="isMakeDropdownOpen" class="absolute mt-1 w-full sm:w-[450px] md:w-[550px] max-h-80 overflow-hidden bg-white border border-gray-200 shadow-2xl rounded-xl flex flex-col left-0 z-50">
+                      <!-- Buscador interno -->
+                      <div class="p-3 border-b border-gray-100 bg-gray-50">
+                        <div class="relative">
+                          <Search class="w-4 h-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                          <input 
+                            type="text" 
+                            v-model="makeSearchQuery" 
+                            placeholder="Buscar marca..." 
+                            class="w-full pl-9 pr-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-action focus:border-action outline-none transition-shadow"
+                            @click.stop
+                          >
+                        </div>
+                      </div>
+                      
+                      <!-- Lista de opciones -->
+                      <div class="p-4 overflow-y-auto max-h-60">
+                        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
+                          <button 
+                            v-for="make in groupedMakes" 
+                            :key="make.slug"
+                            @click.stop="selectMake(make.name)"
+                            type="button"
+                            class="text-left px-3 py-2 text-sm rounded hover:bg-red-50 hover:text-action transition-colors truncate"
+                            :title="make.name"
+                          >
+                            {{ make.name }}
+                          </button>
+                          <div v-if="groupedMakes.length === 0" class="col-span-full text-center text-gray-500 py-4 text-sm">
+                            <span v-if="vehicleMakes.length === 0">Cargando marcas...</span>
+                            <span v-else>No se encontraron marcas</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div v-if="isMakeDropdownOpen" @click="isMakeDropdownOpen = false" class="fixed inset-0 z-40 bg-transparent cursor-default w-screen h-screen"></div>
+                  </div>
+
+                  <!-- Dropdown Modelo -->
+                  <div :class="['relative', isModelDropdownOpen ? 'z-50' : 'z-10']">
+                    <label class="block text-xs font-bold text-gray-700 uppercase tracking-wide mb-2">Modelo</label>
+                    <div 
+                      @click="selectedVehicle.make && (isModelDropdownOpen = !isModelDropdownOpen); if(isModelDropdownOpen) modelSearchQuery = ''"
+                      :class="['w-full h-12 px-4 rounded-lg border border-gray-300 bg-white flex items-center justify-between text-gray-900 relative', selectedVehicle.make ? 'cursor-pointer' : 'opacity-50 cursor-not-allowed bg-gray-50']"
+                    >
+                      <span :class="{'text-gray-400': !selectedVehicle.model}">{{ selectedVehicle.model || 'Seleccionar Modelo' }}</span>
+                      <ChevronDown class="w-4 h-4 text-gray-500" />
+                    </div>
+                    
+                    <div v-if="isModelDropdownOpen" class="absolute mt-1 w-full sm:w-[400px] max-h-80 overflow-hidden bg-white border border-gray-200 shadow-2xl rounded-xl flex flex-col left-0 z-50">
+                      <!-- Buscador interno -->
+                      <div class="p-3 border-b border-gray-100 bg-gray-50">
+                        <div class="relative">
+                          <Search class="w-4 h-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                          <input 
+                            type="text" 
+                            v-model="modelSearchQuery" 
+                            placeholder="Buscar modelo..." 
+                            class="w-full pl-9 pr-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-action focus:border-action outline-none transition-shadow"
+                            @click.stop
+                          >
+                        </div>
+                      </div>
+
+                      <div class="p-4 overflow-y-auto max-h-60">
+                        <div class="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                          <button 
+                            v-for="model in filteredModels" 
+                            :key="model.slug"
+                            @click.stop="selectModel(model.name)"
+                            type="button"
+                            class="text-left px-3 py-2 text-sm rounded hover:bg-red-50 hover:text-action transition-colors truncate"
+                            :title="model.name"
+                          >
+                            {{ model.name }}
+                          </button>
+                          <div v-if="filteredModels.length === 0" class="col-span-full text-center text-gray-500 py-4 text-sm">
+                            <span v-if="vehicleModels.length === 0">Cargando modelos...</span>
+                            <span v-else>No se encontraron modelos</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div v-if="isModelDropdownOpen" @click="isModelDropdownOpen = false" class="fixed inset-0 z-40 bg-transparent cursor-default w-screen h-screen"></div>
+                  </div>
+
+                  <!-- Dropdown Año -->
+                  <div :class="['relative', isYearDropdownOpen ? 'z-50' : 'z-10']">
+                    <label class="block text-xs font-bold text-gray-700 uppercase tracking-wide mb-2">Año</label>
+                    <div 
+                      @click="selectedVehicle.model && (isYearDropdownOpen = !isYearDropdownOpen)"
+                      :class="['w-full h-12 px-4 rounded-lg border border-gray-300 bg-white flex items-center justify-between text-gray-900 relative', selectedVehicle.model ? 'cursor-pointer' : 'opacity-50 cursor-not-allowed bg-gray-50']"
+                    >
+                      <span :class="{'text-gray-400': !selectedVehicle.year}">{{ selectedVehicle.year || 'Seleccionar Año' }}</span>
+                      <ChevronDown class="w-4 h-4 text-gray-500" />
+                    </div>
+                    
+                    <div v-if="isYearDropdownOpen" class="absolute mt-1 w-full sm:w-[300px] max-h-80 overflow-y-auto bg-white border border-gray-200 shadow-2xl rounded-xl p-4 left-0 z-50">
+                      <div class="grid grid-cols-3 sm:grid-cols-4 gap-2">
+                        <button 
+                          v-for="year in vehicleYears" 
+                          :key="year.slug"
+                          @click.stop="selectYear(year.name)"
+                          type="button"
+                          class="text-left px-3 py-2 text-sm rounded hover:bg-red-50 hover:text-action transition-colors truncate text-center"
+                          :title="year.name"
+                        >
+                          {{ year.name }}
+                        </button>
+                        <div v-if="vehicleYears.length === 0" class="col-span-full text-center text-gray-500 py-4 text-sm">
+                          Cargando años...
+                        </div>
+                      </div>
+                    </div>
+                    <div v-if="isYearDropdownOpen" @click="isYearDropdownOpen = false" class="fixed inset-0 z-40 bg-transparent cursor-default w-screen h-screen"></div>
+                  </div>
+
+                </div>
+                <button type="submit" :disabled="!selectedVehicle.year" class="w-full h-12 flex items-center justify-center gap-2 bg-action text-white font-bold rounded-lg hover:bg-red-700 transition-colors shadow-md cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed relative z-30">
+                  <Search class="w-5 h-5" /> VER NEUMÁTICOS COMPATIBLES
+                </button>
+              </form>
             </div>
           </div>
         </div>

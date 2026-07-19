@@ -3,6 +3,7 @@
 use App\Http\Controllers\CatalogController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\VehicleSearchController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -63,4 +64,11 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::post('/brands/{brand}', [DashboardController::class, 'updateBrand'])->name('brands.update');
         Route::delete('/brands/{brand}', [DashboardController::class, 'destroyBrand'])->name('brands.destroy');
     });
+});
+
+Route::prefix('api/vehicles')->group(function () {
+    Route::get('/makes', [VehicleSearchController::class, 'getMakes']);
+    Route::get('/models', [VehicleSearchController::class, 'getModels']);
+    Route::get('/years', [VehicleSearchController::class, 'getYears']);
+    Route::get('/trims', [VehicleSearchController::class, 'getTrims']);
 });
