@@ -21,6 +21,16 @@ const getDiscountPercentage = (price, offerPrice) => {
     </div>
     
     <Link :href="`/catalog/${tire.id}`" class="block relative pt-[100%] bg-gray-100 group overflow-hidden">
+      <!-- Axis Badge (Medida Delantera / Trasera) -->
+      <div v-if="tire.axis && tire.axis !== 'both'" class="absolute bottom-2 left-2 z-10 flex flex-col gap-1">
+        <span v-if="tire.axis === 'front'" class="bg-blue-600 text-white text-[10px] font-bold px-2 py-1 rounded shadow-sm">
+          MEDIDA DELANTERA
+        </span>
+        <span v-if="tire.axis === 'rear'" class="bg-purple-600 text-white text-[10px] font-bold px-2 py-1 rounded shadow-sm">
+          MEDIDA TRASERA
+        </span>
+      </div>
+
       <img :src="tire.images_json && tire.images_json.length ? '/storage/'+tire.images_json[0] : defaultImage" 
            class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" 
            alt="Tire" />

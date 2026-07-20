@@ -100,35 +100,18 @@ class VehicleSearchController extends Controller
                     return $response->json('data') ?? [];
                 }
             } else {
-                // If no trim is provided, fetch modifications to find a valid region
-                $modResponse = Http::get("https://api.wheel-size.com/v2/modifications/", $params);
-                if ($modResponse->successful()) {
-                    $mods = $modResponse->json('data') ?? [];
-                    $regions = [];
-                    foreach ($mods as $mod) {
-                        if (!empty($mod['regions'])) {
-                            foreach ($mod['regions'] as $r) {
-                                $regions[$r] = true;
-                            }
-                        }
-                    }
-                    
-                    if (!empty($regions)) {
-                        $allData = [];
-                        // Query the first 2 regions to avoid using too much API quota
-                        $regionsToFetch = array_slice(array_keys($regions), 0, 2);
-                        foreach ($regionsToFetch as $reg) {
-                            $params['region'] = $reg;
-                            $res2 = Http::get("https://api.wheel-size.com/v2/search/by_model/", $params);
-                            if ($res2->successful()) {
-                                $data = $res2->json('data') ?? [];
-                                if (is_array($data)) {
-                                    $allData = array_merge($allData, $data);
-                                }
-                            }
-                        }
-                        return $allData;
-                    }
+                // Optimize: query by default usdm region, fallback to eudm
+                $params['region'] = 'usdm';
+                $response = Http::get("https://api.wheel-size.com/v2/search/by_model/", $params);
+                if ($response->successful() && !empty($response->json('data'))) {
+                    return $response->json('data');
+                }
+                
+                // Fallback
+                $params['region'] = 'eudm';
+                $res2 = Http::get("https://api.wheel-size.com/v2/search/by_model/", $params);
+                if ($res2->successful()) {
+                    return $res2->json('data') ?? [];
                 }
             }
             

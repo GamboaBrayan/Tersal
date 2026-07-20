@@ -77,22 +77,36 @@ class CatalogController extends Controller
                 foreach ($apiData as $config) {
                     if (isset($config['wheels'])) {
                         foreach ($config['wheels'] as $wheel) {
-                            if (isset($wheel['front']['tire'])) {
-                                $sizeStr = $wheel['front']['tire'];
-                                // Match e.g. "185/65R15" or "185/65ZR15"
-                                preg_match('/^(\d+)\/(\d+)[A-Z]+(\d+)/i', $sizeStr, $matches);
-                                if (count($matches) >= 4) {
-                                    $sizeObj = [
-                                        'width' => $matches[1],
-                                        'profile' => $matches[2],
-                                        'rim' => $matches[3]
-                                    ];
-                                    
-                                    $isStock = isset($wheel['is_stock']) ? $wheel['is_stock'] : true;
-                                    if ($isStock) {
-                                        $recommendedSizes[] = $sizeObj;
-                                    } else {
-                                        $alternativeSizes[] = $sizeObj;
+                            $isStock = isset($wheel['is_stock']) ? $wheel['is_stock'] : true;
+                            
+                            $axes = ['front', 'rear'];
+                            
+                            // Check if front and rear tires are exactly the same
+                            $sameTires = false;
+                            if (isset($wheel['front']['tire']) && isset($wheel['rear']['tire'])) {
+                                if ($wheel['front']['tire'] === $wheel['rear']['tire']) {
+                                    $sameTires = true;
+                                }
+                            }
+                            
+                            foreach ($axes as $axis) {
+                                if (isset($wheel[$axis]['tire'])) {
+                                    $sizeStr = $wheel[$axis]['tire'];
+                                    // Match e.g. "185/65R15" or "185/65ZR15"
+                                    preg_match('/^(\d+)\/(\d+)[A-Z]+(\d+)/i', $sizeStr, $matches);
+                                    if (count($matches) >= 4) {
+                                        $sizeObj = [
+                                            'width' => $matches[1],
+                                            'profile' => $matches[2],
+                                            'rim' => $matches[3],
+                                            'axis' => $sameTires ? 'both' : $axis
+                                        ];
+                                        
+                                        if ($isStock) {
+                                            $recommendedSizes[] = $sizeObj;
+                                        } else {
+                                            $alternativeSizes[] = $sizeObj;
+                                        }
                                     }
                                 }
                             }
@@ -118,6 +132,14 @@ class CatalogController extends Controller
                     }
                 });
                 $recommendedTires = $recQuery->get();
+                $recommendedTires->map(function ($tire) use ($recommendedSizes) {
+                    foreach ($recommendedSizes as $size) {
+                        if ($tire->width == $size['width'] && $tire->profile == $size['profile'] && $tire->rim == $size['rim']) {
+                            $tire->setAttribute('axis', $size['axis']);
+                        }
+                    }
+                    return $tire;
+                });
             }
             
             // Fetch tires for alternatives
@@ -133,6 +155,14 @@ class CatalogController extends Controller
                     }
                 });
                 $alternativeTires = $altQuery->get();
+                $alternativeTires->map(function ($tire) use ($alternativeSizes) {
+                    foreach ($alternativeSizes as $size) {
+                        if ($tire->width == $size['width'] && $tire->profile == $size['profile'] && $tire->rim == $size['rim']) {
+                            $tire->setAttribute('axis', $size['axis']);
+                        }
+                    }
+                    return $tire;
+                });
             }
             
             $tires = null; // No normal pagination for vehicle search

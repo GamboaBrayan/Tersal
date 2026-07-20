@@ -147,7 +147,7 @@ const submit = () => {
                   <div v-if="form.errors.load_index" class="text-red-500 text-xs mt-1">{{ form.errors.load_index }}</div>
                 </div>
                 <div>
-                  <label class="block text-sm font-bold text-gray-700 mb-1">Cód. de Velocidad</label>
+                  <label class="block text-sm font-bold text-gray-700 mb-1">Índice de Velocidad</label>
                   <input type="text" v-model="form.speed_rating" required class="w-full h-12 px-4 rounded-xl border border-gray-200 bg-gray-50 focus:ring-2 focus:ring-primary focus:border-transparent uppercase text-sm sm:text-base">
                   <div v-if="form.errors.speed_rating" class="text-red-500 text-xs mt-1">{{ form.errors.speed_rating }}</div>
                 </div>
