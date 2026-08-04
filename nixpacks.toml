@@ -6,11 +6,14 @@ nixPkgs = [
     "php82Extensions.gd",
     "php82Extensions.zip",
     "composer",
-    "nginx"
+    "nodejs_22",
+    "pnpm"
 ]
 
 [phases.build]
 cmds = [
+    "pnpm install",
+    "pnpm run build",
     "composer install --no-dev --optimize-autoloader",
     "php artisan config:cache",
     "php artisan route:cache",
