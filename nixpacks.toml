@@ -1,5 +1,13 @@
 [phases.setup]
-nixPkgs = ["...", "php82", "php82Extensions.pdo_mysql", "php82Extensions.mbstring", "php82Extensions.gd", "composer", "nginx"]
+nixPkgs = [
+    "php82",
+    "php82Extensions.pdo_mysql",
+    "php82Extensions.mbstring",
+    "php82Extensions.gd",
+    "php82Extensions.zip",
+    "composer",
+    "nginx"
+]
 
 [phases.build]
 cmds = [
