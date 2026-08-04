@@ -1,18 +1,5 @@
-[providers]
-php = "8.2"
-
 [phases.setup]
-nixPkgs = [
-    "php82",
-    "php82Extensions.pdo_mysql",
-    "php82Extensions.mbstring",
-    "php82Extensions.gd",
-    "php82Extensions.zip",
-    "composer",
-    "nodejs_22",
-    "pnpm",
-    "nginx"
-]
+nixPkgs = ["..."]
 
 [phases.install]
 cmds = [
