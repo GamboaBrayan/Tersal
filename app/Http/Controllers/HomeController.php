@@ -24,12 +24,16 @@ class HomeController extends Controller
         $profiles = Tire::select('profile')->distinct()->orderBy('profile')->pluck('profile');
         $rims = Tire::select('rim')->distinct()->orderBy('rim')->pluck('rim');
 
+        $heroImagesSetting = \App\Models\Setting::where('key', 'hero_images')->first();
+        $heroImages = $heroImagesSetting ? json_decode($heroImagesSetting->value, true) : [];
+
         return Inertia::render('Home/Index', [
             'brands' => $brands,
             'promotions' => $promotions,
             'widths' => $widths,
             'profiles' => $profiles,
-            'rims' => $rims
+            'rims' => $rims,
+            'heroImages' => $heroImages
         ]);
     }
 }

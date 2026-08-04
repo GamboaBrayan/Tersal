@@ -1,6 +1,6 @@
 <script setup>
 import { Head, Link, router } from '@inertiajs/vue3';
-import { ref, onMounted, computed } from 'vue';
+import { ref, onMounted, computed, onUnmounted } from 'vue';
 import Header from '../../Shared/Header.vue';
 import Footer from '../../Shared/Footer.vue';
 import WhatsAppFloatingBtn from '../../Shared/WhatsAppFloatingBtn.vue';
@@ -12,7 +12,8 @@ const props = defineProps({
   promotions: Array,
   widths: Array,
   profiles: Array,
-  rims: Array
+  rims: Array,
+  heroImages: Array
 });
 
 const activeTab = ref('medida');
@@ -118,8 +119,22 @@ const filteredModels = computed(() => {
   return modelsArray;
 });
 
+const currentHeroImageIndex = ref(0);
+let heroInterval;
+
 onMounted(() => {
   fetchMakes();
+  if (props.heroImages && props.heroImages.length > 1) {
+    heroInterval = setInterval(() => {
+      currentHeroImageIndex.value = (currentHeroImageIndex.value + 1) % props.heroImages.length;
+    }, 5000);
+  }
+});
+
+onUnmounted(() => {
+  if (heroInterval) {
+    clearInterval(heroInterval);
+  }
 });
 
 const fetchMakes = async () => {
@@ -191,10 +206,19 @@ const searchByVehicle = () => {
     <main class="flex-grow relative z-10">
       <!-- Sección Principal (Hero) -->
       <section class="relative flex flex-col">
-        <div class="absolute inset-0 z-0 bg-gray-900">
-          <img src="/images/hero3.png" class="w-full h-full object-cover object-[75%_top] lg:object-top" alt="Tire Background">
+        <div class="absolute inset-0 z-0 bg-gray-900 overflow-hidden">
+          <template v-if="heroImages && heroImages.length > 0">
+            <div v-for="(img, index) in heroImages" :key="img"
+                 class="absolute inset-0 w-full h-full transition-opacity duration-1000 ease-in-out"
+                 :class="index === currentHeroImageIndex ? 'opacity-100 z-0' : 'opacity-0 -z-10'">
+              <img :src="'/storage/' + img" class="w-full h-full object-cover object-[75%_top] lg:object-top" alt="Tire Background">
+            </div>
+          </template>
+          <template v-else>
+            <img src="/images/hero3.png" class="absolute inset-0 w-full h-full object-cover object-[75%_top] lg:object-top" alt="Tire Background">
+          </template>
           <!-- Difuminado superior para fusionar con el header negro -->
-          <div class="absolute top-0 left-0 w-full h-40 md:h-64 bg-gradient-to-b from-black via-black/50 to-transparent"></div>
+          <div class="absolute top-0 left-0 w-full h-40 md:h-64 bg-gradient-to-b from-black via-black/50 to-transparent z-10"></div>
         </div>
         
         <!-- Spacer Block -->

@@ -1,7 +1,7 @@
 <script setup>
 import { Head, useForm } from '@inertiajs/vue3';
 import AdminLayout from './Components/AdminLayout.vue';
-import { Save, Plus, Trash2, MessageCircle, HelpCircle, ChevronUp, ChevronDown } from 'lucide-vue-next';
+import { Save, Plus, Trash2, MessageCircle, HelpCircle, ChevronUp, ChevronDown, Image as ImageIcon } from 'lucide-vue-next';
 import { ref, onMounted } from 'vue';
 
 const props = defineProps({
@@ -19,9 +19,19 @@ try {
   initialFaqs = [];
 }
 
+let initialHeroImages = [];
+try {
+  if (props.settings?.hero_images) {
+    initialHeroImages = JSON.parse(props.settings.hero_images);
+  }
+} catch (e) {
+  initialHeroImages = [];
+}
+
 const form = useForm({
   whatsapp_number: props.settings?.whatsapp_number || '',
-  faqs: initialFaqs.length > 0 ? initialFaqs : [{ question: '', answer: '' }]
+  faqs: initialFaqs.length > 0 ? initialFaqs : [{ question: '', answer: '' }],
+  hero_images: initialHeroImages
 });
 
 const addFaq = () => {
@@ -46,6 +56,45 @@ const moveDown = (index) => {
     form.faqs.splice(index, 1);
     form.faqs.splice(index + 1, 0, item);
   }
+};
+
+const handleImageUpload = (e) => {
+  const files = e.target.files;
+  if (!files.length) return;
+  for (let i = 0; i < files.length; i++) {
+    form.hero_images.push(files[i]);
+  }
+  e.target.value = '';
+};
+
+const removeHeroImage = (index) => {
+  form.hero_images.splice(index, 1);
+};
+
+const moveHeroImageUp = (index) => {
+  if (index > 0) {
+    const item = form.hero_images[index];
+    form.hero_images.splice(index, 1);
+    form.hero_images.splice(index - 1, 0, item);
+  }
+};
+
+const moveHeroImageDown = (index) => {
+  if (index < form.hero_images.length - 1) {
+    const item = form.hero_images[index];
+    form.hero_images.splice(index, 1);
+    form.hero_images.splice(index + 1, 0, item);
+  }
+};
+
+const getImageUrl = (image) => {
+  if (typeof image === 'string') {
+    return '/storage/' + image;
+  }
+  if (image instanceof File) {
+    return URL.createObjectURL(image);
+  }
+  return '';
 };
 
 const submit = () => {
@@ -92,6 +141,19 @@ const submit = () => {
             <div class="flex items-center gap-2">
               <HelpCircle class="w-4 h-4" />
               Preguntas Frecuentes
+            </div>
+          </button>
+          <button 
+            type="button"
+            @click="activeTab = 'hero'"
+            :class="[
+              'pb-3 sm:pb-4 px-2 text-sm font-bold transition-colors border-b-2 -mb-[2px]',
+              activeTab === 'hero' ? 'text-primary border-primary' : 'text-gray-500 border-transparent hover:text-gray-700 hover:border-gray-300'
+            ]"
+          >
+            <div class="flex items-center gap-2">
+              <ImageIcon class="w-4 h-4" />
+              Carrusel Principal
             </div>
           </button>
         </div>
@@ -157,6 +219,52 @@ const submit = () => {
             </div>
           </div>
           
+        </div>
+
+        <!-- Tab Content 3: Hero Images -->
+        <div v-show="activeTab === 'hero'" class="max-w-4xl bg-white rounded-2xl shadow-sm border border-gray-100 p-5 sm:p-8">
+          <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-6 gap-4">
+            <div>
+              <h2 class="text-lg font-bold text-gray-900">Imágenes del Carrusel</h2>
+              <p class="text-xs text-gray-500 mt-1">Configura las imágenes que rotarán en el inicio (recomendado: 1920x1080px).</p>
+            </div>
+            <div class="relative">
+              <input type="file" multiple accept="image/*" @change="handleImageUpload" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" />
+              <button type="button" class="inline-flex items-center justify-center gap-2 px-4 py-2 bg-blue-50 text-primary font-bold rounded-xl hover:bg-blue-100 transition-colors text-sm w-full sm:w-auto">
+                <Plus class="w-4 h-4" /> Añadir Imágenes
+              </button>
+            </div>
+          </div>
+
+          <div class="space-y-4 sm:space-y-6">
+            <div v-for="(image, index) in form.hero_images" :key="index" class="p-4 sm:p-6 border border-gray-200 rounded-xl bg-gray-50 relative group transition-all hover:border-primary/30 flex flex-col sm:flex-row gap-4 items-center">
+              <div class="w-full sm:w-48 h-32 bg-gray-200 rounded-lg overflow-hidden flex-shrink-0">
+                <img :src="getImageUrl(image)" class="w-full h-full object-cover" />
+              </div>
+              <div class="flex-grow w-full">
+                <p class="text-sm font-bold text-gray-700">Imagen {{ index + 1 }}</p>
+                <p class="text-xs text-gray-500" v-if="typeof image === 'string'">Archivo guardado en el servidor</p>
+                <p class="text-xs text-blue-500 font-bold" v-else>Nueva imagen (pendiente de guardar)</p>
+              </div>
+              <div class="flex gap-2">
+                <div class="flex flex-col gap-1">
+                  <button type="button" @click="moveHeroImageUp(index)" :disabled="index === 0" class="w-8 h-8 bg-gray-200 text-gray-500 rounded-lg flex items-center justify-center hover:bg-gray-300 transition-colors disabled:opacity-30 disabled:cursor-not-allowed">
+                    <ChevronUp class="w-4 h-4" />
+                  </button>
+                  <button type="button" @click="moveHeroImageDown(index)" :disabled="index === form.hero_images.length - 1" class="w-8 h-8 bg-gray-200 text-gray-500 rounded-lg flex items-center justify-center hover:bg-gray-300 transition-colors disabled:opacity-30 disabled:cursor-not-allowed">
+                    <ChevronDown class="w-4 h-4" />
+                  </button>
+                </div>
+                <button type="button" @click="removeHeroImage(index)" class="w-10 h-[68px] bg-red-50 text-action rounded-lg flex items-center justify-center hover:bg-red-100 transition-colors">
+                  <Trash2 class="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+            
+            <div v-if="form.hero_images.length === 0" class="text-center p-8 text-gray-500 border-2 border-dashed border-gray-200 rounded-xl text-sm sm:text-base">
+              No hay imágenes en el carrusel. Haz clic en "Añadir Imágenes".
+            </div>
+          </div>
         </div>
       </div>
 

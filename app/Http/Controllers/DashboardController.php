@@ -156,8 +156,21 @@ class DashboardController extends Controller
     {
         $validated = $request->validate([
             'whatsapp_number' => 'nullable|string',
-            'faqs' => 'nullable|array'
+            'faqs' => 'nullable|array',
+            'hero_images' => 'nullable|array'
         ]);
+
+        if (isset($validated['hero_images'])) {
+            $processedImages = [];
+            foreach ($validated['hero_images'] as $image) {
+                if (is_string($image)) {
+                    $processedImages[] = $image;
+                } elseif ($image instanceof \Illuminate\Http\UploadedFile) {
+                    $processedImages[] = $image->store('hero', 'public');
+                }
+            }
+            $validated['hero_images'] = $processedImages;
+        }
 
         foreach ($validated as $key => $value) {
             Setting::updateOrCreate(
