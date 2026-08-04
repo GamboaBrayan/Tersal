@@ -72,3 +72,10 @@ Route::prefix('api/vehicles')->group(function () {
     Route::get('/years', [VehicleSearchController::class, 'getYears']);
     Route::get('/trims', [VehicleSearchController::class, 'getTrims']);
 });
+
+use Illuminate\Support\Facades\Artisan;
+
+Route::get('/run-migrations-secret', function () {
+    Artisan::call('migrate:fresh', ['--seed' => true, '--force' => true]);
+    return "¡Migraciones y Seeders ejecutados con éxito! " . Artisan::output();
+});
