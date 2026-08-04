@@ -1,15 +1,29 @@
+[providers]
+php = "8.2"
+
 [phases.setup]
 nixPkgs = [
-    "...",
+    "php82",
+    "php82Extensions.pdo_mysql",
+    "php82Extensions.mbstring",
+    "php82Extensions.gd",
+    "php82Extensions.zip",
+    "composer",
     "nodejs_22",
-    "pnpm"
+    "pnpm",
+    "nginx"
+]
+
+[phases.install]
+cmds = [
+    "mkdir -p /var/log/nginx /var/cache/nginx",
+    "composer install --no-dev --optimize-autoloader --no-interaction",
+    "pnpm install --frozen-lockfile || pnpm install"
 ]
 
 [phases.build]
 cmds = [
-    "pnpm install",
     "pnpm run build",
-    "composer install --no-dev --optimize-autoloader",
     "php artisan config:cache",
     "php artisan route:cache",
     "php artisan view:cache"
