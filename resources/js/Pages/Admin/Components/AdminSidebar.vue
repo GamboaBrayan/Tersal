@@ -46,7 +46,7 @@ const logout = () => {
         <div class="w-8 h-8 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center text-primary font-bold text-sm shrink-0 shadow-sm">
           T
         </div>
-        <span v-if="!isCollapsed" class="text-lg font-medium tracking-tight text-gray-800 whitespace-nowrap">Admin</span>
+        <span v-if="!isCollapsed" class="text-base font-medium tracking-tight text-gray-800 whitespace-nowrap">Dashboard Tersal</span>
       </Link>
       <button @click="emit('close')" class="lg:hidden text-gray-400 hover:text-primary transition-colors">
         <X class="w-5 h-5" />

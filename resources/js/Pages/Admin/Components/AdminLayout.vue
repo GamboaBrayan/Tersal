@@ -16,7 +16,7 @@ const isSidebarOpen = ref(false);
         <button @click="isSidebarOpen = true" class="text-gray-500 hover:text-gray-800 transition-colors p-2">
           <Menu class="w-6 h-6" />
         </button>
-        <span class="ml-4 font-medium tracking-tight text-gray-800">Admin</span>
+        <span class="ml-4 font-medium tracking-tight text-gray-800">Dashboard Tersal</span>
       </div>
 
       <!-- Main Content Area with its own scroll -->
