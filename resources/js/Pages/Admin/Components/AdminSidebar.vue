@@ -1,7 +1,7 @@
 <script setup>
 import { ref } from 'vue';
 import { Link, usePage } from '@inertiajs/vue3';
-import { LayoutDashboard, PackageSearch, Settings, LogOut, X, ChevronLeft, ChevronRight } from 'lucide-vue-next';
+import { LayoutDashboard, PackageSearch, Settings, LogOut, X, ChevronLeft, ChevronRight, Tags } from 'lucide-vue-next';
 
 defineProps({
   isOpen: Boolean
@@ -15,6 +15,7 @@ const navItems = [
   { name: 'Métricas', href: '/admin/dashboard', icon: LayoutDashboard },
   { name: 'Inventario', href: '/admin/inventory', icon: PackageSearch },
   { name: 'Marcas', href: '/admin/brands', icon: Settings },
+  { name: 'Categorías', href: '/admin/categories', icon: Tags },
   { name: 'Configuración', href: '/admin/settings', icon: Settings },
 ];
 

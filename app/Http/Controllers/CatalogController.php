@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Brand;
 use App\Models\Tire;
+use App\Models\Category;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -34,7 +35,12 @@ class CatalogController extends Controller
             $query->where('rim', $request->rim);
         }
         if ($request->filled('brand_id')) {
-            $query->where('brand_id', $request->brand_id);
+            $brandsParam = is_array($request->brand_id) ? $request->brand_id : [$request->brand_id];
+            $query->whereIn('brand_id', $brandsParam);
+        }
+        if ($request->filled('category_id')) {
+            $catsParam = is_array($request->category_id) ? $request->category_id : [$request->category_id];
+            $query->whereIn('category_id', $catsParam);
         }
         if ($request->filled('terrain_type')) {
             $query->where('terrain_type', $request->terrain_type);
@@ -171,6 +177,7 @@ class CatalogController extends Controller
             $tires = $query->latest()->paginate(12)->withQueryString();
         }
         $brands = Brand::orderBy('name')->get();
+        $categories = Category::orderBy('name')->get();
         
         $widths = Tire::where('status', true)->whereNotNull('width')->distinct()->orderBy('width')->pluck('width');
         $profiles = Tire::where('status', true)->whereNotNull('profile')->distinct()->orderBy('profile')->pluck('profile');
@@ -184,10 +191,11 @@ class CatalogController extends Controller
             'recommendedSizes' => array_values($recommendedSizes),
             'alternativeSizes' => array_values($alternativeSizes),
             'brands' => $brands,
+            'categories' => $categories,
             'widths' => $widths,
             'profiles' => $profiles,
             'rims' => $rims,
-            'filters' => $request->only(['width', 'profile', 'rim', 'brand_id', 'terrain_type', 'price_min', 'price_max', 'search', 'vehicle_make', 'vehicle_model', 'vehicle_year', 'vehicle_trim'])
+            'filters' => $request->only(['width', 'profile', 'rim', 'brand_id', 'category_id', 'terrain_type', 'price_min', 'price_max', 'search', 'vehicle_make', 'vehicle_model', 'vehicle_year', 'vehicle_trim'])
         ]);
     }
 

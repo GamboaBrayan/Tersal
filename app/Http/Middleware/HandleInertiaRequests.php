@@ -41,7 +41,8 @@ class HandleInertiaRequests extends Middleware
             ...parent::share($request),
             'global_whatsapp' => $whatsappSetting ? $whatsappSetting->value : '123456789',
             'flash' => [
-                'success' => fn () => $request->session()->get('success')
+                'success' => fn () => $request->session()->get('success'),
+                'error' => fn () => $request->session()->get('error')
             ],
         ];
     }

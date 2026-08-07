@@ -2,7 +2,7 @@
 import { Head, Link, router } from '@inertiajs/vue3';
 import AdminLayout from './Components/AdminLayout.vue';
 import { ref, watch } from 'vue';
-import { Edit2, Trash2, Search, Plus, AlertCircle, Package, Upload, ChevronLeft, ChevronRight } from 'lucide-vue-next';
+import { Edit2, Trash2, Search, Plus, AlertCircle, Package, Upload, ChevronLeft, ChevronRight, Download } from 'lucide-vue-next';
 
 const props = defineProps({
   tires: Object,
@@ -107,6 +107,9 @@ const handleImport = (e) => {
         <h1 class="text-2xl sm:text-3xl font-black text-gray-900">Inventario de Llantas</h1>
         <div class="flex items-center gap-2">
           <input type="file" ref="importInput" @change="handleImport" class="hidden" accept=".xlsx,.xls,.csv" />
+          <a href="/admin/inventory/template" class="inline-flex items-center justify-center w-12 h-12 bg-green-50 text-green-600 font-bold rounded-xl hover:bg-green-100 transition-all shadow-sm hover:-translate-y-0.5 flex-shrink-0" title="Descargar Plantilla">
+            <Download class="w-6 h-6" />
+          </a>
           <button @click="$refs.importInput.click()" :disabled="isImporting" class="inline-flex items-center justify-center w-12 h-12 bg-gray-100 text-gray-700 font-bold rounded-xl hover:bg-gray-200 transition-all shadow-sm hover:-translate-y-0.5 flex-shrink-0 disabled:opacity-50" title="Importar Excel">
             <Upload class="w-6 h-6" />
           </button>
@@ -148,7 +151,7 @@ const handleImport = (e) => {
                 <td class="p-4">
                   <div class="flex items-center gap-4">
                     <div class="w-10 h-10 sm:w-12 sm:h-12 bg-gray-100 rounded-lg overflow-hidden flex-shrink-0 flex items-center justify-center">
-                      <img v-if="tire.images_json && tire.images_json.length > 0" :src="`/storage/${tire.images_json[0]}`" class="w-full h-full object-cover" />
+                      <img v-if="tire.images_json && tire.images_json.length > 0" :src="tire.images_json[0].startsWith('http') ? tire.images_json[0] : `/storage/${tire.images_json[0]}`" class="w-full h-full object-cover" />
                       <Package class="w-5 h-5 sm:w-6 sm:h-6 text-gray-400" v-else />
                     </div>
                     <div>

@@ -1,7 +1,7 @@
 <script setup>
 import { Head, useForm, router, Link } from '@inertiajs/vue3';
 import AdminLayout from './Components/AdminLayout.vue';
-import { Plus, Trash2, AlertCircle, Tag, Check, X as XIcon, Edit, Save, Upload, Search, ChevronLeft, ChevronRight } from 'lucide-vue-next';
+import { Plus, Trash2, AlertCircle, Tag, Check, X as XIcon, Edit, Save, Upload, Search, ChevronLeft, ChevronRight, Download } from 'lucide-vue-next';
 import { ref, watch } from 'vue';
 
 const props = defineProps({
@@ -26,6 +26,7 @@ watch(searchQuery, (value) => {
 const form = useForm({
   name: '',
   logo: null,
+  logo_url_input: '',
   show_on_home: true
 });
 
@@ -39,12 +40,21 @@ const handleFileChange = (e) => {
   const file = e.target.files[0];
   if (file) {
     form.logo = file;
+    form.logo_url_input = ''; // clear url if file selected
     logoPreview.value = URL.createObjectURL(file);
   } else {
     form.logo = null;
-    logoPreview.value = null;
+    logoPreview.value = form.logo_url_input || null;
   }
 };
+
+watch(() => form.logo_url_input, (newVal) => {
+  if (newVal && !form.logo) {
+    logoPreview.value = newVal;
+  } else if (!newVal && !form.logo) {
+    logoPreview.value = null;
+  }
+});
 
 const closeBrandModal = () => {
   showBrandModal.value = false;
@@ -66,9 +76,10 @@ const editBrand = (brand) => {
   form.name = brand.name;
   form.show_on_home = !!brand.show_on_home;
   form.logo = null;
+  form.logo_url_input = brand.logo_url && brand.logo_url.startsWith('http') ? brand.logo_url : '';
   
   if (brand.logo_url) {
-    logoPreview.value = '/storage/' + brand.logo_url;
+    logoPreview.value = brand.logo_url.startsWith('http') ? brand.logo_url : '/storage/' + brand.logo_url;
   } else {
     logoPreview.value = null;
   }
@@ -176,6 +187,9 @@ const handleImport = (e) => {
         </div>
         <div class="flex items-center gap-2">
           <input type="file" ref="importInput" @change="handleImport" class="hidden" accept=".xlsx,.xls,.csv" />
+          <a href="/admin/brands/template" class="inline-flex items-center justify-center w-12 h-12 bg-green-50 text-green-600 font-bold rounded-xl hover:bg-green-100 transition-all shadow-sm hover:-translate-y-0.5 flex-shrink-0" title="Descargar Plantilla">
+            <Download class="w-6 h-6" />
+          </a>
           <button @click="$refs.importInput.click()" :disabled="isImporting" class="inline-flex items-center justify-center w-12 h-12 bg-gray-100 text-gray-700 font-bold rounded-xl hover:bg-gray-200 transition-all shadow-sm hover:-translate-y-0.5 flex-shrink-0 disabled:opacity-50" title="Importar Excel">
             <Upload class="w-6 h-6" />
           </button>
@@ -215,7 +229,7 @@ const handleImport = (e) => {
                 <td class="p-4">
                   <div class="flex items-center gap-3">
                     <div class="w-12 h-12 rounded-lg border border-gray-200 bg-white flex items-center justify-center flex-shrink-0 p-1">
-                      <img v-if="brand.logo_url" :src="'/storage/' + brand.logo_url" class="max-w-full max-h-full object-contain" />
+                      <img v-if="brand.logo_url" :src="brand.logo_url.startsWith('http') ? brand.logo_url : '/storage/' + brand.logo_url" class="max-w-full max-h-full object-contain" />
                       <Tag v-else class="w-5 h-5 text-gray-400" />
                     </div>
                     <div class="flex flex-col">
@@ -293,15 +307,23 @@ const handleImport = (e) => {
         </div>
         <form @submit.prevent="submit" class="p-6 flex flex-col gap-5">
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Nombre de la Marca</label>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Nombre de la Marca <span class="text-red-500">*</span></label>
             <input type="text" v-model="form.name" required class="w-full h-12 px-4 rounded-xl border border-gray-200 bg-gray-50 focus:ring-2 focus:ring-primary focus:border-transparent text-sm sm:text-base" placeholder="Ej: Michelin">
             <div v-if="form.errors.name" class="text-red-500 text-xs mt-1">{{ form.errors.name }}</div>
           </div>
           
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Logo (Opcional)</label>
-            <input type="file" ref="fileInput" @change="handleFileChange" accept="image/*" class="w-full h-12 px-4 py-2 rounded-xl border border-gray-200 bg-gray-50 focus:ring-2 focus:ring-primary focus:border-transparent text-sm sm:text-base file:mr-4 file:py-1 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20">
-            <div v-if="form.errors.logo" class="text-red-500 text-xs mt-1">{{ form.errors.logo }}</div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Logo (Archivo)</label>
+              <input type="file" ref="fileInput" @change="handleFileChange" accept="image/*" class="w-full h-12 px-4 py-2 rounded-xl border border-gray-200 bg-gray-50 focus:ring-2 focus:ring-primary focus:border-transparent text-sm sm:text-base file:mr-4 file:py-1 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20">
+              <div v-if="form.errors.logo" class="text-red-500 text-xs mt-1">{{ form.errors.logo }}</div>
+            </div>
+            
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Logo (URL Externa)</label>
+              <input type="url" v-model="form.logo_url_input" :disabled="!!form.logo" placeholder="https://ejemplo.com/logo.png" class="w-full h-12 px-4 rounded-xl border border-gray-200 bg-gray-50 focus:ring-2 focus:ring-primary focus:border-transparent text-sm sm:text-base disabled:opacity-50">
+              <div v-if="form.errors.logo_url_input" class="text-red-500 text-xs mt-1">{{ form.errors.logo_url_input }}</div>
+            </div>
           </div>
 
           <div v-if="logoPreview" class="w-20 h-20 rounded-lg overflow-hidden border border-gray-200 bg-white flex items-center justify-center p-1">

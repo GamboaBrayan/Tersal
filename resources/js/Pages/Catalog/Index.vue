@@ -18,6 +18,7 @@ defineProps({
   recommendedSizes: Array,
   alternativeSizes: Array,
   brands: Array,
+  categories: Array,
   filters: Object,
   widths: Array,
   profiles: Array,
@@ -54,7 +55,7 @@ defineProps({
       <div class="flex flex-col lg:flex-row gap-8">
         <!-- Barra Lateral (Filtros) -->
         <aside :class="{'hidden lg:block': !isMobileFiltersOpen, 'block': isMobileFiltersOpen}" class="w-full lg:w-1/4 flex-shrink-0">
-          <FilterSidebar :brands="brands" :filters="filters" :widths="widths" :profiles="profiles" :rims="rims" @applied="isMobileFiltersOpen = false" />
+          <FilterSidebar :brands="brands" :categories="categories" :filters="filters" :widths="widths" :profiles="profiles" :rims="rims" @applied="isMobileFiltersOpen = false" />
         </aside>
 
         <!-- Cuadrícula de Productos -->

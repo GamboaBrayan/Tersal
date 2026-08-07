@@ -66,7 +66,7 @@ class VehicleSearchController extends Controller
         if (!$make || !$model || !$year) return response()->json([]);
 
         return Cache::remember("ws_trims_{$make}_{$model}_{$year}", now()->addDays(30), function () use ($make, $model, $year) {
-            $response = Http::get("{$this->baseUrl}/trims/", [
+            $response = Http::get("{$this->baseUrl}/modifications/", [
                 'make' => $make,
                 'model' => $model,
                 'year' => $year,

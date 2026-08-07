@@ -5,24 +5,45 @@ import { ChevronDown, HelpCircle } from 'lucide-vue-next';
 
 const props = defineProps({
   brands: Array,
+  categories: Array,
   filters: Object,
   widths: Array,
   profiles: Array,
   rims: Array
 });
 
-const currentFilters = ref({
+const getInitialFilters = () => ({
   width: props.filters.width || null,
   profile: props.filters.profile || null,
   rim: props.filters.rim || null,
-  brand_id: props.filters.brand_id || null,
+  brand_id: Array.isArray(props.filters.brand_id) ? props.filters.brand_id.map(String) : (props.filters.brand_id ? [String(props.filters.brand_id)] : []),
+  category_id: Array.isArray(props.filters.category_id) ? props.filters.category_id.map(String) : (props.filters.category_id ? [String(props.filters.category_id)] : []),
   terrain_type: props.filters.terrain_type || null,
   price_min: props.filters.price_min || null,
   price_max: props.filters.price_max || null,
 });
 
+const currentFilters = ref(getInitialFilters());
+
+import { computed, watch } from 'vue';
+
+const hasFilterChanges = computed(() => {
+  const current = JSON.stringify({
+    ...currentFilters.value,
+    brand_id: currentFilters.value.brand_id.map(String).sort(),
+    category_id: currentFilters.value.category_id.map(String).sort(),
+  });
+  const initial = JSON.stringify({
+    ...getInitialFilters(),
+    brand_id: getInitialFilters().brand_id.sort(),
+    category_id: getInitialFilters().category_id.sort(),
+  });
+  return current !== initial;
+});
+
 const showTooltip = ref(false);
 const isBrandsExpanded = ref(true);
+const isCategoriesExpanded = ref(true);
 
 const emit = defineEmits(['applied']);
 
@@ -33,8 +54,6 @@ const isRimDropdownOpen = ref(false);
 const widthSearchQuery = ref('');
 const profileSearchQuery = ref('');
 const rimSearchQuery = ref('');
-
-import { computed } from 'vue';
 
 const filteredWidths = computed(() => {
   if (!widthSearchQuery.value) return props.widths || [];
@@ -69,7 +88,8 @@ const clearFilters = () => {
     width: null,
     profile: null,
     rim: null,
-    brand_id: null,
+    brand_id: [],
+    category_id: [],
     terrain_type: null,
     price_min: null,
     price_max: null,
@@ -217,6 +237,22 @@ const clearFilters = () => {
       
     </div>
 
+    <!-- Sección Categorías -->
+    <div class="mb-8">
+      <div class="flex items-center justify-between mb-4">
+        <button type="button" @click="isCategoriesExpanded = !isCategoriesExpanded" class="flex items-center gap-2 font-bold text-primary focus:outline-none hover:text-gray-900 transition-colors w-full text-left">
+          Categoría
+          <ChevronDown :class="{'rotate-180': isCategoriesExpanded}" class="w-4 h-4 transition-transform ml-auto" />
+        </button>
+      </div>
+      <div v-show="isCategoriesExpanded" class="space-y-3 max-h-48 overflow-y-auto pr-2 [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 [&::-webkit-scrollbar-thumb]:rounded-full">
+        <label v-for="category in categories" :key="category.id" class="flex items-center gap-3 cursor-pointer group">
+          <input type="checkbox" v-model="currentFilters.category_id" :value="category.id" class="w-4 h-4 text-primary rounded border-gray-300 focus:ring-primary">
+          <span class="text-sm text-gray-600 group-hover:text-gray-900">{{ category.name }}</span>
+        </label>
+      </div>
+    </div>
+
     <!-- Sección Marcas -->
     <div class="mb-8">
       <div class="flex items-center justify-between mb-4">
@@ -226,12 +262,8 @@ const clearFilters = () => {
         </button>
       </div>
       <div v-show="isBrandsExpanded" class="space-y-3 max-h-48 overflow-y-auto pr-2 [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 [&::-webkit-scrollbar-thumb]:rounded-full">
-        <label class="flex items-center gap-3 cursor-pointer group">
-          <input type="radio" v-model="currentFilters.brand_id" :value="null" class="w-4 h-4 text-primary border-gray-300 focus:ring-primary">
-          <span class="text-sm text-gray-600 group-hover:text-gray-900">Todas las marcas</span>
-        </label>
         <label v-for="brand in brands" :key="brand.id" class="flex items-center gap-3 cursor-pointer group">
-          <input type="radio" v-model="currentFilters.brand_id" :value="brand.id" class="w-4 h-4 text-primary border-gray-300 focus:ring-primary">
+          <input type="checkbox" v-model="currentFilters.brand_id" :value="brand.id" class="w-4 h-4 text-primary rounded border-gray-300 focus:ring-primary">
           <span class="text-sm text-gray-600 group-hover:text-gray-900">{{ brand.name }}</span>
         </label>
       </div>
@@ -287,8 +319,8 @@ const clearFilters = () => {
 
     <!-- Botón Aplicar -->
     <div class="mt-8">
-      <button @click="applyFilters" class="w-full h-12 bg-action text-white font-bold rounded-lg hover:bg-red-700 transition-colors shadow-md flex items-center justify-center gap-2">
-        APLICAR FILTROS
+      <button @click="applyFilters" :disabled="!hasFilterChanges" class="w-full h-10 bg-action/90 text-white font-semibold rounded-lg cursor-pointer hover:bg-action transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed text-sm">
+        Aplicar Filtros
       </button>
     </div>
   </div>

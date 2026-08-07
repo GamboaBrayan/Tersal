@@ -12,7 +12,7 @@ class Tire extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
-        'brand_id', 'model', 'year', 'version', 'width', 'profile', 'rim', 
+        'brand_id', 'category_id', 'model', 'year', 'version', 'width', 'profile', 'rim', 
         'load_index', 'speed_rating', 'terrain_type', 'is_run_flat', 
         'description', 'price', 'offer_price', 'stock', 
         'images_json', 'status', 'product_code'
@@ -40,6 +40,11 @@ class Tire extends Model
     public function brand()
     {
         return $this->belongsTo(Brand::class);
+    }
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
     }
 
     protected function hasDiscount(): Attribute

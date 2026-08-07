@@ -45,6 +45,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         
         // Inventory
         Route::get('/inventory', [DashboardController::class, 'inventory'])->name('inventory');
+        Route::get('/inventory/template', [DashboardController::class, 'downloadTemplateInventory'])->name('inventory.template');
         Route::post('/inventory/import', [DashboardController::class, 'importInventory'])->name('inventory.import');
         Route::get('/import-progress', [DashboardController::class, 'importProgress'])->name('import.progress');
         Route::post('/inventory', [DashboardController::class, 'store'])->name('inventory.store');
@@ -59,10 +60,17 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
         // Brands
         Route::get('/brands', [DashboardController::class, 'brands'])->name('brands');
+        Route::get('/brands/template', [DashboardController::class, 'downloadTemplateBrands'])->name('brands.template');
         Route::post('/brands/import', [DashboardController::class, 'importBrands'])->name('brands.import');
         Route::post('/brands', [DashboardController::class, 'storeBrand'])->name('brands.store');
         Route::post('/brands/{brand}', [DashboardController::class, 'updateBrand'])->name('brands.update');
         Route::delete('/brands/{brand}', [DashboardController::class, 'destroyBrand'])->name('brands.destroy');
+
+        // Categories
+        Route::get('/categories', [DashboardController::class, 'categories'])->name('categories');
+        Route::post('/categories', [DashboardController::class, 'storeCategory'])->name('categories.store');
+        Route::post('/categories/{category}', [DashboardController::class, 'updateCategory'])->name('categories.update');
+        Route::delete('/categories/{category}', [DashboardController::class, 'destroyCategory'])->name('categories.destroy');
     });
 });
 

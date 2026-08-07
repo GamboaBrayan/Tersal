@@ -23,11 +23,11 @@ const decreaseQuantity = () => { if (quantity.value > 1) quantity.value--; };
 
 // Image helper function for related tires
 const getFirstImage = (t) => {
-  return t.images_json && t.images_json.length ? '/storage/' + t.images_json[0] : defaultImage;
+  return t.images_json && t.images_json.length ? (t.images_json[0].startsWith('http') ? t.images_json[0] : '/storage/' + t.images_json[0]) : defaultImage;
 };
 
 const images = props.tire.images_json && props.tire.images_json.length 
-  ? props.tire.images_json.map(img => '/storage/' + img) 
+  ? props.tire.images_json.map(img => img.startsWith('http') ? img : '/storage/' + img)
   : [defaultImage, defaultImage, defaultImage]; // Mock multiple images if missing
 
 const totalAmount = () => {
@@ -157,27 +157,27 @@ const getDiscountPercentage = (price, offerPrice) => {
           <h2 class="text-2xl font-black text-gray-900 mb-6">Especificaciones Técnicas</h2>
           <div class="space-y-4 max-w-3xl">
             <div class="flex justify-between py-3 border-b border-gray-100">
-              <span class="text-sm font-bold text-gray-500">ANCHO</span>
+              <span class="text-sm font-semibold text-gray-500">ANCHO</span>
               <span class="text-sm font-bold text-gray-900">{{ tire.width }} mm</span>
             </div>
             <div class="flex justify-between py-3 border-b border-gray-100">
-              <span class="text-sm font-bold text-gray-500">PERFIL</span>
+              <span class="text-sm font-semibold text-gray-500">PERFIL</span>
               <span class="text-sm font-bold text-gray-900">{{ tire.profile }}%</span>
             </div>
             <div class="flex justify-between py-3 border-b border-gray-100">
-              <span class="text-sm font-bold text-gray-500">DIÁMETRO DE ARO</span>
+              <span class="text-sm font-semibold text-gray-500">DIÁMETRO DE ARO</span>
               <span class="text-sm font-bold text-gray-900">{{ tire.rim }}"</span>
             </div>
             <div class="flex justify-between py-3 border-b border-gray-100">
-              <span class="text-sm font-bold text-gray-500">ÍNDICE DE CARGA</span>
+              <span class="text-sm font-semibold text-gray-500">ÍNDICE DE CARGA</span>
               <span class="text-sm font-bold text-gray-900">{{ tire.load_index }}</span>
             </div>
             <div class="flex justify-between py-3 border-b border-gray-100">
-              <span class="text-sm font-bold text-gray-500">RATING DE VELOCIDAD</span>
+              <span class="text-sm font-semibold text-gray-500">ÍNDICE DE VELOCIDAD</span>
               <span class="text-sm font-bold text-gray-900">{{ tire.speed_rating }}</span>
             </div>
             <div class="flex justify-between py-3 border-b border-gray-100">
-              <span class="text-sm font-bold text-gray-500">RUN FLAT</span>
+              <span class="text-sm font-semibold text-gray-500">RUN FLAT</span>
               <span class="text-sm font-bold text-gray-900">{{ tire.is_run_flat ? 'Sí' : 'No' }}</span>
             </div>
           </div>

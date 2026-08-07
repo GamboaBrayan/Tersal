@@ -31,7 +31,7 @@ const getDiscountPercentage = (price, offerPrice) => {
         </span>
       </div>
 
-      <img :src="tire.images_json && tire.images_json.length ? '/storage/'+tire.images_json[0] : defaultImage" 
+      <img :src="tire.images_json && tire.images_json.length ? (tire.images_json[0].startsWith('http') ? tire.images_json[0] : '/storage/'+tire.images_json[0]) : defaultImage" 
            class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" 
            alt="Tire" />
     </Link>
@@ -54,7 +54,7 @@ const getDiscountPercentage = (price, offerPrice) => {
       </div>
       
       <Link :href="`/catalog/${tire.id}`" 
-         class="w-full h-12 flex items-center justify-center bg-action text-white font-bold rounded hover:bg-red-700 transition-colors shadow-sm text-sm">
+         class="w-full h-10 flex items-center justify-center bg-action/90 text-white font-semibold rounded-lg hover:bg-action transition-colors text-sm">
         Ver Detalles
       </Link>
     </div>

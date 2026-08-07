@@ -58,6 +58,7 @@ const toggleDropdown = (type) => {
   if (type === 'make') { isMakeDropdownOpen.value = !isMakeDropdownOpen.value; if (isMakeDropdownOpen.value) makeSearchQuery.value = ''; }
   if (type === 'model') { if (!selectedVehicle.value.makeName && !selectedVehicle.value.makeSlug) return; isModelDropdownOpen.value = !isModelDropdownOpen.value; if (isModelDropdownOpen.value) modelSearchQuery.value = ''; }
   if (type === 'year') { if (!selectedVehicle.value.modelName && !selectedVehicle.value.modelSlug) return; isYearDropdownOpen.value = !isYearDropdownOpen.value; }
+  if (type === 'trim') { if (!selectedVehicle.value.yearName && !selectedVehicle.value.yearSlug) return; isTrimDropdownOpen.value = !isTrimDropdownOpen.value; }
 };
 
 const searchByMeasure = () => {
@@ -77,6 +78,7 @@ const getDiscountPercentage = (price, offerPrice) => {
 const vehicleMakes = ref([]);
 const vehicleModels = ref([]);
 const vehicleYears = ref([]);
+const vehicleTrims = ref([]);
 
 const selectedVehicle = ref({
   makeName: '',
@@ -84,12 +86,15 @@ const selectedVehicle = ref({
   modelName: '',
   modelSlug: '',
   yearName: '',
-  yearSlug: ''
+  yearSlug: '',
+  trimName: '',
+  trimSlug: ''
 });
 
 const isMakeDropdownOpen = ref(false);
 const isModelDropdownOpen = ref(false);
 const isYearDropdownOpen = ref(false);
+const isTrimDropdownOpen = ref(false);
 
 const makeSearchQuery = ref('');
 const modelSearchQuery = ref('');
@@ -153,8 +158,12 @@ const selectMake = async (make) => {
   selectedVehicle.value.modelSlug = '';
   selectedVehicle.value.yearName = '';
   selectedVehicle.value.yearSlug = '';
+  selectedVehicle.value.trimName = '';
+  selectedVehicle.value.trimSlug = '';
   isMakeDropdownOpen.value = false;
   vehicleModels.value = [];
+  vehicleYears.value = [];
+  vehicleTrims.value = [];
   
   try {
     const response = await axios.get('/api/vehicles/models', { params: { make: make.slug } });
@@ -167,8 +176,11 @@ const selectModel = async (model) => {
   selectedVehicle.value.modelSlug = model.slug;
   selectedVehicle.value.yearName = '';
   selectedVehicle.value.yearSlug = '';
+  selectedVehicle.value.trimName = '';
+  selectedVehicle.value.trimSlug = '';
   isModelDropdownOpen.value = false;
   vehicleYears.value = [];
+  vehicleTrims.value = [];
   
   try {
     const response = await axios.get('/api/vehicles/years', { 
@@ -178,19 +190,43 @@ const selectModel = async (model) => {
   } catch (error) { console.error(error); }
 };
 
-const selectYear = (year) => {
+const selectYear = async (year) => {
   selectedVehicle.value.yearName = year.name;
   selectedVehicle.value.yearSlug = year.slug;
+  selectedVehicle.value.trimName = '';
+  selectedVehicle.value.trimSlug = '';
   isYearDropdownOpen.value = false;
+  vehicleTrims.value = [];
+  
+  try {
+    const response = await axios.get('/api/vehicles/trims', { 
+      params: { 
+        make: selectedVehicle.value.makeSlug, 
+        model: selectedVehicle.value.modelSlug,
+        year: year.slug
+      } 
+    });
+    vehicleTrims.value = response.data;
+  } catch (error) { console.error(error); }
+};
+
+const selectTrim = (trim) => {
+  selectedVehicle.value.trimName = trim.name;
+  selectedVehicle.value.trimSlug = trim.slug;
+  isTrimDropdownOpen.value = false;
 };
 
 const searchByVehicle = () => {
   if (!selectedVehicle.value.yearSlug) return;
-  router.get('/catalog', {
+  const params = {
     vehicle_make: selectedVehicle.value.makeSlug,
     vehicle_model: selectedVehicle.value.modelSlug,
     vehicle_year: selectedVehicle.value.yearSlug
-  });
+  };
+  if (selectedVehicle.value.trimSlug) {
+    params.vehicle_trim = selectedVehicle.value.trimSlug;
+  }
+  router.get('/catalog', params);
 };
 </script>
 
@@ -238,24 +274,24 @@ const searchByVehicle = () => {
                 <span class="text-white font-semibold text-lg lg:text-xl drop-shadow-md">Más de 5,000 medidas disponibles.</span>
                 <div class="flex items-center gap-8 lg:gap-12 mt-2">
                   <!-- AUTO -->
-                  <div class="flex flex-col items-center gap-3 opacity-90 hover:opacity-100 transition-opacity cursor-default">
+                  <Link href="/catalog?category_id[]=1" class="flex flex-col items-center gap-3 opacity-90 hover:opacity-100 transition-opacity cursor-pointer">
                     <svg class="w-12 sm:w-14 h-6 sm:h-8 text-white fill-current -scale-x-100" viewBox="0 0 123 40" xmlns="http://www.w3.org/2000/svg">
                       <path fill-rule="evenodd" clip-rule="evenodd" d="M103.94,23.97c5.39,0,9.76,4.37,9.76,9.76c0,5.39-4.37,9.76-9.76,9.76c-5.39,0-9.76-4.37-9.76-9.76 C94.18,28.34,98.55,23.97,103.94,23.97L103.94,23.97z M23,29.07v3.51h3.51C26.09,30.86,24.73,29.49,23,29.07L23,29.07z M26.52,34.87H23v3.51C24.73,37.97,26.09,36.6,26.52,34.87L26.52,34.87z M20.71,38.39v-3.51H17.2 C17.62,36.6,18.99,37.96,20.71,38.39L20.71,38.39z M17.2,32.59h3.51v-3.51C18.99,29.49,17.62,30.86,17.2,32.59L17.2,32.59z M105.09,29.07v3.51h3.51C108.18,30.86,106.82,29.49,105.09,29.07L105.09,29.07z M108.6,34.87h-3.51v3.51 C106.82,37.97,108.18,36.6,108.6,34.87L108.6,34.87z M102.8,38.39v-3.51h-3.51C99.71,36.6,101.07,37.96,102.8,38.39L102.8,38.39z M99.28,32.59h3.51v-3.51C101.07,29.49,99.71,30.86,99.28,32.59L99.28,32.59z M49.29,12.79c-1.54-0.35-3.07-0.35-4.61-0.28 C56.73,6.18,61.46,2.07,75.57,2.9l-1.94,12.87L50.4,16.65c0.21-0.61,0.33-0.94,0.37-1.55C50.88,13.36,50.86,13.15,49.29,12.79 L49.29,12.79z M79.12,3.13L76.6,15.6l24.13-0.98c2.48-0.1,2.91-1.19,1.41-3.28c-0.68-0.95-1.44-1.89-2.31-2.82 C93.59,1.86,87.38,3.24,79.12,3.13L79.12,3.13z M0.46,27.28H1.2c0.46-2.04,1.37-3.88,2.71-5.53c2.94-3.66,4.28-3.2,8.65-3.99 l24.46-4.61c5.43-3.86,11.98-7.3,19.97-10.2C64.4,0.25,69.63-0.01,77.56,0c4.54,0.01,9.14,0.28,13.81,0.84 c2.37,0.15,4.69,0.47,6.97,0.93c2.73,0.55,5.41,1.31,8.04,2.21l9.8,5.66c2.89,1.67,3.51,3.62,3.88,6.81l1.38,11.78h1.43v6.51 c-0.2,2.19-1.06,2.52-2.88,2.52h-2.37c0.92-20.59-28.05-24.11-27.42,1.63H34.76c3.73-17.75-14.17-23.91-22.96-13.76 c-2.67,3.09-3.6,7.31-3.36,12.3H2.03c-0.51-0.24-0.91-0.57-1.21-0.98c-1.05-1.43-0.82-5.74-0.74-8.23 C0.09,27.55-0.12,27.28,0.46,27.28L0.46,27.28z M21.86,23.97c5.39,0,9.76,4.37,9.76,9.76c0,5.39-4.37,9.76-9.76,9.76 c-5.39,0-9.76-4.37-9.76-9.76C12.1,28.34,16.47,23.97,21.86,23.97L21.86,23.97z"/>
                     </svg>
                     <span class="text-white text-sm lg:text-base font-bold uppercase tracking-widest">Auto</span>
-                  </div>
+                  </Link>
                   <!-- SUV -->
-                  <div class="flex flex-col items-center gap-3 opacity-90 hover:opacity-100 transition-opacity cursor-default">
+                  <Link href="/catalog?category_id[]=2" class="flex flex-col items-center gap-3 opacity-90 hover:opacity-100 transition-opacity cursor-pointer">
                     <svg class="w-12 sm:w-14 h-6 sm:h-8 text-white fill-current" viewBox="0 0 260 140" xmlns="http://www.w3.org/2000/svg">
                       <path fill-rule="evenodd" clip-rule="evenodd" d="M246,90.011V59.995c0-5.523-4.48-9.995-10-9.995h-50L156.97,6.416C155.11,3.634,152.34,2,149,2H28 c-5.52,0-10,4.446-10,9.969V30h-8c-4.42,0-8,3.56-8,7.983v40.022C2,82.427,5.58,86,10,86h8v20h16.458 c2.8-15.959,16.702-28.066,33.462-28.066c16.75,0,30.708,12.107,33.518,28.066h72.958c2.8-15.959,16.764-28.066,33.524-28.066 c16.75,0,30.624,12.107,33.434,28.066H250c4.42,0,8-3.563,8-7.985v-8.004H246z M86,50H30V13.97h56V50z M98,50V13.97h48L170,50H98z M68,138c-14.336,0-26.083-11.706-26.083-26.051s11.664-26.014,26-26.014s26,11.669,26,26.014S82.336,138,68,138z M67.917,99.943 c-6.617,0-12,5.386-12,12.006c0,6.621,5.383,12.006,12,12.006s12-5.386,12-12.006C79.917,105.329,74.534,99.943,67.917,99.943z M208,138c-14.337,0-26.083-11.706-26.083-26.051s11.663-26.014,26-26.014s26,11.669,26,26.014S222.337,138,208,138z M207.917,99.943c-6.617,0-12,5.386-12,12.006c0,6.621,5.383,12.006,12,12.006s12-5.386,12-12.006 C219.917,105.329,214.534,99.943,207.917,99.943z"/>
                     </svg>
                     <span class="text-white text-sm lg:text-base font-bold uppercase tracking-widest">SUV</span>
-                  </div>
+                  </Link>
                   <!-- 4x4 (PICKUP) -->
-                  <div class="flex flex-col items-center gap-3 opacity-90 hover:opacity-100 transition-opacity cursor-default">
+                  <Link href="/catalog?category_id[]=3" class="flex flex-col items-center gap-3 opacity-90 hover:opacity-100 transition-opacity cursor-pointer">
                     <img src="/images/4x4.png?v=3" class="w-12 sm:w-14 h-6 sm:h-8 object-contain brightness-0 invert -scale-x-100 scale-[1.7] transform-gpu" alt="4x4">
                     <span class="text-white text-sm lg:text-base font-bold uppercase tracking-widest">4x4</span>
-                  </div>
+                  </Link>
                 </div>
               </div>
             </div>
@@ -467,8 +503,8 @@ const searchByVehicle = () => {
             <!-- Contenido: Búsqueda por Vehículo -->
             <div v-if="activeTab === 'vehiculo'">
               <form @submit.prevent="searchByVehicle">
-                <!-- 4 columns for large screens to fit all inline -->
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 mb-2">
+                <!-- 5 columns for large screens to fit all inline -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 mb-2">
                   
                   <!-- Dropdown Marca -->
                   <div :class="['relative', isMakeDropdownOpen ? 'z-50' : 'z-20']">
@@ -601,6 +637,38 @@ const searchByVehicle = () => {
                     <div v-if="isYearDropdownOpen" @click="isYearDropdownOpen = false" class="fixed inset-0 z-40 bg-transparent cursor-default w-full h-full"></div>
                   </div>
 
+                  <!-- Dropdown Versión -->
+                  <div :class="['relative', isTrimDropdownOpen ? 'z-50' : 'z-20']">
+                    <label class="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-2">Versión <span class="font-normal text-[10px] lowercase text-gray-400">(opcional)</span></label>
+                    <div 
+                      @click="toggleDropdown('trim')"
+                      class="w-full h-14 px-4 rounded-xl border border-gray-100 flex items-center justify-between text-gray-900 relative transition-colors"
+                      :class="[(selectedVehicle.yearSlug || selectedVehicle.yearName) ? 'bg-gray-50 hover:bg-gray-100/50 cursor-pointer' : 'opacity-50 cursor-not-allowed bg-gray-50/50']"
+                    >
+                      <span :class="{'text-gray-400 font-normal': !selectedVehicle.trimName, 'font-bold': selectedVehicle.trimName}" class="truncate pr-2">{{ selectedVehicle.trimName || 'Seleccionar Versión' }}</span>
+                      <ChevronDown class="w-4 h-4 text-gray-400 pointer-events-none shrink-0" />
+                    </div>
+                    
+                    <div v-if="isTrimDropdownOpen" class="absolute mt-2 w-full sm:w-[350px] max-h-80 overflow-y-auto bg-white border border-gray-100 shadow-[0_10px_40px_rgb(0,0,0,0.08)] rounded-2xl p-4 right-0 lg:left-0 lg:right-auto z-50">
+                      <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                        <button 
+                          v-for="trim in vehicleTrims" 
+                          :key="trim.slug"
+                          @click.stop="selectTrim(trim)"
+                          type="button"
+                          class="text-left px-3 py-2 text-sm rounded hover:bg-red-50 hover:text-action transition-colors truncate"
+                          :title="trim.name"
+                        >
+                          {{ trim.name }}
+                        </button>
+                        <div v-if="vehicleTrims.length === 0" class="col-span-full text-center text-gray-500 py-4 text-sm">
+                          No hay versiones disponibles
+                        </div>
+                      </div>
+                    </div>
+                    <div v-if="isTrimDropdownOpen" @click="isTrimDropdownOpen = false" class="fixed inset-0 z-40 bg-transparent cursor-default w-full h-full"></div>
+                  </div>
+
                   <!-- Submit Button -->
                   <div class="flex items-end">
                     <button @click.prevent="searchByVehicle" type="button" :disabled="!selectedVehicle.yearName && !selectedVehicle.yearSlug" class="w-full h-14 px-2 flex items-center justify-center gap-1.5 sm:gap-2 bg-action text-white text-xs xl:text-sm font-bold rounded-xl hover:bg-red-700 transition-all shadow-[0_4px_14px_0_rgb(220,38,38,0.39)] hover:shadow-[0_6px_20px_rgba(220,38,38,0.23)] cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none relative z-30 pointer-events-auto leading-tight text-center">
@@ -662,7 +730,7 @@ const searchByVehicle = () => {
         <div class="marquee-container group flex w-full">
           <div v-for="n in 10" :key="n" class="marquee-content flex shrink-0 gap-12 pr-12 items-center justify-start min-w-max" :style="{ animationDuration: Math.max(brands.length * 4, 10) + 's' }">
             <Link :href="`/catalog?brand_id=${brand.id}`" v-for="brand in brands" :key="`${n}-${brand.id}`" class="shrink-0 flex items-center justify-center w-32 h-20 transition-all duration-300 opacity-70 hover:opacity-100 cursor-pointer">
-              <img v-if="brand.logo_url" :src="'/storage/' + brand.logo_url" :alt="brand.name" class="max-w-full max-h-full object-contain grayscale hover:grayscale-0 transition-all duration-300" />
+              <img v-if="brand.logo_url" :src="brand.logo_url.startsWith('http') ? brand.logo_url : '/storage/' + brand.logo_url" :alt="brand.name" class="max-w-full max-h-full object-contain grayscale hover:grayscale-0 transition-all duration-300" />
               <span v-else class="text-xl font-black text-gray-400 hover:text-gray-900 transition-colors">{{ brand.name }}</span>
             </Link>
           </div>
@@ -680,7 +748,7 @@ const searchByVehicle = () => {
           <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             <div v-for="tire in promotions" :key="tire.id" class="bg-white rounded-2xl shadow-[0_4px_20px_rgb(0,0,0,0.03)] border-transparent overflow-hidden hover:shadow-[0_12px_40px_rgb(0,0,0,0.08)] hover:-translate-y-1 transition-all duration-300 flex flex-col max-w-sm mx-auto w-full group">
               <div class="relative pt-[85%] bg-gray-50/50">
-                <img :src="tire.images_json && tire.images_json.length ? '/storage/'+tire.images_json[0] : 'https://images.unsplash.com/photo-1620065095360-6644bcce8937?auto=format&fit=crop&q=80&w=400&h=400'" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="Tire" />
+                <img :src="tire.images_json && tire.images_json.length ? (tire.images_json[0].startsWith('http') ? tire.images_json[0] : '/storage/'+tire.images_json[0]) : 'https://images.unsplash.com/photo-1620065095360-6644bcce8937?auto=format&fit=crop&q=80&w=400&h=400'" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="Tire" />
                 <div class="absolute top-3 left-3 bg-action text-white text-[10px] font-bold px-2 py-1 rounded shadow-[0_4px_10px_rgb(220,38,38,0.3)] flex items-center gap-1">
                   OFERTA
                   <span class="bg-white text-action px-1 rounded text-[10px]">{{ getDiscountPercentage(tire.price, tire.offer_price) }}%</span>
@@ -694,7 +762,7 @@ const searchByVehicle = () => {
                     <div class="text-xs text-gray-400 line-through">S/. {{ tire.price }}</div>
                     <div class="text-xl font-black text-gray-900 leading-none mt-1">S/. {{ tire.offer_price }}</div>
                   </div>
-                  <Link :href="`/catalog/${tire.id}`" class="h-9 px-4 flex items-center justify-center bg-action text-white font-bold rounded-lg hover:bg-red-700 shadow-[0_4px_12px_rgb(220,38,38,0.3)] hover:shadow-[0_6px_16px_rgb(220,38,38,0.4)] transition-all text-xs">
+                  <Link :href="`/catalog/${tire.id}`" class="h-8 px-4 flex items-center justify-center bg-action/90 text-white font-semibold rounded-lg hover:bg-action transition-colors text-xs">
                     Ver más
                   </Link>
                 </div>
