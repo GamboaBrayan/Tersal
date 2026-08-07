@@ -317,7 +317,7 @@ const handleImport = (e) => {
             <button type="button" @click="closeBrandModal" class="inline-flex items-center justify-center h-12 px-6 bg-gray-100 text-gray-700 font-bold rounded-xl hover:bg-gray-200 transition-all cursor-pointer whitespace-nowrap text-sm sm:text-base">
               Cancelar
             </button>
-            <button type="submit" :disabled="form.processing" class="inline-flex items-center justify-center gap-2 h-12 px-6 bg-action text-white font-bold rounded-xl hover:bg-red-700 transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed shadow-md hover:-translate-y-0.5 whitespace-nowrap text-sm sm:text-base">
+            <button type="submit" :disabled="form.processing || !form.isDirty" class="inline-flex items-center justify-center gap-2 h-12 px-6 bg-action text-white font-bold rounded-xl hover:bg-red-700 transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed shadow-md hover:-translate-y-0.5 whitespace-nowrap text-sm sm:text-base">
               <Save v-if="isEditing" class="w-5 h-5" />
               <Plus v-else class="w-5 h-5" />
               {{ isEditing ? 'Guardar Cambios' : 'Agregar Marca' }}

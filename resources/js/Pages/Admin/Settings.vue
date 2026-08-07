@@ -270,7 +270,7 @@ const submit = () => {
 
       <!-- Sticky Bottom Bar -->
       <div class="bg-white border-t border-gray-200 px-4 sm:px-8 py-4 sticky bottom-0 z-10 flex justify-end gap-4 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
-        <button type="submit" :disabled="form.processing" class="inline-flex items-center justify-center gap-2 h-12 px-6 sm:px-8 bg-action text-white font-bold rounded-xl hover:bg-red-700 transition-colors shadow-md cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed w-full sm:w-auto text-sm sm:text-base">
+        <button type="submit" :disabled="form.processing || !form.isDirty" class="inline-flex items-center justify-center gap-2 h-12 px-6 sm:px-8 bg-action text-white font-bold rounded-xl hover:bg-red-700 transition-colors shadow-md cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed w-full sm:w-auto text-sm sm:text-base">
           <Save class="w-5 h-5" /> Guardar Configuración
         </button>
       </div>

@@ -239,22 +239,22 @@ const searchByVehicle = () => {
                 <div class="flex items-center gap-8 lg:gap-12 mt-2">
                   <!-- AUTO -->
                   <div class="flex flex-col items-center gap-3 opacity-90 hover:opacity-100 transition-opacity cursor-default">
-                    <svg class="w-12 h-12 text-white fill-current scale-x-[-1]" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M19,10H14V7H19V10M22,10.5V15H20C20,16.7 18.7,18 17,18C15.3,18 14,16.7 14,15H10C10,16.7 8.7,18 7,18C5.3,18 4,16.7 4,15H2V11L4.8,6.8C5.2,6.3 5.8,6 6.5,6H16L22,10.5M17,13.5C16.2,13.5 15.5,14.2 15.5,15C15.5,15.8 16.2,16.5 17,16.5C17.8,16.5 18.5,15.8 18.5,15C18.5,14.2 17.8,13.5 17,13.5M7,13.5C6.2,13.5 5.5,14.2 5.5,15C5.5,15.8 6.2,16.5 7,16.5C7.8,16.5 8.5,15.8 8.5,15C8.5,14.2 7.8,13.5 7,13.5Z" />
+                    <svg class="w-12 sm:w-14 h-6 sm:h-8 text-white fill-current -scale-x-100" viewBox="0 0 123 40" xmlns="http://www.w3.org/2000/svg">
+                      <path fill-rule="evenodd" clip-rule="evenodd" d="M103.94,23.97c5.39,0,9.76,4.37,9.76,9.76c0,5.39-4.37,9.76-9.76,9.76c-5.39,0-9.76-4.37-9.76-9.76 C94.18,28.34,98.55,23.97,103.94,23.97L103.94,23.97z M23,29.07v3.51h3.51C26.09,30.86,24.73,29.49,23,29.07L23,29.07z M26.52,34.87H23v3.51C24.73,37.97,26.09,36.6,26.52,34.87L26.52,34.87z M20.71,38.39v-3.51H17.2 C17.62,36.6,18.99,37.96,20.71,38.39L20.71,38.39z M17.2,32.59h3.51v-3.51C18.99,29.49,17.62,30.86,17.2,32.59L17.2,32.59z M105.09,29.07v3.51h3.51C108.18,30.86,106.82,29.49,105.09,29.07L105.09,29.07z M108.6,34.87h-3.51v3.51 C106.82,37.97,108.18,36.6,108.6,34.87L108.6,34.87z M102.8,38.39v-3.51h-3.51C99.71,36.6,101.07,37.96,102.8,38.39L102.8,38.39z M99.28,32.59h3.51v-3.51C101.07,29.49,99.71,30.86,99.28,32.59L99.28,32.59z M49.29,12.79c-1.54-0.35-3.07-0.35-4.61-0.28 C56.73,6.18,61.46,2.07,75.57,2.9l-1.94,12.87L50.4,16.65c0.21-0.61,0.33-0.94,0.37-1.55C50.88,13.36,50.86,13.15,49.29,12.79 L49.29,12.79z M79.12,3.13L76.6,15.6l24.13-0.98c2.48-0.1,2.91-1.19,1.41-3.28c-0.68-0.95-1.44-1.89-2.31-2.82 C93.59,1.86,87.38,3.24,79.12,3.13L79.12,3.13z M0.46,27.28H1.2c0.46-2.04,1.37-3.88,2.71-5.53c2.94-3.66,4.28-3.2,8.65-3.99 l24.46-4.61c5.43-3.86,11.98-7.3,19.97-10.2C64.4,0.25,69.63-0.01,77.56,0c4.54,0.01,9.14,0.28,13.81,0.84 c2.37,0.15,4.69,0.47,6.97,0.93c2.73,0.55,5.41,1.31,8.04,2.21l9.8,5.66c2.89,1.67,3.51,3.62,3.88,6.81l1.38,11.78h1.43v6.51 c-0.2,2.19-1.06,2.52-2.88,2.52h-2.37c0.92-20.59-28.05-24.11-27.42,1.63H34.76c3.73-17.75-14.17-23.91-22.96-13.76 c-2.67,3.09-3.6,7.31-3.36,12.3H2.03c-0.51-0.24-0.91-0.57-1.21-0.98c-1.05-1.43-0.82-5.74-0.74-8.23 C0.09,27.55-0.12,27.28,0.46,27.28L0.46,27.28z M21.86,23.97c5.39,0,9.76,4.37,9.76,9.76c0,5.39-4.37,9.76-9.76,9.76 c-5.39,0-9.76-4.37-9.76-9.76C12.1,28.34,16.47,23.97,21.86,23.97L21.86,23.97z"/>
                     </svg>
                     <span class="text-white text-sm lg:text-base font-bold uppercase tracking-widest">Auto</span>
                   </div>
                   <!-- SUV -->
                   <div class="flex flex-col items-center gap-3 opacity-90 hover:opacity-100 transition-opacity cursor-default">
-                    <svg class="w-12 h-12 text-white fill-current scale-x-[-1]" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M19 8V11H14V8H19M22 11V16H20C20 17.66 18.66 19 17 19C15.34 19 14 17.66 14 16H10C10 17.66 8.66 19 7 19C5.34 19 4 17.66 4 16H2V9.5C2 8.12 3.12 7 4.5 7H12L15.5 7L22 11M7 14.5C6.17 14.5 5.5 15.17 5.5 16C5.5 16.83 6.17 17.5 7 17.5C7.83 17.5 8.5 16.83 8.5 16C8.5 15.17 7.83 14.5 7 14.5M17 14.5C16.17 14.5 15.5 15.17 15.5 16C15.5 16.83 16.17 17.5 17 17.5C17.83 17.5 18.5 16.83 18.5 16C18.5 15.17 17.83 14.5 17 14.5M4 9V11H12.5V9H4Z" />
+                    <svg class="w-12 sm:w-14 h-6 sm:h-8 text-white fill-current" viewBox="0 0 260 140" xmlns="http://www.w3.org/2000/svg">
+                      <path fill-rule="evenodd" clip-rule="evenodd" d="M246,90.011V59.995c0-5.523-4.48-9.995-10-9.995h-50L156.97,6.416C155.11,3.634,152.34,2,149,2H28 c-5.52,0-10,4.446-10,9.969V30h-8c-4.42,0-8,3.56-8,7.983v40.022C2,82.427,5.58,86,10,86h8v20h16.458 c2.8-15.959,16.702-28.066,33.462-28.066c16.75,0,30.708,12.107,33.518,28.066h72.958c2.8-15.959,16.764-28.066,33.524-28.066 c16.75,0,30.624,12.107,33.434,28.066H250c4.42,0,8-3.563,8-7.985v-8.004H246z M86,50H30V13.97h56V50z M98,50V13.97h48L170,50H98z M68,138c-14.336,0-26.083-11.706-26.083-26.051s11.664-26.014,26-26.014s26,11.669,26,26.014S82.336,138,68,138z M67.917,99.943 c-6.617,0-12,5.386-12,12.006c0,6.621,5.383,12.006,12,12.006s12-5.386,12-12.006C79.917,105.329,74.534,99.943,67.917,99.943z M208,138c-14.337,0-26.083-11.706-26.083-26.051s11.663-26.014,26-26.014s26,11.669,26,26.014S222.337,138,208,138z M207.917,99.943c-6.617,0-12,5.386-12,12.006c0,6.621,5.383,12.006,12,12.006s12-5.386,12-12.006 C219.917,105.329,214.534,99.943,207.917,99.943z"/>
                     </svg>
                     <span class="text-white text-sm lg:text-base font-bold uppercase tracking-widest">SUV</span>
                   </div>
                   <!-- 4x4 (PICKUP) -->
                   <div class="flex flex-col items-center gap-3 opacity-90 hover:opacity-100 transition-opacity cursor-default">
-                    <svg class="w-12 h-12 text-white fill-current scale-x-[-1]" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M6 10.5V13.5H3V10.5H6M17 10.5C17 9.7 16.3 9 15.5 9H11L9.2 6.3C8.8 5.6 8 5 7.2 5H2C1.5 5 1 5.4 1 6V15H3C3 16.7 4.3 18 6 18C7.7 18 9 16.7 9 15H15C15 16.7 16.3 18 18 18C19.7 18 21 16.7 21 15H23V11L21 10.5M6 16.5C5.2 16.5 4.5 15.8 4.5 15C4.5 14.2 5.2 13.5 6 13.5C6.8 13.5 7.5 14.2 7.5 15C7.5 15.8 6.8 16.5 6 16.5M18 16.5C17.2 16.5 16.5 15.8 16.5 15C16.5 14.2 17.2 13.5 18 13.5C18.8 13.5 19.5 14.2 19.5 15C19.5 15.8 18.8 16.5 18 16.5M9.5 13.5V9H15.5C15.8 9 16.1 9.2 16.3 9.4L18.4 11H9.5V13.5Z" />
+                    <svg class="w-12 sm:w-14 h-6 sm:h-8 text-white fill-current" viewBox="0 95 404 190" xmlns="http://www.w3.org/2000/svg">
+                      <path fill-rule="evenodd" clip-rule="evenodd" d="M403.199,262.416l-5.651-52.739c-2.235-20.858-19.739-36.587-40.716-36.587h-39.109l-51.999-55.058 c-9.461-10.018-22.791-15.764-36.571-15.764H174.82c-16.428,0-29.793,13.365-29.793,29.793v41.028H16.7c-5.523,0-10,4.478-10,10 v70.961c-3.899,1.365-6.7,5.066-6.7,9.431c0,5.522,4.477,10,10,10h26.843c5.656,16.004,20.929,27.506,38.845,27.506 s33.19-11.501,38.846-27.506h180.519c5.656,16.004,20.929,27.506,38.846,27.506s33.19-11.501,38.846-27.506h20.512 c2.837,0,5.542-1.205,7.438-3.316C402.591,268.055,403.501,265.237,403.199,262.416z M251.184,131.765l39.029,41.325h-81.935 v-50.821h20.875C237.455,122.269,245.484,125.729,251.184,131.765z M165.027,132.062c0-5.399,4.393-9.793,9.793-9.793h13.458 v50.821h-23.251V132.062z M96.88,259.795c0,11.686-9.507,21.192-21.192,21.192c-11.685,0-21.192-9.507-21.192-21.192 c0-11.685,9.507-21.191,21.192-21.191C87.374,238.604,96.88,248.11,96.88,259.795z M75.688,218.604 c-20.567,0-37.66,15.151-40.708,34.878H26.7V193.09h100.953v60.392h-11.256C113.349,233.755,96.255,218.604,75.688,218.604z M355.091,259.795c0,11.686-9.507,21.192-21.192,21.192s-21.192-9.507-21.192-21.192c0-11.685,9.507-21.191,21.192-21.191 S355.091,248.11,355.091,259.795z M374.607,253.481c-3.047-19.727-20.141-34.878-40.708-34.878s-37.661,15.151-40.708,34.878 H147.652V193.09h209.18c10.731,0,19.687,8.047,20.83,18.718l4.465,41.674H374.607z"/>
                     </svg>
                     <span class="text-white text-sm lg:text-base font-bold uppercase tracking-widest">4x4</span>
                   </div>
@@ -271,7 +271,7 @@ const searchByVehicle = () => {
         <div class="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 relative z-40 text-center pointer-events-auto">
           <!-- Buscador overlapping exactly 50% on the bottom border minus 3 pixels -->
           <div class="transform translate-y-[calc(50%-3px)] relative z-20">
-            <div class="max-w-[1050px] mx-auto p-6 sm:p-8 text-left bg-white/95 backdrop-blur-md shadow-2xl rounded-3xl border border-white/20">
+            <div class="max-w-[1050px] mx-auto p-6 sm:p-10 text-left bg-white/95 backdrop-blur-xl shadow-[0_8px_40px_rgb(0,0,0,0.08)] rounded-[2rem] border border-gray-100/50">
 
             <!-- Título Principal del Buscador -->
             <h2 class="text-xl sm:text-2xl font-black text-red-500 mb-6 uppercase tracking-wide text-center">
@@ -279,13 +279,13 @@ const searchByVehicle = () => {
             </h2>
 
             <!-- Tabs and Help Link Header -->
-            <div class="relative flex justify-center items-end border-b border-gray-200 mb-6">
+            <div class="relative flex justify-center items-end border-b border-gray-100 mb-8">
               <!-- Pestañas -->
               <div class="flex w-full sm:w-auto min-w-[300px]">
-                <button @click="activeTab = 'medida'" :class="{'border-gray-900 text-gray-900': activeTab === 'medida', 'border-transparent text-gray-500 hover:text-gray-700': activeTab !== 'medida'}" class="flex-1 pb-4 text-sm font-extrabold uppercase tracking-wider border-b-2 transition-colors text-center">
+                <button @click="activeTab = 'medida'" :class="{'border-action text-action': activeTab === 'medida', 'border-transparent text-gray-400 hover:text-gray-600': activeTab !== 'medida'}" class="flex-1 pb-4 text-sm font-extrabold uppercase tracking-wider border-b-2 transition-all text-center">
                   Por Medida
                 </button>
-                <button @click="activeTab = 'vehiculo'" :class="{'border-gray-900 text-gray-900': activeTab === 'vehiculo', 'border-transparent text-gray-500 hover:text-gray-700': activeTab !== 'vehiculo'}" class="flex-1 pb-4 text-sm font-extrabold uppercase tracking-wider border-b-2 transition-colors text-center">
+                <button @click="activeTab = 'vehiculo'" :class="{'border-action text-action': activeTab === 'vehiculo', 'border-transparent text-gray-400 hover:text-gray-600': activeTab !== 'vehiculo'}" class="flex-1 pb-4 text-sm font-extrabold uppercase tracking-wider border-b-2 transition-all text-center">
                   Por Vehículo
                 </button>
               </div>
@@ -305,16 +305,16 @@ const searchByVehicle = () => {
                 
                   <!-- Dropdown Ancho -->
                   <div :class="['relative', isWidthDropdownOpen ? 'z-50' : 'z-20']" class="col-span-1">
-                    <label class="block text-xs font-extrabold text-gray-700 uppercase tracking-wide mb-2">Ancho</label>
+                    <label class="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-2">Ancho</label>
                     <div 
                       @click="toggleDropdown('width')"
-                      class="w-full h-12 px-4 rounded-lg border border-gray-300 bg-white cursor-pointer flex items-center justify-between text-gray-900 relative"
+                      class="w-full h-14 px-4 rounded-xl border border-gray-100 bg-gray-50 hover:bg-gray-100/50 cursor-pointer flex items-center justify-between text-gray-900 relative transition-colors"
                     >
-                      <span :class="{'text-gray-400': !searchFilters.width}">{{ searchFilters.width ? searchFilters.width : 'Ej: 225' }}</span>
-                      <ChevronDown class="w-4 h-4 text-gray-500 pointer-events-none" />
+                      <span :class="{'text-gray-400 font-medium': !searchFilters.width, 'font-bold': searchFilters.width}">{{ searchFilters.width ? searchFilters.width : 'Ej: 225' }}</span>
+                      <ChevronDown class="w-4 h-4 text-gray-400 pointer-events-none" />
                     </div>
                     
-                    <div v-if="isWidthDropdownOpen" class="absolute mt-1 w-full sm:w-[300px] max-h-80 overflow-hidden bg-white border border-gray-200 shadow-2xl rounded-xl flex flex-col left-0 z-50">
+                    <div v-if="isWidthDropdownOpen" class="absolute mt-2 w-full sm:w-[300px] max-h-80 overflow-hidden bg-white border border-gray-100 shadow-[0_10px_40px_rgb(0,0,0,0.08)] rounded-2xl flex flex-col left-0 z-50">
                       <!-- Buscador interno -->
                       <div class="p-3 border-b border-gray-100 bg-gray-50">
                         <div class="relative">
@@ -356,16 +356,16 @@ const searchByVehicle = () => {
 
                   <!-- Dropdown Alto -->
                   <div :class="['relative', isProfileDropdownOpen ? 'z-50' : 'z-20']" class="col-span-1">
-                    <label class="block text-xs font-extrabold text-gray-700 uppercase tracking-wide mb-2">Altura</label>
+                    <label class="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-2">Altura</label>
                     <div 
                       @click="toggleDropdown('profile')"
-                      class="w-full h-12 px-4 rounded-lg border border-gray-300 bg-white cursor-pointer flex items-center justify-between text-gray-900 relative"
+                      class="w-full h-14 px-4 rounded-xl border border-gray-100 bg-gray-50 hover:bg-gray-100/50 cursor-pointer flex items-center justify-between text-gray-900 relative transition-colors"
                     >
-                      <span :class="{'text-gray-400': !searchFilters.profile}">{{ searchFilters.profile ? searchFilters.profile : 'Ej: 45' }}</span>
-                      <ChevronDown class="w-4 h-4 text-gray-500 pointer-events-none" />
+                      <span :class="{'text-gray-400 font-medium': !searchFilters.profile, 'font-bold': searchFilters.profile}">{{ searchFilters.profile ? searchFilters.profile : 'Ej: 45' }}</span>
+                      <ChevronDown class="w-4 h-4 text-gray-400 pointer-events-none" />
                     </div>
                     
-                    <div v-if="isProfileDropdownOpen" class="absolute mt-1 w-full sm:w-[300px] max-h-80 overflow-hidden bg-white border border-gray-200 shadow-2xl rounded-xl flex flex-col left-0 z-50">
+                    <div v-if="isProfileDropdownOpen" class="absolute mt-2 w-full sm:w-[300px] max-h-80 overflow-hidden bg-white border border-gray-100 shadow-[0_10px_40px_rgb(0,0,0,0.08)] rounded-2xl flex flex-col left-0 z-50">
                       <!-- Buscador interno -->
                       <div class="p-3 border-b border-gray-100 bg-gray-50">
                         <div class="relative">
@@ -407,16 +407,16 @@ const searchByVehicle = () => {
 
                   <!-- Dropdown Rin -->
                   <div :class="['relative', isRimDropdownOpen ? 'z-50' : 'z-20']" class="col-span-1">
-                    <label class="block text-xs font-extrabold text-gray-700 uppercase tracking-wide mb-2">Rin</label>
+                    <label class="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-2">Rin</label>
                     <div 
                       @click="toggleDropdown('rim')"
-                      class="w-full h-12 px-4 rounded-lg border border-gray-300 bg-white cursor-pointer flex items-center justify-between text-gray-900 relative"
+                      class="w-full h-14 px-4 rounded-xl border border-gray-100 bg-gray-50 hover:bg-gray-100/50 cursor-pointer flex items-center justify-between text-gray-900 relative transition-colors"
                     >
-                      <span :class="{'text-gray-400': !searchFilters.rim}">{{ searchFilters.rim ? searchFilters.rim : 'Ej: 18' }}</span>
-                      <ChevronDown class="w-4 h-4 text-gray-500 pointer-events-none" />
+                      <span :class="{'text-gray-400 font-medium': !searchFilters.rim, 'font-bold': searchFilters.rim}">{{ searchFilters.rim ? searchFilters.rim : 'Ej: 18' }}</span>
+                      <ChevronDown class="w-4 h-4 text-gray-400 pointer-events-none" />
                     </div>
                     
-                    <div v-if="isRimDropdownOpen" class="absolute mt-1 w-full sm:w-[300px] max-h-80 overflow-hidden bg-white border border-gray-200 shadow-2xl rounded-xl flex flex-col left-0 z-50">
+                    <div v-if="isRimDropdownOpen" class="absolute mt-2 w-full sm:w-[300px] max-h-80 overflow-hidden bg-white border border-gray-100 shadow-[0_10px_40px_rgb(0,0,0,0.08)] rounded-2xl flex flex-col left-0 z-50">
                       <!-- Buscador interno -->
                       <div class="p-3 border-b border-gray-100 bg-gray-50">
                         <div class="relative">
@@ -458,7 +458,7 @@ const searchByVehicle = () => {
 
                   <!-- Submit Button -->
                   <div class="flex items-end relative z-20">
-                    <button type="submit" @click.prevent="searchByMeasure" class="w-full h-12 flex items-center justify-center gap-2 bg-action text-white text-sm font-bold rounded-lg hover:bg-red-700 transition-colors shadow-md cursor-pointer relative z-20 pointer-events-auto">
+                    <button type="submit" @click.prevent="searchByMeasure" class="w-full h-14 flex items-center justify-center gap-2 bg-action text-white text-sm font-bold rounded-xl hover:bg-red-700 transition-all shadow-[0_4px_14px_0_rgb(220,38,38,0.39)] hover:shadow-[0_6px_20px_rgba(220,38,38,0.23)] cursor-pointer relative z-20 pointer-events-auto">
                       <Search class="w-4 h-4 pointer-events-none" /> BUSCAR MIS NEUMÁTICOS
                     </button>
                   </div>
@@ -474,17 +474,17 @@ const searchByVehicle = () => {
                   
                   <!-- Dropdown Marca -->
                   <div :class="['relative', isMakeDropdownOpen ? 'z-50' : 'z-20']">
-                    <label class="block text-xs font-extrabold text-gray-700 uppercase tracking-wide mb-2">Marca</label>
+                    <label class="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-2">Marca</label>
                     <div 
                       @click="toggleDropdown('make')"
-                      class="w-full h-12 px-4 rounded-lg border border-gray-300 bg-white cursor-pointer flex items-center justify-between text-gray-900 relative"
+                      class="w-full h-14 px-4 rounded-xl border border-gray-100 bg-gray-50 hover:bg-gray-100/50 cursor-pointer flex items-center justify-between text-gray-900 relative transition-colors"
                     >
-                      <span :class="{'text-gray-400': !selectedVehicle.makeName}">{{ selectedVehicle.makeName || 'Seleccionar Marca' }}</span>
-                      <ChevronDown class="w-4 h-4 text-gray-500 pointer-events-none" />
+                      <span :class="{'text-gray-400 font-medium': !selectedVehicle.makeName, 'font-bold': selectedVehicle.makeName}">{{ selectedVehicle.makeName || 'Seleccionar Marca' }}</span>
+                      <ChevronDown class="w-4 h-4 text-gray-400 pointer-events-none" />
                     </div>
                     
                     <!-- Desplegable -->
-                    <div v-if="isMakeDropdownOpen" class="absolute mt-1 w-full sm:w-[450px] md:w-[550px] max-h-80 overflow-hidden bg-white border border-gray-200 shadow-2xl rounded-xl flex flex-col left-0 z-50">
+                    <div v-if="isMakeDropdownOpen" class="absolute mt-2 w-full sm:w-[450px] md:w-[550px] max-h-80 overflow-hidden bg-white border border-gray-100 shadow-[0_10px_40px_rgb(0,0,0,0.08)] rounded-2xl flex flex-col left-0 z-50">
                       <!-- Buscador interno -->
                       <div class="p-3 border-b border-gray-100 bg-gray-50">
                         <div class="relative">
@@ -524,17 +524,17 @@ const searchByVehicle = () => {
 
                   <!-- Dropdown Modelo -->
                   <div :class="['relative', isModelDropdownOpen ? 'z-50' : 'z-20']">
-                    <label class="block text-xs font-extrabold text-gray-700 uppercase tracking-wide mb-2">Modelo</label>
+                    <label class="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-2">Modelo</label>
                     <div 
                       @click="toggleDropdown('model')"
-                      class="w-full h-12 px-4 rounded-lg border border-gray-300 bg-white flex items-center justify-between text-gray-900 relative"
-                      :class="[(selectedVehicle.makeSlug || selectedVehicle.makeName) ? 'cursor-pointer' : 'opacity-50 cursor-not-allowed bg-gray-50']"
+                      class="w-full h-14 px-4 rounded-xl border border-gray-100 flex items-center justify-between text-gray-900 relative transition-colors"
+                      :class="[(selectedVehicle.makeSlug || selectedVehicle.makeName) ? 'bg-gray-50 hover:bg-gray-100/50 cursor-pointer' : 'opacity-50 cursor-not-allowed bg-gray-50/50']"
                     >
-                      <span :class="{'text-gray-400': !selectedVehicle.modelName}">{{ selectedVehicle.modelName || 'Seleccionar Modelo' }}</span>
-                      <ChevronDown class="w-4 h-4 text-gray-500 pointer-events-none" />
+                      <span :class="{'text-gray-400 font-medium': !selectedVehicle.modelName, 'font-bold': selectedVehicle.modelName}">{{ selectedVehicle.modelName || 'Seleccionar Modelo' }}</span>
+                      <ChevronDown class="w-4 h-4 text-gray-400 pointer-events-none" />
                     </div>
                     
-                    <div v-if="isModelDropdownOpen" class="absolute mt-1 w-full sm:w-[400px] max-h-80 overflow-hidden bg-white border border-gray-200 shadow-2xl rounded-xl flex flex-col left-0 z-50">
+                    <div v-if="isModelDropdownOpen" class="absolute mt-2 w-full sm:w-[400px] max-h-80 overflow-hidden bg-white border border-gray-100 shadow-[0_10px_40px_rgb(0,0,0,0.08)] rounded-2xl flex flex-col left-0 z-50">
                       <!-- Buscador interno -->
                       <div class="p-3 border-b border-gray-100 bg-gray-50">
                         <div class="relative">
@@ -573,17 +573,17 @@ const searchByVehicle = () => {
 
                   <!-- Dropdown Año -->
                   <div :class="['relative', isYearDropdownOpen ? 'z-50' : 'z-20']">
-                    <label class="block text-xs font-extrabold text-gray-700 uppercase tracking-wide mb-2">Año</label>
+                    <label class="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-2">Año</label>
                     <div 
                       @click="toggleDropdown('year')"
-                      class="w-full h-12 px-4 rounded-lg border border-gray-300 bg-white flex items-center justify-between text-gray-900 relative"
-                      :class="[(selectedVehicle.modelSlug || selectedVehicle.modelName) ? 'cursor-pointer' : 'opacity-50 cursor-not-allowed bg-gray-50']"
+                      class="w-full h-14 px-4 rounded-xl border border-gray-100 flex items-center justify-between text-gray-900 relative transition-colors"
+                      :class="[(selectedVehicle.modelSlug || selectedVehicle.modelName) ? 'bg-gray-50 hover:bg-gray-100/50 cursor-pointer' : 'opacity-50 cursor-not-allowed bg-gray-50/50']"
                     >
-                      <span :class="{'text-gray-400': !selectedVehicle.yearName}">{{ selectedVehicle.yearName || 'Seleccionar Año' }}</span>
-                      <ChevronDown class="w-4 h-4 text-gray-500 pointer-events-none" />
+                      <span :class="{'text-gray-400 font-medium': !selectedVehicle.yearName, 'font-bold': selectedVehicle.yearName}">{{ selectedVehicle.yearName || 'Seleccionar Año' }}</span>
+                      <ChevronDown class="w-4 h-4 text-gray-400 pointer-events-none" />
                     </div>
                     
-                    <div v-if="isYearDropdownOpen" class="absolute mt-1 w-full sm:w-[300px] max-h-80 overflow-y-auto bg-white border border-gray-200 shadow-2xl rounded-xl p-4 left-0 z-50">
+                    <div v-if="isYearDropdownOpen" class="absolute mt-2 w-full sm:w-[300px] max-h-80 overflow-y-auto bg-white border border-gray-100 shadow-[0_10px_40px_rgb(0,0,0,0.08)] rounded-2xl p-4 left-0 z-50">
                       <div class="grid grid-cols-3 sm:grid-cols-4 gap-2">
                         <button 
                           v-for="year in vehicleYears" 
@@ -605,8 +605,9 @@ const searchByVehicle = () => {
 
                   <!-- Submit Button -->
                   <div class="flex items-end">
-                    <button @click.prevent="searchByVehicle" type="button" :disabled="!selectedVehicle.yearName && !selectedVehicle.yearSlug" class="w-full h-12 flex items-center justify-center gap-2 bg-action text-white font-bold rounded-lg hover:bg-red-700 transition-colors shadow-md cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed relative z-30 pointer-events-auto">
-                      <Search class="w-5 h-5 pointer-events-none" /> VER NEUMÁTICOS COMPATIBLES
+                    <button @click.prevent="searchByVehicle" type="button" :disabled="!selectedVehicle.yearName && !selectedVehicle.yearSlug" class="w-full h-14 px-2 flex items-center justify-center gap-1.5 sm:gap-2 bg-action text-white text-xs xl:text-sm font-bold rounded-xl hover:bg-red-700 transition-all shadow-[0_4px_14px_0_rgb(220,38,38,0.39)] hover:shadow-[0_6px_20px_rgba(220,38,38,0.23)] cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none relative z-30 pointer-events-auto leading-tight text-center">
+                      <Search class="w-4 h-4 shrink-0 pointer-events-none" />
+                      <span>VER COMPATIBLES</span>
                     </button>
                   </div>
                 </div>
@@ -632,8 +633,8 @@ const searchByVehicle = () => {
             <div class="flex items-center gap-4 px-2 lg:px-6 py-6 sm:py-0 justify-center lg:justify-start border-b border-white/10 sm:border-b-0 lg:border-r">
               <ShieldCheck class="w-8 h-8 text-white shrink-0" stroke-width="1.5" />
               <div>
-                <h4 class="font-black text-sm uppercase tracking-wide">Productos Originales</h4>
-                <p class="text-xs text-gray-400 mt-0.5">Garantía de fábrica</p>
+                <h4 class="font-black text-sm uppercase tracking-wide">Neumáticos Certificados</h4>
+                <p class="text-xs text-gray-400 mt-0.5">Calidad garantizada</p>
               </div>
             </div>
             <!-- Feature 3 -->
@@ -678,26 +679,26 @@ const searchByVehicle = () => {
             <Link href="/catalog" class="text-primary font-bold hover:underline">Ver todo el catálogo &rarr;</Link>
           </div>
           
-          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            <div v-for="tire in promotions" :key="tire.id" class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow flex flex-col max-w-sm mx-auto w-full">
-              <div class="relative pt-[85%] bg-gray-100">
-                <img :src="tire.images_json && tire.images_json.length ? '/storage/'+tire.images_json[0] : 'https://images.unsplash.com/photo-1620065095360-6644bcce8937?auto=format&fit=crop&q=80&w=400&h=400'" class="absolute inset-0 w-full h-full object-cover" alt="Tire" />
-                <div class="absolute top-2 left-2 bg-action text-white text-[10px] font-bold px-2 py-1 rounded shadow-sm flex items-center gap-1">
+          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            <div v-for="tire in promotions" :key="tire.id" class="bg-white rounded-2xl shadow-[0_4px_20px_rgb(0,0,0,0.03)] border-transparent overflow-hidden hover:shadow-[0_12px_40px_rgb(0,0,0,0.08)] hover:-translate-y-1 transition-all duration-300 flex flex-col max-w-sm mx-auto w-full group">
+              <div class="relative pt-[85%] bg-gray-50/50">
+                <img :src="tire.images_json && tire.images_json.length ? '/storage/'+tire.images_json[0] : 'https://images.unsplash.com/photo-1620065095360-6644bcce8937?auto=format&fit=crop&q=80&w=400&h=400'" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="Tire" />
+                <div class="absolute top-3 left-3 bg-action text-white text-[10px] font-bold px-2 py-1 rounded shadow-[0_4px_10px_rgb(220,38,38,0.3)] flex items-center gap-1">
                   OFERTA
                   <span class="bg-white text-action px-1 rounded text-[10px]">{{ getDiscountPercentage(tire.price, tire.offer_price) }}%</span>
                 </div>
               </div>
-              <div class="p-4 flex-grow flex flex-col">
-                <div class="text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-1">{{ tire.brand?.name || 'Marca' }}</div>
-                <h3 class="text-sm font-bold text-gray-900 mb-2 leading-tight">{{ tire.width }}/{{ tire.profile }} R{{ tire.rim }} {{ tire.model }}</h3>
-                <div class="mt-auto pt-3 border-t border-gray-100 flex items-center justify-between">
+              <div class="p-5 flex-grow flex flex-col">
+                <div class="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">{{ tire.brand?.name || 'Marca' }}</div>
+                <h3 class="text-sm font-bold text-gray-800 mb-3 leading-tight">{{ tire.width }}/{{ tire.profile }} R{{ tire.rim }} {{ tire.model }}</h3>
+                <div class="mt-auto pt-4 border-t border-gray-100 flex items-center justify-between">
                   <div>
                     <div class="text-xs text-gray-400 line-through">S/. {{ tire.price }}</div>
-                    <div class="text-lg font-black text-gray-900 leading-none mt-1">S/. {{ tire.offer_price }}</div>
+                    <div class="text-xl font-black text-gray-900 leading-none mt-1">S/. {{ tire.offer_price }}</div>
                   </div>
-                  <a :href="'https://wa.me/' + $page.props.global_whatsapp + '?text=' + encodeURIComponent(`¡Hola! Estoy interesado en el neumático ${tire.brand?.name || ''} ${tire.model} en la medida ${tire.width}/${tire.profile} R${tire.rim} que vi en su web. Deseo confirmar el stock.`)" target="_blank" class="h-8 px-3 flex items-center justify-center bg-action text-white font-bold rounded hover:bg-red-700 transition-colors text-xs">
+                  <Link :href="`/catalog/${tire.id}`" class="h-9 px-4 flex items-center justify-center bg-action text-white font-bold rounded-lg hover:bg-red-700 shadow-[0_4px_12px_rgb(220,38,38,0.3)] hover:shadow-[0_6px_16px_rgb(220,38,38,0.4)] transition-all text-xs">
                     Ver más
-                  </a>
+                  </Link>
                 </div>
               </div>
             </div>
@@ -709,30 +710,30 @@ const searchByVehicle = () => {
       </section>
 
       <!-- Pasos de Compra -->
-      <section class="py-16 bg-white border-t border-gray-100">
+      <section class="py-20 bg-white border-t border-gray-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 class="text-3xl font-black text-gray-900 mb-12">Cómo comprar por WhatsApp en 3 pasos</h2>
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <h2 class="text-2xl sm:text-3xl font-black text-gray-900 mb-14 tracking-tight">Cómo comprar en <span class="text-action">3 simples pasos</span></h2>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
             <div class="flex flex-col items-center">
-              <div class="w-16 h-16 bg-blue-50 text-primary rounded-full flex items-center justify-center mb-4">
-                <Search class="w-8 h-8" />
+              <div class="w-20 h-20 bg-red-50 text-action rounded-[2rem] flex items-center justify-center mb-6 shadow-sm">
+                <Search class="w-8 h-8" stroke-width="2.5" />
               </div>
-              <h3 class="font-bold text-lg mb-2 text-gray-900">1. Encuentra tu medida</h3>
-              <p class="text-gray-600 text-sm">Usa nuestro buscador para ubicar el neumático exacto que necesita tu vehículo.</p>
+              <h3 class="font-bold text-lg mb-3 text-gray-800">1. Encuentra tu medida</h3>
+              <p class="text-gray-500 text-sm leading-relaxed max-w-xs">Usa nuestro buscador para ubicar el neumático exacto que necesita tu vehículo.</p>
             </div>
             <div class="flex flex-col items-center">
-              <div class="w-16 h-16 bg-blue-50 text-primary rounded-full flex items-center justify-center mb-4">
-                <MessageCircle class="w-8 h-8" />
+              <div class="w-20 h-20 bg-red-50 text-action rounded-[2rem] flex items-center justify-center mb-6 shadow-sm">
+                <MessageCircle class="w-8 h-8" stroke-width="2.5" />
               </div>
-              <h3 class="font-bold text-lg mb-2 text-gray-900">2. Consulta stock</h3>
-              <p class="text-gray-600 text-sm">Haz clic en el botón rojo de WhatsApp. Te atenderemos en minutos.</p>
+              <h3 class="font-bold text-lg mb-3 text-gray-800">2. Consulta stock</h3>
+              <p class="text-gray-500 text-sm leading-relaxed max-w-xs">Haz clic en el botón de WhatsApp. Te atenderemos y confirmaremos en minutos.</p>
             </div>
             <div class="flex flex-col items-center">
-              <div class="w-16 h-16 bg-blue-50 text-primary rounded-full flex items-center justify-center mb-4">
-                <Truck class="w-8 h-8" />
+              <div class="w-20 h-20 bg-red-50 text-action rounded-[2rem] flex items-center justify-center mb-6 shadow-sm">
+                <Truck class="w-8 h-8" stroke-width="2.5" />
               </div>
-              <h3 class="font-bold text-lg mb-2 text-gray-900">3. Coordina la entrega</h3>
-              <p class="text-gray-600 text-sm">Paga de forma segura y recibe o instala tus neumáticos el mismo día.</p>
+              <h3 class="font-bold text-lg mb-3 text-gray-800">3. Coordina la entrega</h3>
+              <p class="text-gray-500 text-sm leading-relaxed max-w-xs">Paga de forma segura y recibe o instala tus neumáticos el mismo día.</p>
             </div>
           </div>
         </div>

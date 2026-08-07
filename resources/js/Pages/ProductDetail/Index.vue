@@ -158,27 +158,27 @@ const getDiscountPercentage = (price, offerPrice) => {
           <div class="space-y-4 max-w-3xl">
             <div class="flex justify-between py-3 border-b border-gray-100">
               <span class="text-sm font-bold text-gray-500">ANCHO</span>
-              <span class="text-sm font-bold text-primary">{{ tire.width }} mm</span>
+              <span class="text-sm font-bold text-gray-900">{{ tire.width }} mm</span>
             </div>
             <div class="flex justify-between py-3 border-b border-gray-100">
               <span class="text-sm font-bold text-gray-500">PERFIL</span>
-              <span class="text-sm font-bold text-primary">{{ tire.profile }}%</span>
+              <span class="text-sm font-bold text-gray-900">{{ tire.profile }}%</span>
             </div>
             <div class="flex justify-between py-3 border-b border-gray-100">
               <span class="text-sm font-bold text-gray-500">DIÁMETRO DE ARO</span>
-              <span class="text-sm font-bold text-primary">{{ tire.rim }}"</span>
+              <span class="text-sm font-bold text-gray-900">{{ tire.rim }}"</span>
             </div>
             <div class="flex justify-between py-3 border-b border-gray-100">
               <span class="text-sm font-bold text-gray-500">ÍNDICE DE CARGA</span>
-              <span class="text-sm font-bold text-primary">{{ tire.load_index }}</span>
+              <span class="text-sm font-bold text-gray-900">{{ tire.load_index }}</span>
             </div>
             <div class="flex justify-between py-3 border-b border-gray-100">
               <span class="text-sm font-bold text-gray-500">RATING DE VELOCIDAD</span>
-              <span class="text-sm font-bold text-primary">{{ tire.speed_rating }}</span>
+              <span class="text-sm font-bold text-gray-900">{{ tire.speed_rating }}</span>
             </div>
             <div class="flex justify-between py-3 border-b border-gray-100">
               <span class="text-sm font-bold text-gray-500">RUN FLAT</span>
-              <span class="text-sm font-bold text-primary">{{ tire.is_run_flat ? 'Sí' : 'No' }}</span>
+              <span class="text-sm font-bold text-gray-900">{{ tire.is_run_flat ? 'Sí' : 'No' }}</span>
             </div>
           </div>
         </div>

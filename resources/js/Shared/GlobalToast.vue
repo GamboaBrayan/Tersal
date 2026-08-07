@@ -24,10 +24,12 @@ watch(() => page.props.flash?.success, (newSuccess) => {
 <template>
   <div 
     class="fixed top-4 right-4 z-[9999] transition-all duration-300 transform"
-    :class="showToast ? 'translate-y-0 opacity-100' : '-translate-y-4 opacity-0 pointer-events-none'"
+    :class="showToast ? 'translate-x-0 opacity-100' : 'translate-x-full opacity-0 pointer-events-none'"
   >
-    <div class="bg-white border border-gray-100 text-gray-900 px-4 py-3 rounded-xl shadow-xl flex items-center gap-3 min-w-[250px]">
-      <CheckCircle2 class="w-5 h-5 text-green-500 shrink-0" />
+    <div class="bg-white border border-gray-100 text-gray-800 px-5 py-3.5 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.08)] flex items-center gap-3 min-w-[280px]">
+      <div class="w-8 h-8 rounded-full bg-green-50 flex items-center justify-center shrink-0">
+        <CheckCircle2 class="w-4 h-4 text-green-500" stroke-width="2.5" />
+      </div>
       <span class="font-bold text-sm">{{ toastMessage }}</span>
     </div>
   </div>

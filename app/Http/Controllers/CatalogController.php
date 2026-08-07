@@ -79,34 +79,35 @@ class CatalogController extends Controller
                         foreach ($config['wheels'] as $wheel) {
                             $isStock = isset($wheel['is_stock']) ? $wheel['is_stock'] : true;
                             
-                            $axes = ['front', 'rear'];
-                            
-                            // Check if front and rear tires are exactly the same
-                            $sameTires = false;
-                            if (isset($wheel['front']['tire']) && isset($wheel['rear']['tire'])) {
-                                if ($wheel['front']['tire'] === $wheel['rear']['tire']) {
-                                    $sameTires = true;
+                            $axesData = [];
+                            if (isset($wheel['tire'])) {
+                                $axesData['both'] = $wheel['tire'];
+                            } else {
+                                if (!empty($wheel['front']['tire'])) $axesData['front'] = $wheel['front']['tire'];
+                                if (!empty($wheel['rear']['tire'])) $axesData['rear'] = $wheel['rear']['tire'];
+                                
+                                if (isset($axesData['front']) && isset($axesData['rear']) && $axesData['front'] === $axesData['rear']) {
+                                    $axesData = ['both' => $axesData['front']];
+                                } elseif (count($axesData) === 1) {
+                                    // If only one axis is provided (like only front), it's a standard fitment really, don't label it.
+                                    $val = reset($axesData);
+                                    $axesData = ['both' => $val];
                                 }
                             }
                             
-                            foreach ($axes as $axis) {
-                                if (isset($wheel[$axis]['tire'])) {
-                                    $sizeStr = $wheel[$axis]['tire'];
-                                    // Match e.g. "185/65R15" or "185/65ZR15"
-                                    preg_match('/^(\d+)\/(\d+)[A-Z]+(\d+)/i', $sizeStr, $matches);
-                                    if (count($matches) >= 4) {
-                                        $sizeObj = [
-                                            'width' => $matches[1],
-                                            'profile' => $matches[2],
-                                            'rim' => $matches[3],
-                                            'axis' => $sameTires ? 'both' : $axis
-                                        ];
-                                        
-                                        if ($isStock) {
-                                            $recommendedSizes[] = $sizeObj;
-                                        } else {
-                                            $alternativeSizes[] = $sizeObj;
-                                        }
+                            foreach ($axesData as $axis => $sizeStr) {
+                                if (preg_match('/(\d+)\/(\d+)[a-zA-Z\s]+(\d+)/', $sizeStr, $matches)) {
+                                    $sizeObj = [
+                                        'width' => $matches[1],
+                                        'profile' => $matches[2],
+                                        'rim' => $matches[3],
+                                        'axis' => $axis
+                                    ];
+                                    
+                                    if ($isStock) {
+                                        $recommendedSizes[] = $sizeObj;
+                                    } else {
+                                        $alternativeSizes[] = $sizeObj;
                                     }
                                 }
                             }

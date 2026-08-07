@@ -58,13 +58,9 @@ const submit = () => {
     form.transform((data) => ({
       ...data,
       _method: 'PUT',
-    })).post(`/admin/inventory/${props.tire.id}`, {
-      onSuccess: () => router.visit('/admin/inventory')
-    });
+    })).post(`/admin/inventory/${props.tire.id}`);
   } else {
-    form.post('/admin/inventory', {
-      onSuccess: () => router.visit('/admin/inventory')
-    });
+    form.post('/admin/inventory');
   }
 };
 </script>
@@ -91,7 +87,7 @@ const submit = () => {
             
             <!-- Card 2: Technical Specifications -->
             <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 sm:p-8">
-              <h2 class="text-lg sm:text-xl font-bold text-primary mb-4 sm:mb-6 border-b border-gray-100 pb-4">Especificaciones Técnicas</h2>
+              <h2 class="text-lg sm:text-xl font-bold text-black mb-4 sm:mb-6 border-b border-gray-100 pb-4">Especificaciones Técnicas</h2>
               
               <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 mb-4 sm:mb-6">
                 <div>
@@ -257,7 +253,7 @@ const submit = () => {
         <Link href="/admin/inventory" class="inline-flex items-center justify-center h-12 px-8 bg-gray-100 text-gray-700 font-bold rounded-xl hover:bg-gray-200 transition-colors w-full sm:w-auto text-sm sm:text-base">
           Cancelar
         </Link>
-        <button type="submit" :disabled="form.processing" class="inline-flex items-center justify-center gap-2 h-12 px-8 bg-action text-white font-bold rounded-xl hover:bg-red-700 transition-colors shadow-md cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed w-full sm:w-auto text-sm sm:text-base">
+        <button type="submit" :disabled="form.processing || !form.isDirty" class="inline-flex items-center justify-center gap-2 h-12 px-8 bg-action text-white font-bold rounded-xl hover:bg-red-700 transition-colors shadow-md cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed w-full sm:w-auto text-sm sm:text-base">
           <Save class="w-5 h-5" /> Guardar Cambios
         </button>
       </div>

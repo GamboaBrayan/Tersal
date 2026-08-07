@@ -97,7 +97,7 @@ class DashboardController extends Controller
 
         Tire::create($validated);
 
-        return redirect()->back()->with('success', 'Neumático creado exitosamente.');
+        return redirect('/admin/inventory')->with('success', 'Neumático creado exitosamente.');
     }
 
     public function update(Request $request, Tire $tire)
@@ -134,7 +134,7 @@ class DashboardController extends Controller
 
         $tire->update($validated);
 
-        return redirect()->back()->with('success', 'Neumático actualizado exitosamente.');
+        return redirect('/admin/inventory')->with('success', 'Neumático actualizado exitosamente.');
     }
 
     public function destroy(Tire $tire)

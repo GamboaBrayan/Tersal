@@ -107,11 +107,25 @@ class VehicleSearchController extends Controller
                     return $response->json('data');
                 }
                 
-                // Fallback
+                // Fallback 1: EUDM (Europe)
                 $params['region'] = 'eudm';
                 $res2 = Http::get("https://api.wheel-size.com/v2/search/by_model/", $params);
-                if ($res2->successful()) {
-                    return $res2->json('data') ?? [];
+                if ($res2->successful() && !empty($res2->json('data'))) {
+                    return $res2->json('data');
+                }
+                
+                // Fallback 2: SADM (South America)
+                $params['region'] = 'sadm';
+                $res3 = Http::get("https://api.wheel-size.com/v2/search/by_model/", $params);
+                if ($res3->successful() && !empty($res3->json('data'))) {
+                    return $res3->json('data');
+                }
+                
+                // Fallback 3: LADM (Latin America)
+                $params['region'] = 'ladm';
+                $res4 = Http::get("https://api.wheel-size.com/v2/search/by_model/", $params);
+                if ($res4->successful()) {
+                    return $res4->json('data') ?? [];
                 }
             }
             
