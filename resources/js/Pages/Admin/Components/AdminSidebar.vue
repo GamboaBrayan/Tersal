@@ -38,7 +38,7 @@ const logout = () => {
     :class="[
       isOpen ? 'translate-x-0' : '-translate-x-full',
       isCollapsed ? 'lg:w-20' : 'lg:w-60',
-      'w-64 bg-white border-r border-gray-100 h-screen flex flex-col flex-shrink-0 fixed lg:sticky top-0 z-50 transition-all duration-300 ease-in-out shadow-sm lg:shadow-none'
+      'lg:translate-x-0 w-64 bg-white border-r border-gray-100 h-screen flex flex-col flex-shrink-0 fixed lg:sticky top-0 z-50 transition-all duration-300 ease-in-out shadow-sm lg:shadow-none'
     ]"
   >
     <div class="h-16 flex items-center justify-between px-5 border-b border-gray-100">
