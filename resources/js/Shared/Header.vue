@@ -21,15 +21,15 @@ watch(() => page.url, () => {
         <div class="flex items-center gap-4 lg:gap-6">
           <div class="flex items-center gap-2 font-medium hover:text-red-100 transition-colors cursor-pointer">
             <Phone class="w-4 h-4" /> 
-            <span>(555) 123-4567</span>
+            <span>+51 987654321</span>
           </div>
           <div class="flex items-center gap-2 font-medium hover:text-red-100 transition-colors cursor-pointer">
             <MessageCircle class="w-4 h-4" /> 
-            <span>555 987 654 / 555 123 456</span>
+            <span>+51 987654321</span>
           </div>
           <div class="flex items-center gap-2 font-medium hover:text-red-100 transition-colors cursor-pointer">
             <Mail class="w-4 h-4" /> 
-            <span>contacto@tersal.com</span>
+            <span>Llantastersal@gmail.com</span>
           </div>
         </div>
       </div>
