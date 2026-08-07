@@ -253,9 +253,7 @@ const searchByVehicle = () => {
                   </div>
                   <!-- 4x4 (PICKUP) -->
                   <div class="flex flex-col items-center gap-3 opacity-90 hover:opacity-100 transition-opacity cursor-default">
-                    <svg class="w-12 sm:w-14 h-6 sm:h-8 text-white fill-current" viewBox="0 95 404 190" xmlns="http://www.w3.org/2000/svg">
-                      <path fill-rule="evenodd" clip-rule="evenodd" d="M403.199,262.416l-5.651-52.739c-2.235-20.858-19.739-36.587-40.716-36.587h-39.109l-51.999-55.058 c-9.461-10.018-22.791-15.764-36.571-15.764H174.82c-16.428,0-29.793,13.365-29.793,29.793v41.028H16.7c-5.523,0-10,4.478-10,10 v70.961c-3.899,1.365-6.7,5.066-6.7,9.431c0,5.522,4.477,10,10,10h26.843c5.656,16.004,20.929,27.506,38.845,27.506 s33.19-11.501,38.846-27.506h180.519c5.656,16.004,20.929,27.506,38.846,27.506s33.19-11.501,38.846-27.506h20.512 c2.837,0,5.542-1.205,7.438-3.316C402.591,268.055,403.501,265.237,403.199,262.416z M251.184,131.765l39.029,41.325h-81.935 v-50.821h20.875C237.455,122.269,245.484,125.729,251.184,131.765z M165.027,132.062c0-5.399,4.393-9.793,9.793-9.793h13.458 v50.821h-23.251V132.062z M96.88,259.795c0,11.686-9.507,21.192-21.192,21.192c-11.685,0-21.192-9.507-21.192-21.192 c0-11.685,9.507-21.191,21.192-21.191C87.374,238.604,96.88,248.11,96.88,259.795z M75.688,218.604 c-20.567,0-37.66,15.151-40.708,34.878H26.7V193.09h100.953v60.392h-11.256C113.349,233.755,96.255,218.604,75.688,218.604z M355.091,259.795c0,11.686-9.507,21.192-21.192,21.192s-21.192-9.507-21.192-21.192c0-11.685,9.507-21.191,21.192-21.191 S355.091,248.11,355.091,259.795z M374.607,253.481c-3.047-19.727-20.141-34.878-40.708-34.878s-37.661,15.151-40.708,34.878 H147.652V193.09h209.18c10.731,0,19.687,8.047,20.83,18.718l4.465,41.674H374.607z"/>
-                    </svg>
+                    <img src="/images/4x4.png?v=3" class="w-12 sm:w-14 h-6 sm:h-8 object-contain brightness-0 invert -scale-x-100 scale-[1.7] transform-gpu" alt="4x4">
                     <span class="text-white text-sm lg:text-base font-bold uppercase tracking-widest">4x4</span>
                   </div>
                 </div>
@@ -310,7 +308,7 @@ const searchByVehicle = () => {
                       @click="toggleDropdown('width')"
                       class="w-full h-14 px-4 rounded-xl border border-gray-100 bg-gray-50 hover:bg-gray-100/50 cursor-pointer flex items-center justify-between text-gray-900 relative transition-colors"
                     >
-                      <span :class="{'text-gray-400 font-medium': !searchFilters.width, 'font-bold': searchFilters.width}">{{ searchFilters.width ? searchFilters.width : 'Ej: 225' }}</span>
+                      <span :class="{'text-gray-400 font-normal': !searchFilters.width, 'font-bold': searchFilters.width}">{{ searchFilters.width ? searchFilters.width : 'Ej: 225' }}</span>
                       <ChevronDown class="w-4 h-4 text-gray-400 pointer-events-none" />
                     </div>
                     
@@ -361,7 +359,7 @@ const searchByVehicle = () => {
                       @click="toggleDropdown('profile')"
                       class="w-full h-14 px-4 rounded-xl border border-gray-100 bg-gray-50 hover:bg-gray-100/50 cursor-pointer flex items-center justify-between text-gray-900 relative transition-colors"
                     >
-                      <span :class="{'text-gray-400 font-medium': !searchFilters.profile, 'font-bold': searchFilters.profile}">{{ searchFilters.profile ? searchFilters.profile : 'Ej: 45' }}</span>
+                      <span :class="{'text-gray-400 font-normal': !searchFilters.profile, 'font-bold': searchFilters.profile}">{{ searchFilters.profile ? searchFilters.profile : 'Ej: 45' }}</span>
                       <ChevronDown class="w-4 h-4 text-gray-400 pointer-events-none" />
                     </div>
                     
@@ -412,7 +410,7 @@ const searchByVehicle = () => {
                       @click="toggleDropdown('rim')"
                       class="w-full h-14 px-4 rounded-xl border border-gray-100 bg-gray-50 hover:bg-gray-100/50 cursor-pointer flex items-center justify-between text-gray-900 relative transition-colors"
                     >
-                      <span :class="{'text-gray-400 font-medium': !searchFilters.rim, 'font-bold': searchFilters.rim}">{{ searchFilters.rim ? searchFilters.rim : 'Ej: 18' }}</span>
+                      <span :class="{'text-gray-400 font-normal': !searchFilters.rim, 'font-bold': searchFilters.rim}">{{ searchFilters.rim ? searchFilters.rim : 'Ej: 18' }}</span>
                       <ChevronDown class="w-4 h-4 text-gray-400 pointer-events-none" />
                     </div>
                     
@@ -479,7 +477,7 @@ const searchByVehicle = () => {
                       @click="toggleDropdown('make')"
                       class="w-full h-14 px-4 rounded-xl border border-gray-100 bg-gray-50 hover:bg-gray-100/50 cursor-pointer flex items-center justify-between text-gray-900 relative transition-colors"
                     >
-                      <span :class="{'text-gray-400 font-medium': !selectedVehicle.makeName, 'font-bold': selectedVehicle.makeName}">{{ selectedVehicle.makeName || 'Seleccionar Marca' }}</span>
+                      <span :class="{'text-gray-400 font-normal': !selectedVehicle.makeName, 'font-bold': selectedVehicle.makeName}">{{ selectedVehicle.makeName || 'Seleccionar Marca' }}</span>
                       <ChevronDown class="w-4 h-4 text-gray-400 pointer-events-none" />
                     </div>
                     
@@ -530,7 +528,7 @@ const searchByVehicle = () => {
                       class="w-full h-14 px-4 rounded-xl border border-gray-100 flex items-center justify-between text-gray-900 relative transition-colors"
                       :class="[(selectedVehicle.makeSlug || selectedVehicle.makeName) ? 'bg-gray-50 hover:bg-gray-100/50 cursor-pointer' : 'opacity-50 cursor-not-allowed bg-gray-50/50']"
                     >
-                      <span :class="{'text-gray-400 font-medium': !selectedVehicle.modelName, 'font-bold': selectedVehicle.modelName}">{{ selectedVehicle.modelName || 'Seleccionar Modelo' }}</span>
+                      <span :class="{'text-gray-400 font-normal': !selectedVehicle.modelName, 'font-bold': selectedVehicle.modelName}">{{ selectedVehicle.modelName || 'Seleccionar Modelo' }}</span>
                       <ChevronDown class="w-4 h-4 text-gray-400 pointer-events-none" />
                     </div>
                     
@@ -579,7 +577,7 @@ const searchByVehicle = () => {
                       class="w-full h-14 px-4 rounded-xl border border-gray-100 flex items-center justify-between text-gray-900 relative transition-colors"
                       :class="[(selectedVehicle.modelSlug || selectedVehicle.modelName) ? 'bg-gray-50 hover:bg-gray-100/50 cursor-pointer' : 'opacity-50 cursor-not-allowed bg-gray-50/50']"
                     >
-                      <span :class="{'text-gray-400 font-medium': !selectedVehicle.yearName, 'font-bold': selectedVehicle.yearName}">{{ selectedVehicle.yearName || 'Seleccionar Año' }}</span>
+                      <span :class="{'text-gray-400 font-normal': !selectedVehicle.yearName, 'font-bold': selectedVehicle.yearName}">{{ selectedVehicle.yearName || 'Seleccionar Año' }}</span>
                       <ChevronDown class="w-4 h-4 text-gray-400 pointer-events-none" />
                     </div>
                     
