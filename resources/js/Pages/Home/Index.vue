@@ -239,27 +239,22 @@ const searchByVehicle = () => {
                 <div class="flex items-center gap-8 lg:gap-12 mt-2">
                   <!-- AUTO -->
                   <div class="flex flex-col items-center gap-3 opacity-90 hover:opacity-100 transition-opacity cursor-default">
-                    <svg class="w-12 h-12 text-white stroke-[1.5]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
-                      <path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"/>
-                      <circle cx="7" cy="17" r="2.5"/><path d="M9.5 17h5"/><circle cx="17" cy="17" r="2.5"/>
+                    <svg class="w-12 h-12 text-white fill-current scale-x-[-1]" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M19,10H14V7H19V10M22,10.5V15H20C20,16.7 18.7,18 17,18C15.3,18 14,16.7 14,15H10C10,16.7 8.7,18 7,18C5.3,18 4,16.7 4,15H2V11L4.8,6.8C5.2,6.3 5.8,6 6.5,6H16L22,10.5M17,13.5C16.2,13.5 15.5,14.2 15.5,15C15.5,15.8 16.2,16.5 17,16.5C17.8,16.5 18.5,15.8 18.5,15C18.5,14.2 17.8,13.5 17,13.5M7,13.5C6.2,13.5 5.5,14.2 5.5,15C5.5,15.8 6.2,16.5 7,16.5C7.8,16.5 8.5,15.8 8.5,15C8.5,14.2 7.8,13.5 7,13.5Z" />
                     </svg>
                     <span class="text-white text-sm lg:text-base font-bold uppercase tracking-widest">Auto</span>
                   </div>
                   <!-- SUV -->
                   <div class="flex flex-col items-center gap-3 opacity-90 hover:opacity-100 transition-opacity cursor-default">
-                    <svg class="w-12 h-12 text-white stroke-[1.5] -scale-x-100" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
-                      <circle cx="7" cy="17" r="2.5"/><circle cx="17" cy="17" r="2.5"/>
-                      <path d="M9.5 17h5M4.5 17H3v-4c0-.6.4-1.2.9-1.4l1.6-.7A3 3 0 0 1 6.5 11h.5l2-3.5A2 2 0 0 1 10.7 6h7.3a2 2 0 0 1 2 2v9h-1.5"/>
-                      <path d="M13 6v5h7"/>
+                    <svg class="w-12 h-12 text-white fill-current scale-x-[-1]" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M19 8V11H14V8H19M22 11V16H20C20 17.66 18.66 19 17 19C15.34 19 14 17.66 14 16H10C10 17.66 8.66 19 7 19C5.34 19 4 17.66 4 16H2V9.5C2 8.12 3.12 7 4.5 7H12L15.5 7L22 11M7 14.5C6.17 14.5 5.5 15.17 5.5 16C5.5 16.83 6.17 17.5 7 17.5C7.83 17.5 8.5 16.83 8.5 16C8.5 15.17 7.83 14.5 7 14.5M17 14.5C16.17 14.5 15.5 15.17 15.5 16C15.5 16.83 16.17 17.5 17 17.5C17.83 17.5 18.5 16.83 18.5 16C18.5 15.17 17.83 14.5 17 14.5M4 9V11H12.5V9H4Z" />
                     </svg>
                     <span class="text-white text-sm lg:text-base font-bold uppercase tracking-widest">SUV</span>
                   </div>
                   <!-- 4x4 (PICKUP) -->
                   <div class="flex flex-col items-center gap-3 opacity-90 hover:opacity-100 transition-opacity cursor-default">
-                    <svg class="w-12 h-12 text-white stroke-[1.5] -scale-x-100" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
-                      <circle cx="7" cy="17" r="2.5"/><circle cx="17" cy="17" r="2.5"/>
-                      <path d="M9.5 17h5M4.5 17H3v-4c0-.6.4-1.2.9-1.4l1.6-.7A3 3 0 0 1 6.5 11h.5l2-3.5A2 2 0 0 1 10.7 6h3.6a2 2 0 0 1 1.7 1H16v4h5v6h-1.5"/>
-                      <path d="M16 11v6"/>
+                    <svg class="w-12 h-12 text-white fill-current scale-x-[-1]" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M6 10.5V13.5H3V10.5H6M17 10.5C17 9.7 16.3 9 15.5 9H11L9.2 6.3C8.8 5.6 8 5 7.2 5H2C1.5 5 1 5.4 1 6V15H3C3 16.7 4.3 18 6 18C7.7 18 9 16.7 9 15H15C15 16.7 16.3 18 18 18C19.7 18 21 16.7 21 15H23V11L21 10.5M6 16.5C5.2 16.5 4.5 15.8 4.5 15C4.5 14.2 5.2 13.5 6 13.5C6.8 13.5 7.5 14.2 7.5 15C7.5 15.8 6.8 16.5 6 16.5M18 16.5C17.2 16.5 16.5 15.8 16.5 15C16.5 14.2 17.2 13.5 18 13.5C18.8 13.5 19.5 14.2 19.5 15C19.5 15.8 18.8 16.5 18 16.5M9.5 13.5V9H15.5C15.8 9 16.1 9.2 16.3 9.4L18.4 11H9.5V13.5Z" />
                     </svg>
                     <span class="text-white text-sm lg:text-base font-bold uppercase tracking-widest">4x4</span>
                   </div>
