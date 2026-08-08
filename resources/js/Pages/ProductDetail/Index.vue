@@ -5,6 +5,8 @@ import Header from '../../Shared/Header.vue';
 import Footer from '../../Shared/Footer.vue';
 import WhatsAppFloatingBtn from '../../Shared/WhatsAppFloatingBtn.vue';
 import { CheckCircle2, Shield, Check } from 'lucide-vue-next';
+import { Plane } from 'lucide-vue-next';
+import { TruckIcon } from 'lucide-vue-next';
 
 const props = defineProps({
   tire: Object,
@@ -145,7 +147,10 @@ const getDiscountPercentage = (price, offerPrice) => {
               <Check class="w-5 h-5 text-green-600" /> Instalación Gratis en Talleres Autorizados
             </div>
             <div class="flex items-center gap-3 text-sm text-gray-700 font-medium">
-              <Shield class="w-5 h-5 text-green-600" /> Garantía de fábrica por defectos
+              <Shield class="w-5 h-5 text-green-600" /> Garantía por 3 meses de fábrica
+            </div>
+            <div class="flex items-center gap-3 text-sm text-gray-700 font-medium">
+              <TruckIcon class="w-5 h-5 text-green-600" /> Envío a todo el Perú
             </div>
           </div>
         </div>
