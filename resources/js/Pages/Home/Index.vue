@@ -263,7 +263,7 @@ const searchByVehicle = () => {
           <div class="hidden md:flex absolute inset-0 w-full pointer-events-none z-10">
             <div class="w-full px-4 sm:px-6 md:pl-[1%] lg:pl-[2%] xl:pl-[3%] 2xl:pl-[4%] flex flex-col justify-center items-start pt-12 transition-all duration-700 ease-out transform" :class="currentHeroImageIndex === 0 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'">
               <span class="text-red-600 font-extrabold uppercase tracking-wide text-sm lg:text-base mb-3 drop-shadow-sm">Rendimiento que te lleva más lejos</span>
-              <h1 class="text-white font-black text-5xl lg:text-6xl xl:text-[4.5rem] 2xl:text-7xl leading-[1.05] uppercase tracking-tight drop-shadow-lg">
+              <h1 class="text-white font-black text-4xl lg:text-5xl xl:text-6xl 2xl:text-[4rem] leading-[1.05] uppercase tracking-tight drop-shadow-lg">
                 Encuentra el <br>
                 neumático perfecto <br>
                 <span class="text-red-600">para tu vehículo</span>
