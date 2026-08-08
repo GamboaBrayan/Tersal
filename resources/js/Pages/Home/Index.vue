@@ -305,7 +305,7 @@ const searchByVehicle = () => {
         <div class="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 relative z-40 text-center pointer-events-auto">
           <!-- Buscador overlapping exactly 50% on the bottom border minus 3 pixels -->
           <div class="transform translate-y-[calc(50%-3px)] relative z-20">
-            <div class="max-w-[1050px] mx-auto p-6 sm:p-10 text-left bg-white/95 backdrop-blur-xl shadow-[0_8px_40px_rgb(0,0,0,0.08)] rounded-[2rem] border border-gray-100/50">
+            <div class="max-w-[1050px] mx-auto p-6 sm:p-10 text-left bg-white/85 backdrop-blur-none shadow-[0_8px_40px_rgb(0,0,0,0.08)] rounded-[2rem] border border-gray-100/50">
 
             <!-- Título Principal del Buscador -->
             <h2 class="text-xl sm:text-2xl font-black text-red-500 mb-6 uppercase tracking-wide text-center">
@@ -316,16 +316,16 @@ const searchByVehicle = () => {
             <div class="relative flex justify-center items-end border-b border-gray-100 mb-8">
               <!-- Pestañas -->
               <div class="flex w-full sm:w-auto min-w-[300px]">
-                <button @click="activeTab = 'medida'" :class="{'border-action text-action': activeTab === 'medida', 'border-transparent text-gray-400 hover:text-gray-600': activeTab !== 'medida'}" class="flex-1 pb-4 text-sm font-extrabold uppercase tracking-wider border-b-2 transition-all text-center">
+                <button @click="activeTab = 'medida'" :class="{'border-action text-action': activeTab === 'medida', 'border-transparent text-black hover:text-gray-600': activeTab !== 'medida'}" class="flex-1 pb-4 text-sm font-extrabold uppercase tracking-wider border-b-2 transition-all text-center">
                   Por Medida
                 </button>
-                <button @click="activeTab = 'vehiculo'" :class="{'border-action text-action': activeTab === 'vehiculo', 'border-transparent text-gray-400 hover:text-gray-600': activeTab !== 'vehiculo'}" class="flex-1 pb-4 text-sm font-extrabold uppercase tracking-wider border-b-2 transition-all text-center">
+                <button @click="activeTab = 'vehiculo'" :class="{'border-action text-action': activeTab === 'vehiculo', 'border-transparent text-black hover:text-gray-600': activeTab !== 'vehiculo'}" class="flex-1 pb-4 text-sm font-extrabold uppercase tracking-wider border-b-2 transition-all text-center">
                   Por Vehículo
                 </button>
               </div>
               <!-- Link -->
               <div class="hidden sm:block absolute right-0 pb-4">
-                <Link href="/guide" class="text-gray-600 hover:text-gray-900 text-xs font-semibold flex items-center gap-1 transition-colors">
+                <Link href="/guide" class="text-black hover:text-gray-900 text-xs font-semibold flex items-center gap-1 transition-colors">
                   <Info class="w-4 h-4" /> ¿No sabes tu medida?
                 </Link>
               </div>
@@ -339,7 +339,7 @@ const searchByVehicle = () => {
                 
                   <!-- Dropdown Ancho -->
                   <div :class="['relative', isWidthDropdownOpen ? 'z-50' : 'z-20']" class="col-span-1">
-                    <label class="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-2">Ancho</label>
+                    <label class="block text-xs font-bold text-black uppercase tracking-wide mb-2">Ancho</label>
                     <div 
                       @click="toggleDropdown('width')"
                       class="w-full h-14 px-4 rounded-xl border border-gray-100 bg-gray-50 hover:bg-gray-100/50 cursor-pointer flex items-center justify-between text-gray-900 relative transition-colors"
@@ -390,7 +390,7 @@ const searchByVehicle = () => {
 
                   <!-- Dropdown Alto -->
                   <div :class="['relative', isProfileDropdownOpen ? 'z-50' : 'z-20']" class="col-span-1">
-                    <label class="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-2">Altura</label>
+                    <label class="block text-xs font-bold text-black uppercase tracking-wide mb-2">Altura</label>
                     <div 
                       @click="toggleDropdown('profile')"
                       class="w-full h-14 px-4 rounded-xl border border-gray-100 bg-gray-50 hover:bg-gray-100/50 cursor-pointer flex items-center justify-between text-gray-900 relative transition-colors"
@@ -441,7 +441,7 @@ const searchByVehicle = () => {
 
                   <!-- Dropdown Rin -->
                   <div :class="['relative', isRimDropdownOpen ? 'z-50' : 'z-20']" class="col-span-1">
-                    <label class="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-2">Rin</label>
+                    <label class="block text-xs font-bold text-black uppercase tracking-wide mb-2">Rin</label>
                     <div 
                       @click="toggleDropdown('rim')"
                       class="w-full h-14 px-4 rounded-xl border border-gray-100 bg-gray-50 hover:bg-gray-100/50 cursor-pointer flex items-center justify-between text-gray-900 relative transition-colors"
@@ -508,7 +508,7 @@ const searchByVehicle = () => {
                   
                   <!-- Dropdown Marca -->
                   <div :class="['relative', isMakeDropdownOpen ? 'z-50' : 'z-20']">
-                    <label class="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-2">Marca</label>
+                    <label class="block text-xs font-bold text-black uppercase tracking-wide mb-2">Marca</label>
                     <div 
                       @click="toggleDropdown('make')"
                       class="w-full h-14 px-4 rounded-xl border border-gray-100 bg-gray-50 hover:bg-gray-100/50 cursor-pointer flex items-center justify-between text-gray-900 relative transition-colors"
@@ -558,7 +558,7 @@ const searchByVehicle = () => {
 
                   <!-- Dropdown Modelo -->
                   <div :class="['relative', isModelDropdownOpen ? 'z-50' : 'z-20']">
-                    <label class="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-2">Modelo</label>
+                    <label class="block text-xs font-bold text-black uppercase tracking-wide mb-2">Modelo</label>
                     <div 
                       @click="toggleDropdown('model')"
                       class="w-full h-14 px-4 rounded-xl border border-gray-100 flex items-center justify-between text-gray-900 relative transition-colors"
@@ -607,7 +607,7 @@ const searchByVehicle = () => {
 
                   <!-- Dropdown Año -->
                   <div :class="['relative', isYearDropdownOpen ? 'z-50' : 'z-20']">
-                    <label class="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-2">Año</label>
+                    <label class="block text-xs font-bold text-black uppercase tracking-wide mb-2">Año</label>
                     <div 
                       @click="toggleDropdown('year')"
                       class="w-full h-14 px-4 rounded-xl border border-gray-100 flex items-center justify-between text-gray-900 relative transition-colors"
@@ -639,7 +639,7 @@ const searchByVehicle = () => {
 
                   <!-- Dropdown Versión -->
                   <div :class="['relative', isTrimDropdownOpen ? 'z-50' : 'z-20']">
-                    <label class="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-2">Versión <span class="font-normal text-[10px] lowercase text-gray-400">(opcional)</span></label>
+                    <label class="block text-xs font-bold text-black uppercase tracking-wide mb-2">Versión <span class="font-normal text-[10px] lowercase text-gray-400">(opcional)</span></label>
                     <div 
                       @click="toggleDropdown('trim')"
                       class="w-full h-14 px-4 rounded-xl border border-gray-100 flex items-center justify-between text-gray-900 relative transition-colors"
