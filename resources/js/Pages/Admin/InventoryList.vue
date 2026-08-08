@@ -151,7 +151,7 @@ const handleImport = (e) => {
                 <td class="p-4">
                   <div class="flex items-center gap-4">
                     <div class="w-10 h-10 sm:w-12 sm:h-12 bg-gray-100 rounded-lg overflow-hidden flex-shrink-0 flex items-center justify-center">
-                      <img v-if="tire.images_json && tire.images_json.length > 0" :src="tire.images_json[0].startsWith('http') ? tire.images_json[0] : `/storage/${tire.images_json[0]}`" class="w-full h-full object-cover" />
+                      <img v-if="tire.image_urls && tire.image_urls.length > 0" :src="tire.image_urls[0]" class="w-full h-full object-cover" />
                       <Package class="w-5 h-5 sm:w-6 sm:h-6 text-gray-400" v-else />
                     </div>
                     <div>

@@ -1,5 +1,5 @@
 <script setup>
-import { Head, useForm } from '@inertiajs/vue3';
+import { Head, useForm, usePage } from '@inertiajs/vue3';
 import AdminLayout from './Components/AdminLayout.vue';
 import { Save, Plus, Trash2, MessageCircle, HelpCircle, ChevronUp, ChevronDown, Image as ImageIcon } from 'lucide-vue-next';
 import { ref, onMounted } from 'vue';
@@ -89,7 +89,7 @@ const moveHeroImageDown = (index) => {
 
 const getImageUrl = (image) => {
   if (typeof image === 'string') {
-    return '/storage/' + image;
+    return image.startsWith('http') ? image : usePage().props.storage_url + '/' + image;
   }
   if (image instanceof File) {
     return URL.createObjectURL(image);

@@ -1,5 +1,5 @@
 <script setup>
-import { Head, Link, useForm, router } from '@inertiajs/vue3';
+import { Head, Link, useForm, router, usePage } from '@inertiajs/vue3';
 import AdminLayout from './Components/AdminLayout.vue';
 import { ArrowLeft, Save, UploadCloud, X, Plus } from 'lucide-vue-next';
 import { ref } from 'vue';
@@ -238,7 +238,7 @@ const submit = () => {
               <div class="mt-6 space-y-4">
                 <!-- Existing -->
                 <div v-for="(img, idx) in form.existing_images" :key="'ex'+idx" class="relative group w-full h-32 rounded-xl overflow-hidden bg-gray-100 border border-gray-200">
-                  <img :src="img.startsWith('http') ? img : `/storage/${img}`" class="w-full h-full object-cover">
+                  <img :src="img.startsWith('http') ? img : `${usePage().props.storage_url}/${img}`" class="w-full h-full object-cover">
                   <button type="button" @click="removeExistingImage(idx)" class="absolute top-2 right-2 w-8 h-8 bg-white/90 text-action rounded-full flex items-center justify-center shadow-sm opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
                     <X class="w-4 h-4" />
                   </button>

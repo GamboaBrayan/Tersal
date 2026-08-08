@@ -247,7 +247,7 @@ const searchByVehicle = () => {
             <div v-for="(img, index) in heroImages" :key="img"
                  class="absolute inset-0 w-full h-full transition-opacity duration-1000 ease-in-out"
                  :class="index === currentHeroImageIndex ? 'opacity-100 z-0' : 'opacity-0 -z-10'">
-              <img :src="'/storage/' + img" class="w-full h-full object-cover object-[75%_top] lg:object-top" alt="Tire Background">
+              <img :src="img" class="w-full h-full object-cover object-[75%_top] lg:object-top" alt="Tire Background">
             </div>
           </template>
           <template v-else>
@@ -730,7 +730,7 @@ const searchByVehicle = () => {
         <div class="marquee-container group flex w-full">
           <div v-for="n in 10" :key="n" class="marquee-content flex shrink-0 gap-12 pr-12 items-center justify-start min-w-max" :style="{ animationDuration: Math.max(brands.length * 4, 10) + 's' }">
             <Link :href="`/catalog?brand_id=${brand.id}`" v-for="brand in brands" :key="`${n}-${brand.id}`" class="shrink-0 flex items-center justify-center w-32 h-20 transition-all duration-300 opacity-70 hover:opacity-100 cursor-pointer">
-              <img v-if="brand.logo_url" :src="brand.logo_url.startsWith('http') ? brand.logo_url : '/storage/' + brand.logo_url" :alt="brand.name" class="max-w-full max-h-full object-contain grayscale hover:grayscale-0 transition-all duration-300" />
+              <img v-if="brand.logo_full_url" :src="brand.logo_full_url" :alt="brand.name" class="max-w-full max-h-full object-contain grayscale hover:grayscale-0 transition-all duration-300" />
               <span v-else class="text-xl font-black text-gray-400 hover:text-gray-900 transition-colors">{{ brand.name }}</span>
             </Link>
           </div>
@@ -748,7 +748,7 @@ const searchByVehicle = () => {
           <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             <div v-for="tire in promotions" :key="tire.id" class="bg-white rounded-2xl shadow-[0_4px_20px_rgb(0,0,0,0.03)] border-transparent overflow-hidden hover:shadow-[0_12px_40px_rgb(0,0,0,0.08)] hover:-translate-y-1 transition-all duration-300 flex flex-col max-w-sm mx-auto w-full group">
               <div class="relative pt-[85%] bg-gray-50/50">
-                <img :src="tire.images_json && tire.images_json.length ? (tire.images_json[0].startsWith('http') ? tire.images_json[0] : '/storage/'+tire.images_json[0]) : 'https://images.unsplash.com/photo-1620065095360-6644bcce8937?auto=format&fit=crop&q=80&w=400&h=400'" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="Tire" />
+                <img :src="tire.image_urls && tire.image_urls.length ? tire.image_urls[0] : 'https://images.unsplash.com/photo-1620065095360-6644bcce8937?auto=format&fit=crop&q=80&w=400&h=400'" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="Tire" />
                 <div class="absolute top-3 left-3 bg-action text-white text-[10px] font-bold px-2 py-1 rounded shadow-[0_4px_10px_rgb(220,38,38,0.3)] flex items-center gap-1">
                   OFERTA
                   <span class="bg-white text-action px-1 rounded text-[10px]">{{ getDiscountPercentage(tire.price, tire.offer_price) }}%</span>

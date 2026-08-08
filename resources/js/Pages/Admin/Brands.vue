@@ -79,7 +79,7 @@ const editBrand = (brand) => {
   form.logo_url_input = brand.logo_url && brand.logo_url.startsWith('http') ? brand.logo_url : '';
   
   if (brand.logo_url) {
-    logoPreview.value = brand.logo_url.startsWith('http') ? brand.logo_url : '/storage/' + brand.logo_url;
+    logoPreview.value = brand.logo_full_url;
   } else {
     logoPreview.value = null;
   }
@@ -229,7 +229,7 @@ const handleImport = (e) => {
                 <td class="p-4">
                   <div class="flex items-center gap-3">
                     <div class="w-12 h-12 rounded-lg border border-gray-200 bg-white flex items-center justify-center flex-shrink-0 p-1">
-                      <img v-if="brand.logo_url" :src="brand.logo_url.startsWith('http') ? brand.logo_url : '/storage/' + brand.logo_url" class="max-w-full max-h-full object-contain" />
+                      <img v-if="brand.logo_full_url" :src="brand.logo_full_url" class="max-w-full max-h-full object-contain" />
                       <Tag v-else class="w-5 h-5 text-gray-400" />
                     </div>
                     <div class="flex flex-col">

@@ -25,7 +25,16 @@ class HomeController extends Controller
         $rims = Tire::select('rim')->distinct()->orderBy('rim')->pluck('rim');
 
         $heroImagesSetting = \App\Models\Setting::where('key', 'hero_images')->first();
-        $heroImages = $heroImagesSetting ? json_decode($heroImagesSetting->value, true) : [];
+        $heroImages = [];
+        if ($heroImagesSetting) {
+            $paths = json_decode($heroImagesSetting->value, true);
+            if (is_array($paths)) {
+                $heroImages = array_map(function($path) {
+                    if (str_starts_with($path, 'http')) return $path;
+                    return \Illuminate\Support\Facades\Storage::disk('r2')->url($path);
+                }, $paths);
+            }
+        }
 
         return Inertia::render('Home/Index', [
             'brands' => $brands,

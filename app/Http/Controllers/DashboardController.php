@@ -108,7 +108,7 @@ class DashboardController extends Controller
 
         if ($request->hasFile('images')) {
             foreach ($request->file('images') as $image) {
-                $imagePaths[] = $image->store('tires', 'public');
+                $imagePaths[] = $image->store('tires', 'r2');
             }
         }
         $validated['images_json'] = $imagePaths;
@@ -157,7 +157,7 @@ class DashboardController extends Controller
         
         if ($request->hasFile('images')) {
             foreach ($request->file('images') as $image) {
-                $imagePaths[] = $image->store('tires', 'public');
+                $imagePaths[] = $image->store('tires', 'r2');
             }
         }
         $validated['images_json'] = $imagePaths;
@@ -196,7 +196,7 @@ class DashboardController extends Controller
                 if (is_string($image)) {
                     $processedImages[] = $image;
                 } elseif ($image instanceof \Illuminate\Http\UploadedFile) {
-                    $processedImages[] = $image->store('hero', 'public');
+                    $processedImages[] = $image->store('hero', 'r2');
                 }
             }
             $validated['hero_images'] = $processedImages;
@@ -244,7 +244,7 @@ class DashboardController extends Controller
         ];
 
         if ($request->hasFile('logo')) {
-            $data['logo_url'] = $request->file('logo')->store('brands', 'public');
+            $data['logo_url'] = $request->file('logo')->store('brands', 'r2');
         } elseif (!empty($validated['logo_url_input'])) {
             $data['logo_url'] = $validated['logo_url_input'];
         }
@@ -269,7 +269,7 @@ class DashboardController extends Controller
         ];
 
         if ($request->hasFile('logo')) {
-            $data['logo_url'] = $request->file('logo')->store('brands', 'public');
+            $data['logo_url'] = $request->file('logo')->store('brands', 'r2');
         } elseif (!empty($validated['logo_url_input'])) {
             $data['logo_url'] = $validated['logo_url_input'];
         }

@@ -31,7 +31,7 @@ const getDiscountPercentage = (price, offerPrice) => {
         </span>
       </div>
 
-      <img :src="tire.images_json && tire.images_json.length ? (tire.images_json[0].startsWith('http') ? tire.images_json[0] : '/storage/'+tire.images_json[0]) : defaultImage" 
+      <img :src="tire.image_urls && tire.image_urls.length ? tire.image_urls[0] : defaultImage" 
            class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" 
            alt="Tire" />
     </Link>

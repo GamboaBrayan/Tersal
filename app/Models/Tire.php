@@ -26,7 +26,7 @@ class Tire extends Model
         'offer_price' => 'decimal:2',
     ];
 
-    protected $appends = ['has_discount', 'is_available'];
+    protected $appends = ['has_discount', 'is_available', 'image_urls'];
 
     protected static function booted()
     {
@@ -58,6 +58,25 @@ class Tire extends Model
     {
         return Attribute::make(
             get: fn () => $this->stock > 0,
+        );
+    }
+
+    protected function imageUrls(): Attribute
+    {
+        return Attribute::make(
+            get: function () {
+                $urls = [];
+                if (is_array($this->images_json)) {
+                    foreach ($this->images_json as $path) {
+                        if (str_starts_with($path, 'http')) {
+                            $urls[] = $path;
+                        } else {
+                            $urls[] = \Illuminate\Support\Facades\Storage::disk('r2')->url($path);
+                        }
+                    }
+                }
+                return $urls;
+            },
         );
     }
 }

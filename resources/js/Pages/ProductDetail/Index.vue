@@ -25,11 +25,11 @@ const decreaseQuantity = () => { if (quantity.value > 1) quantity.value--; };
 
 // Image helper function for related tires
 const getFirstImage = (t) => {
-  return t.images_json && t.images_json.length ? (t.images_json[0].startsWith('http') ? t.images_json[0] : '/storage/' + t.images_json[0]) : defaultImage;
+  return t.image_urls && t.image_urls.length ? t.image_urls[0] : defaultImage;
 };
 
-const images = props.tire.images_json && props.tire.images_json.length 
-  ? props.tire.images_json.map(img => img.startsWith('http') ? img : '/storage/' + img)
+const images = props.tire.image_urls && props.tire.image_urls.length 
+  ? props.tire.image_urls
   : [defaultImage, defaultImage, defaultImage]; // Mock multiple images if missing
 
 const totalAmount = () => {
