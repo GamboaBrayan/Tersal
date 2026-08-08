@@ -305,7 +305,7 @@ const searchByVehicle = () => {
         <div class="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 relative z-40 text-center pointer-events-auto">
           <!-- Buscador overlapping exactly 50% on the bottom border minus 3 pixels -->
           <div class="transform translate-y-[calc(50%-3px)] relative z-20">
-            <div class="max-w-[1050px] mx-auto p-6 sm:p-10 text-left bg-white/85 backdrop-blur-none shadow-[0_8px_40px_rgb(0,0,0,0.08)] rounded-[2rem] border border-gray-100/50">
+            <div class="max-w-[1050px] mx-auto p-6 sm:p-10 text-left bg-white/80 backdrop-blur-none shadow-[0_8px_40px_rgb(0,0,0,0.08)] rounded-[2rem] border border-gray-100/50">
 
             <!-- Título Principal del Buscador -->
             <h2 class="text-xl sm:text-2xl font-black text-red-500 mb-6 uppercase tracking-wide text-center">
