@@ -24,10 +24,6 @@ watch(() => page.url, () => {
             <span>+51 987654321</span>
           </div>
           <div class="flex items-center gap-2 font-medium hover:text-red-100 transition-colors cursor-pointer">
-            <MessageCircle class="w-4 h-4" /> 
-            <span>+51 987654321</span>
-          </div>
-          <div class="flex items-center gap-2 font-medium hover:text-red-100 transition-colors cursor-pointer">
             <Mail class="w-4 h-4" /> 
             <span>Llantastersal@gmail.com</span>
           </div>
