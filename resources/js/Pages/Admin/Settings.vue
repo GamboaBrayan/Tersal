@@ -71,31 +71,35 @@ const moveDown = (index) => {
 };
 
 const handleImageUpload = (e) => {
-  const files = e.target.files;
+  const files = Array.from(e.target.files);
   if (!files.length) return;
-  for (let i = 0; i < files.length; i++) {
-    form.hero_images.push(files[i]);
-  }
+  form.hero_images = [...form.hero_images, ...files];
   e.target.value = '';
 };
 
 const removeHeroImage = (index) => {
-  form.hero_images.splice(index, 1);
+  const newArr = [...form.hero_images];
+  newArr.splice(index, 1);
+  form.hero_images = newArr;
 };
 
 const moveHeroImageUp = (index) => {
   if (index > 0) {
-    const item = form.hero_images[index];
-    form.hero_images.splice(index, 1);
-    form.hero_images.splice(index - 1, 0, item);
+    const newArr = [...form.hero_images];
+    const item = newArr[index];
+    newArr.splice(index, 1);
+    newArr.splice(index - 1, 0, item);
+    form.hero_images = newArr;
   }
 };
 
 const moveHeroImageDown = (index) => {
   if (index < form.hero_images.length - 1) {
-    const item = form.hero_images[index];
-    form.hero_images.splice(index, 1);
-    form.hero_images.splice(index + 1, 0, item);
+    const newArr = [...form.hero_images];
+    const item = newArr[index];
+    newArr.splice(index, 1);
+    newArr.splice(index + 1, 0, item);
+    form.hero_images = newArr;
   }
 };
 
