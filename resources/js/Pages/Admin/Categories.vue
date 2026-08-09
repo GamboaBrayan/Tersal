@@ -40,6 +40,7 @@ const closeCategoryModal = () => {
 
 const openCreateModal = () => {
   closeCategoryModal(); // reset first
+  form.defaults({ name: '' });
   showCategoryModal.value = true;
 };
 
@@ -47,6 +48,7 @@ const editCategory = (category) => {
   isEditing.value = true;
   editingCategoryId.value = category.id;
   form.name = category.name;
+  form.defaults({ name: category.name });
   showCategoryModal.value = true;
 };
 

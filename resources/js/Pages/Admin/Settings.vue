@@ -2,7 +2,7 @@
 import { Head, useForm, usePage } from '@inertiajs/vue3';
 import AdminLayout from './Components/AdminLayout.vue';
 import { Save, Plus, Trash2, MessageCircle, HelpCircle, ChevronUp, ChevronDown, Image as ImageIcon } from 'lucide-vue-next';
-import { ref, onMounted } from 'vue';
+import { ref, watch } from 'vue';
 
 const props = defineProps({
   settings: Object
@@ -10,29 +10,41 @@ const props = defineProps({
 
 const activeTab = ref('contact');
 
-let initialFaqs = [];
-try {
-  if (props.settings?.faqs) {
-    initialFaqs = JSON.parse(props.settings.faqs);
-  }
-} catch (e) {
-  initialFaqs = [];
-}
-
-let initialHeroImages = [];
-try {
-  if (props.settings?.hero_images) {
-    initialHeroImages = JSON.parse(props.settings.hero_images);
-  }
-} catch (e) {
-  initialHeroImages = [];
-}
-
 const form = useForm({
-  whatsapp_number: props.settings?.whatsapp_number || '',
-  faqs: initialFaqs.length > 0 ? initialFaqs : [{ question: '', answer: '' }],
-  hero_images: initialHeroImages
+  whatsapp_number: '',
+  faqs: [{ question: '', answer: '' }],
+  hero_images: []
 });
+
+watch(() => props.settings, (newSettings) => {
+  let initialFaqs = [];
+  try {
+    if (newSettings?.faqs) {
+      initialFaqs = JSON.parse(newSettings.faqs);
+    }
+  } catch (e) {
+    initialFaqs = [];
+  }
+  
+  let initialHeroImages = [];
+  try {
+    if (newSettings?.hero_images) {
+      initialHeroImages = JSON.parse(newSettings.hero_images);
+    }
+  } catch (e) {
+    initialHeroImages = [];
+  }
+  
+  form.whatsapp_number = newSettings?.whatsapp_number || '';
+  form.faqs = initialFaqs.length > 0 ? initialFaqs : [{ question: '', answer: '' }];
+  form.hero_images = initialHeroImages;
+  
+  form.defaults({
+    whatsapp_number: form.whatsapp_number,
+    faqs: form.faqs,
+    hero_images: form.hero_images
+  });
+}, { deep: true, immediate: true });
 
 const addFaq = () => {
   form.faqs.push({ question: '', answer: '' });

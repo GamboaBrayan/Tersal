@@ -2,6 +2,10 @@
 import { ref, onMounted } from 'vue';
 import { useCookieConsent } from '../Composables/useCookieConsent';
 import { X, Check, Settings2, Info } from 'lucide-vue-next';
+import { usePage } from '@inertiajs/vue3';
+
+const page = usePage();
+const isAdmin = page.url.startsWith('/admin') || page.url.startsWith('/login');
 
 const { showBanner, checkConsent, acceptAll, rejectNonEssential, saveConsent } = useCookieConsent();
 const showSettings = ref(false);
@@ -30,15 +34,16 @@ const handleSavePreferences = () => {
 </script>
 
 <template>
-  <!-- Main Banner -->
-  <Transition
-    enter-active-class="transition ease-out duration-300"
-    enter-from-class="transform translate-y-full opacity-0"
-    enter-to-class="transform translate-y-0 opacity-100"
-    leave-active-class="transition ease-in duration-200"
-    leave-from-class="transform translate-y-0 opacity-100"
-    leave-to-class="transform translate-y-full opacity-0"
-  >
+  <div v-if="!isAdmin">
+    <!-- Main Banner -->
+    <Transition
+      enter-active-class="transition ease-out duration-300"
+      enter-from-class="transform translate-y-full opacity-0"
+      enter-to-class="transform translate-y-0 opacity-100"
+      leave-active-class="transition ease-in duration-200"
+      leave-from-class="transform translate-y-0 opacity-100"
+      leave-to-class="transform translate-y-full opacity-0"
+    >
     <div v-if="showBanner && !showSettings" class="fixed bottom-0 left-0 right-0 z-[100] p-4 pointer-events-none">
       <div class="max-w-7xl mx-auto bg-white rounded-2xl shadow-[0_-10px_40px_rgba(0,0,0,0.1)] border border-gray-100 p-5 md:p-6 flex flex-col md:flex-row items-start md:items-center gap-4 md:gap-6 pointer-events-auto">
         
@@ -141,5 +146,6 @@ const handleSavePreferences = () => {
 
       </div>
     </div>
-  </Transition>
+    </Transition>
+  </div>
 </template>

@@ -67,6 +67,12 @@ const closeBrandModal = () => {
 
 const openCreateModal = () => {
   closeBrandModal(); // reset first
+  form.defaults({
+    name: '',
+    logo: null,
+    logo_url_input: '',
+    show_on_home: true
+  });
   showBrandModal.value = true;
 };
 
@@ -77,6 +83,13 @@ const editBrand = (brand) => {
   form.show_on_home = !!brand.show_on_home;
   form.logo = null;
   form.logo_url_input = brand.logo_url && brand.logo_url.startsWith('http') ? brand.logo_url : '';
+  
+  form.defaults({
+    name: form.name,
+    show_on_home: form.show_on_home,
+    logo: null,
+    logo_url_input: form.logo_url_input
+  });
   
   if (brand.logo_url) {
     logoPreview.value = brand.logo_full_url;
