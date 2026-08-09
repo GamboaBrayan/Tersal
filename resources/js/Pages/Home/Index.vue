@@ -730,7 +730,7 @@ const searchByVehicle = () => {
         <div class="marquee-container group flex w-full">
           <div v-for="n in 10" :key="n" class="marquee-content flex shrink-0 gap-12 pr-12 items-center justify-start min-w-max" :style="{ animationDuration: Math.max(brands.length * 4, 10) + 's' }">
             <Link :href="`/catalog?brand_id=${brand.id}`" v-for="brand in brands" :key="`${n}-${brand.id}`" class="shrink-0 flex items-center justify-center w-32 h-20 transition-all duration-300 opacity-70 hover:opacity-100 cursor-pointer">
-              <img v-if="brand.logo_full_url" :src="brand.logo_full_url" :alt="brand.name" class="max-w-full max-h-full object-contain grayscale hover:grayscale-0 transition-all duration-300" />
+              <img v-if="brand.logo_full_url" :src="brand.logo_full_url" :alt="brand.name" class="max-w-full max-h-full object-contain transition-all duration-300" />
               <span v-else class="text-xl font-black text-gray-400 hover:text-gray-900 transition-colors">{{ brand.name }}</span>
             </Link>
           </div>
