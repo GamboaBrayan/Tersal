@@ -144,8 +144,22 @@ class DashboardController extends Controller
             'image_urls.*' => 'nullable|url'
         ]);
 
-        $imagePaths = $request->input('existing_images', []);
+        $existingImagesInput = $request->input('existing_images', []);
         
+        $originalImages = is_array($tire->images_json) ? $tire->images_json : [];
+        $deletedImages = array_diff($originalImages, $existingImagesInput);
+        
+        foreach ($deletedImages as $delImage) {
+            if (!empty($delImage) && !str_starts_with($delImage, 'http')) {
+                try {
+                    \Illuminate\Support\Facades\Storage::disk('r2')->delete($delImage);
+                } catch (\Exception $e) {
+                    \Illuminate\Support\Facades\Log::error("Failed to delete image from R2: {$delImage}", ['error' => $e->getMessage()]);
+                }
+            }
+        }
+
+        $imagePaths = $existingImagesInput;
         // Add new URLs
         if ($request->has('image_urls') && is_array($request->image_urls)) {
             foreach ($request->image_urls as $url) {
@@ -199,6 +213,24 @@ class DashboardController extends Controller
                     $processedImages[] = $image->store('hero', 'r2');
                 }
             }
+            
+            $oldSetting = Setting::where('key', 'hero_images')->first();
+            if ($oldSetting) {
+                $oldImages = json_decode($oldSetting->value, true);
+                if (is_array($oldImages)) {
+                    $deletedHeroImages = array_diff($oldImages, array_filter($processedImages, 'is_string'));
+                    foreach ($deletedHeroImages as $delImage) {
+                        if (!empty($delImage) && !str_starts_with($delImage, 'http')) {
+                            try {
+                                \Illuminate\Support\Facades\Storage::disk('r2')->delete($delImage);
+                            } catch (\Exception $e) {
+                                \Illuminate\Support\Facades\Log::error("Failed to delete hero image from R2: {$delImage}", ['error' => $e->getMessage()]);
+                            }
+                        }
+                    }
+                }
+            }
+
             $validated['hero_images'] = $processedImages;
         }
 
@@ -269,8 +301,22 @@ class DashboardController extends Controller
         ];
 
         if ($request->hasFile('logo')) {
+            if (!empty($brand->logo_url) && !str_starts_with($brand->logo_url, 'http')) {
+                try {
+                    \Illuminate\Support\Facades\Storage::disk('r2')->delete($brand->logo_url);
+                } catch (\Exception $e) {
+                    \Illuminate\Support\Facades\Log::error("Failed to delete brand logo from R2: {$brand->logo_url}", ['error' => $e->getMessage()]);
+                }
+            }
             $data['logo_url'] = $request->file('logo')->store('brands', 'r2');
         } elseif (!empty($validated['logo_url_input'])) {
+            if ($validated['logo_url_input'] !== $brand->logo_url && !empty($brand->logo_url) && !str_starts_with($brand->logo_url, 'http')) {
+                try {
+                    \Illuminate\Support\Facades\Storage::disk('r2')->delete($brand->logo_url);
+                } catch (\Exception $e) {
+                    \Illuminate\Support\Facades\Log::error("Failed to delete brand logo from R2: {$brand->logo_url}", ['error' => $e->getMessage()]);
+                }
+            }
             $data['logo_url'] = $validated['logo_url_input'];
         }
 

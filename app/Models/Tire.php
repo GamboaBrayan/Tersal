@@ -35,6 +35,20 @@ class Tire extends Model
             $tire->product_code = 'TT' . str_pad($tire->id, 6, '0', STR_PAD_LEFT);
             $tire->saveQuietly();
         });
+
+        static::forceDeleted(function ($tire) {
+            if (is_array($tire->images_json)) {
+                foreach ($tire->images_json as $image) {
+                    if (!empty($image) && !str_starts_with($image, 'http')) {
+                        try {
+                            \Illuminate\Support\Facades\Storage::disk('r2')->delete($image);
+                        } catch (\Exception $e) {
+                            \Illuminate\Support\Facades\Log::error("Failed to delete image from R2: {$image}", ['error' => $e->getMessage()]);
+                        }
+                    }
+                }
+            }
+        });
     }
 
     public function brand()

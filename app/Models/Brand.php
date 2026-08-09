@@ -13,6 +13,19 @@ class Brand extends Model
 
     protected $appends = ['logo_full_url'];
 
+    protected static function booted()
+    {
+        static::deleting(function ($brand) {
+            if (!empty($brand->logo_url) && !str_starts_with($brand->logo_url, 'http')) {
+                try {
+                    \Illuminate\Support\Facades\Storage::disk('r2')->delete($brand->logo_url);
+                } catch (\Exception $e) {
+                    \Illuminate\Support\Facades\Log::error("Failed to delete brand logo from R2: {$brand->logo_url}", ['error' => $e->getMessage()]);
+                }
+            }
+        });
+    }
+
     public function tires()
     {
         return $this->hasMany(Tire::class);
