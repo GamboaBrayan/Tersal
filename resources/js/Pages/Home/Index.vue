@@ -4,7 +4,7 @@ import { ref, onMounted, computed, onUnmounted } from 'vue';
 import Header from '../../Shared/Header.vue';
 import Footer from '../../Shared/Footer.vue';
 import WhatsAppFloatingBtn from '../../Shared/WhatsAppFloatingBtn.vue';
-import { Search, Info, CheckCircle2, MessageCircle, Truck, ChevronDown, ShieldCheck, Car, CarFront, CheckCircle } from 'lucide-vue-next';
+import { Search, HelpCircle, MessageCircle, Truck, ChevronDown, ShieldCheck, CheckCircle, ChevronLeft, ChevronRight } from 'lucide-vue-next';
 import axios from 'axios';
 
 const props = defineProps({
@@ -228,6 +228,92 @@ const searchByVehicle = () => {
   }
   router.get('/catalog', params);
 };
+
+const brandsScrollContainer = ref(null);
+let animationFrameId = null;
+let isHoveringBrands = false;
+
+const scrollBrands = (direction) => {
+  if (brandsScrollContainer.value) {
+    const scrollAmount = 300;
+    const newScrollPosition = brandsScrollContainer.value.scrollLeft + (direction === 'left' ? -scrollAmount : scrollAmount);
+    brandsScrollContainer.value.scrollTo({
+      left: newScrollPosition,
+      behavior: 'smooth'
+    });
+  }
+};
+
+const startAutoScroll = () => {
+  if (isHoveringBrands || !brandsScrollContainer.value) return;
+
+  const container = brandsScrollContainer.value;
+  container.scrollLeft += 1;
+
+  if (container.scrollLeft >= container.scrollWidth / 2) {
+    container.scrollLeft = 0;
+  }
+
+  animationFrameId = requestAnimationFrame(startAutoScroll);
+};
+
+const handleMouseEnter = () => {
+  isHoveringBrands = true;
+  if (animationFrameId) {
+    cancelAnimationFrame(animationFrameId);
+    animationFrameId = null;
+  }
+};
+
+const handleMouseLeave = () => {
+  isHoveringBrands = false;
+  if (!animationFrameId) {
+    animationFrameId = requestAnimationFrame(startAutoScroll);
+  }
+};
+
+const currentPromoIndex = ref(0);
+const nextPromo = () => {
+  if (props.promotions && props.promotions.length > 0) {
+    currentPromoIndex.value = (currentPromoIndex.value + 1) % props.promotions.length;
+  }
+};
+const prevPromo = () => {
+  if (props.promotions && props.promotions.length > 0) {
+    currentPromoIndex.value = (currentPromoIndex.value - 1 + props.promotions.length) % props.promotions.length;
+  }
+};
+
+let promoInterval = null;
+const startPromoAutoPlay = () => {
+  if (!promoInterval) {
+    promoInterval = setInterval(() => {
+      nextPromo();
+    }, 5000);
+  }
+};
+const stopPromoAutoPlay = () => {
+  if (promoInterval) {
+    clearInterval(promoInterval);
+    promoInterval = null;
+  }
+};
+
+onMounted(() => {
+  // Pequeño delay para asegurar que el DOM está listo y tiene width
+  setTimeout(() => {
+    animationFrameId = requestAnimationFrame(startAutoScroll);
+  }, 500);
+  
+  startPromoAutoPlay();
+});
+
+onUnmounted(() => {
+  if (animationFrameId) {
+    cancelAnimationFrame(animationFrameId);
+  }
+  stopPromoAutoPlay();
+});
 </script>
 
 <template>
@@ -235,9 +321,7 @@ const searchByVehicle = () => {
     <Head title="Inicio" />
     <WhatsAppFloatingBtn />
 
-    <div class="relative z-50">
-      <Header />
-    </div>
+    <Header />
 
     <main class="flex-grow relative z-10">
       <!-- Sección Principal (Hero) -->
@@ -254,7 +338,7 @@ const searchByVehicle = () => {
             <img src="/images/hero3.png" class="absolute inset-0 w-full h-full object-cover object-[75%_top] lg:object-top" alt="Tire Background">
           </template>
           <!-- Difuminado superior para fusionar con el header negro -->
-          <div class="absolute top-0 left-0 w-full h-40 md:h-64 bg-gradient-to-b from-black via-black/50 to-transparent z-10"></div>
+          <div class="absolute top-0 left-0 w-full h-40 md:h-20 bg-gradient-to-b from-black via-black/0 to-transparent z-10"></div>
         </div>
         
         <!-- Spacer Block -->
@@ -305,28 +389,28 @@ const searchByVehicle = () => {
         <div class="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 relative z-40 text-center pointer-events-auto">
           <!-- Buscador overlapping exactly 50% on the bottom border minus 3 pixels -->
           <div class="transform translate-y-[calc(50%-3px)] relative z-20">
-            <div class="max-w-[1050px] mx-auto p-6 sm:p-10 text-left bg-white/80 backdrop-blur-none shadow-[0_8px_40px_rgb(0,0,0,0.08)] rounded-[2rem] border border-gray-100/50">
+            <div class="max-w-[1050px] mx-auto px-6 py-5 sm:px-8 sm:py-5 text-left bg-white/80 backdrop-blur-none shadow-[0_8px_40px_rgb(0,0,0,0.08)] rounded-[1rem] border border-gray-100/50">
 
             <!-- Título Principal del Buscador -->
-            <h2 class="text-xl sm:text-2xl font-black text-red-500 mb-6 uppercase tracking-wide text-center">
+            <h2 class="text-xl sm:text-2xl font-black text-red-500 mb-4 uppercase tracking-wide text-left">
               Encuentra tus Neumáticos aquí:
             </h2>
 
             <!-- Tabs and Help Link Header -->
-            <div class="relative flex justify-center items-end border-b border-gray-100 mb-8">
+            <div class="relative flex justify-start items-end border-b border-gray-100 mb-6">
               <!-- Pestañas -->
-              <div class="flex w-full sm:w-auto min-w-[300px]">
-                <button @click="activeTab = 'medida'" :class="{'border-action text-action': activeTab === 'medida', 'border-transparent text-black hover:text-gray-600': activeTab !== 'medida'}" class="flex-1 pb-4 text-sm font-extrabold uppercase tracking-wider border-b-2 transition-all text-center">
+              <div class="flex w-full sm:w-auto min-w-[280px] gap-2">
+                <button @click="activeTab = 'medida'" :class="{'border-action text-action': activeTab === 'medida', 'border-transparent text-black hover:text-gray-600': activeTab !== 'medida'}" class="flex-1 pb-4 text-sm font-extrabold uppercase tracking-wider border-b-2 transition-all text-left">
                   Por Medida
                 </button>
-                <button @click="activeTab = 'vehiculo'" :class="{'border-action text-action': activeTab === 'vehiculo', 'border-transparent text-black hover:text-gray-600': activeTab !== 'vehiculo'}" class="flex-1 pb-4 text-sm font-extrabold uppercase tracking-wider border-b-2 transition-all text-center">
+                <button @click="activeTab = 'vehiculo'" :class="{'border-action text-action': activeTab === 'vehiculo', 'border-transparent text-black hover:text-gray-600': activeTab !== 'vehiculo'}" class="flex-1 pb-4 text-sm font-extrabold uppercase tracking-wider border-b-2 transition-all text-left">
                   Por Vehículo
                 </button>
               </div>
               <!-- Link -->
               <div class="hidden sm:block absolute right-0 pb-4">
-                <Link href="/guide" class="text-black hover:text-gray-900 text-xs font-semibold flex items-center gap-1 transition-colors">
-                  <Info class="w-4 h-4" /> ¿No sabes tu medida?
+                <Link href="/guide" class="text-black hover:text-gray-900 text-sm font-semibold flex items-center gap-1 transition-colors">
+                  <HelpCircle class="w-5 h-5" /> ¿No sabes tu medida? <span class="text-action">Te ayudamos</span>
                 </Link>
               </div>
             </div>
@@ -390,7 +474,7 @@ const searchByVehicle = () => {
 
                   <!-- Dropdown Alto -->
                   <div :class="['relative', isProfileDropdownOpen ? 'z-50' : 'z-20']" class="col-span-1">
-                    <label class="block text-xs font-bold text-black uppercase tracking-wide mb-2">Altura</label>
+                    <label class="block text-xs font-bold text-black uppercase tracking-wide mb-2">Perfil</label>
                     <div 
                       @click="toggleDropdown('profile')"
                       class="w-full h-14 px-4 rounded-xl border border-gray-100 bg-gray-50 hover:bg-gray-100/50 cursor-pointer flex items-center justify-between text-gray-900 relative transition-colors"
@@ -407,7 +491,7 @@ const searchByVehicle = () => {
                           <input 
                             type="text" 
                             v-model="profileSearchQuery" 
-                            placeholder="Buscar alto..." 
+                            placeholder="Buscar perfil..." 
                             class="w-full pl-9 pr-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-action focus:border-action outline-none transition-shadow"
                             @click.stop
                           >
@@ -441,7 +525,7 @@ const searchByVehicle = () => {
 
                   <!-- Dropdown Rin -->
                   <div :class="['relative', isRimDropdownOpen ? 'z-50' : 'z-20']" class="col-span-1">
-                    <label class="block text-xs font-bold text-black uppercase tracking-wide mb-2">Rin</label>
+                    <label class="block text-xs font-bold text-black uppercase tracking-wide mb-2">Aro</label>
                     <div 
                       @click="toggleDropdown('rim')"
                       class="w-full h-14 px-4 rounded-xl border border-gray-100 bg-gray-50 hover:bg-gray-100/50 cursor-pointer flex items-center justify-between text-gray-900 relative transition-colors"
@@ -458,7 +542,7 @@ const searchByVehicle = () => {
                           <input 
                             type="text" 
                             v-model="rimSearchQuery" 
-                            placeholder="Buscar rin..." 
+                            placeholder="Buscar aro..." 
                             class="w-full pl-9 pr-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-action focus:border-action outline-none transition-shadow"
                             @click.stop
                           >
@@ -685,7 +769,7 @@ const searchByVehicle = () => {
         
         <!-- Barra de Características (Features Bar) merged into Hero -->
         <div class="relative z-10 text-white w-full">
-          <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-[320px] sm:pt-[280px] md:pt-[220px] lg:pt-[160px] pb-10">
+          <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-[320px] sm:pt-[280px] md:pt-[220px] lg:pt-[160px] pb-16 sm:pb-16">
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-0">
             <!-- Feature 1 -->
             <div class="flex items-center gap-4 px-2 lg:px-6 py-6 sm:py-0 justify-center lg:justify-start border-b border-white/10 sm:border-b-0 sm:border-r">
@@ -725,81 +809,166 @@ const searchByVehicle = () => {
         </div>
         </div>
       </section>
-      <!-- Carrusel de Marcas -->
-      <section v-if="brands && brands.length > 0" class="py-12 bg-white border-b border-gray-100 overflow-hidden relative z-0">
-        <div class="marquee-container group flex w-full">
-          <div v-for="n in 10" :key="n" class="marquee-content flex shrink-0 gap-12 pr-12 items-center justify-start min-w-max" :style="{ animationDuration: Math.max(brands.length * 4, 10) + 's' }">
-            <Link :href="`/catalog?brand_id=${brand.id}`" v-for="brand in brands" :key="`${n}-${brand.id}`" class="shrink-0 flex items-center justify-center w-32 h-20 transition-all duration-300 opacity-70 hover:opacity-100 cursor-pointer">
-              <img v-if="brand.logo_full_url" :src="brand.logo_full_url" :alt="brand.name" class="max-w-full max-h-full object-contain transition-all duration-300" />
-              <span v-else class="text-xl font-black text-gray-400 hover:text-gray-900 transition-colors">{{ brand.name }}</span>
-            </Link>
+      <!-- Carrusel de Marcas (Estilo Píldora) -->
+      <section v-if="brands && brands.length > 0" class="bg-gray-50 pb-8 pt-4 sm:-mt-12 relative z-20">
+        <div class="w-11/12 max-w-[1600px] mx-auto">
+          <div 
+            class="bg-white rounded-[2.5rem] shadow-lg border border-gray-100 p-2 sm:p-4 flex items-center relative"
+            @mouseenter="handleMouseEnter"
+            @mouseleave="handleMouseLeave"
+          >
+            
+            <!-- Botón Izquierda -->
+            <button @click="scrollBrands('left')" class="flex-shrink-0 w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors text-gray-500 focus:outline-none cursor-pointer">
+              <ChevronLeft class="w-5 h-5" />
+            </button>
+
+            <!-- Contenedor scrolleable (Loop Infinito) -->
+            <div ref="brandsScrollContainer" class="flex-grow flex items-center gap-8 sm:gap-14 overflow-x-hidden px-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+              <template v-for="n in 5" :key="`group-${n}`">
+                <Link 
+                  :href="`/catalog?brand_id=${brand.id}`" 
+                  v-for="brand in brands" 
+                  :key="`${n}-${brand.id}`" 
+                  class="shrink-0 flex items-center justify-center h-12 sm:h-16 transition-all duration-300 opacity-80 hover:opacity-100 cursor-pointer"
+                >
+                  <img v-if="brand.logo_full_url" :src="brand.logo_full_url" :alt="brand.name" class="max-w-[100px] sm:max-w-[140px] max-h-full object-contain transition-all duration-300" />
+                  <span v-else class="text-lg sm:text-xl font-black text-gray-400 hover:text-gray-900 transition-colors">{{ brand.name }}</span>
+                </Link>
+              </template>
+            </div>
+
+            <!-- Botón Derecha -->
+            <button @click="scrollBrands('right')" class="flex-shrink-0 w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors text-gray-500 focus:outline-none cursor-pointer">
+              <ChevronRight class="w-5 h-5" />
+            </button>
           </div>
         </div>
       </section>
 
       <!-- Promociones -->
-      <section class="py-16 bg-gray-50">
+      <section class="py-16 bg-gray-50 relative z-20">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div class="flex items-center justify-between mb-8">
-            <h2 class="text-3xl font-black text-gray-900">Ofertas Especiales</h2>
-            <Link href="/catalog" class="text-primary font-bold hover:underline">Ver todo el catálogo &rarr;</Link>
-          </div>
           
-          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            <div v-for="tire in promotions" :key="tire.id" class="bg-white rounded-2xl shadow-[0_4px_20px_rgb(0,0,0,0.03)] border-transparent overflow-hidden hover:shadow-[0_12px_40px_rgb(0,0,0,0.08)] hover:-translate-y-1 transition-all duration-300 flex flex-col max-w-sm mx-auto w-full group">
-              <div class="relative pt-[85%] bg-gray-50/50">
-                <img :src="tire.image_urls && tire.image_urls.length ? tire.image_urls[0] : 'https://images.unsplash.com/photo-1620065095360-6644bcce8937?auto=format&fit=crop&q=80&w=400&h=400'" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="Tire" />
-                <div class="absolute top-3 left-3 bg-action text-white text-[10px] font-bold px-2 py-1 rounded shadow-[0_4px_10px_rgb(220,38,38,0.3)] flex items-center gap-1">
-                  OFERTA
-                  <span class="bg-white text-action px-1 rounded text-[10px]">{{ getDiscountPercentage(tire.price, tire.offer_price) }}%</span>
-                </div>
+          <div v-if="promotions && promotions.length > 0" class="flex flex-col lg:flex-row items-center gap-12">
+            <!-- Izquierda: Texto y Botón -->
+            <div class="w-full lg:w-5/12">
+              <div class="inline-block bg-blue-50 text-primary font-bold text-xs px-3 py-1 rounded-md mb-4 uppercase tracking-wider">
+                OFERTAS ESPECIALES
               </div>
-              <div class="p-5 flex-grow flex flex-col">
-                <div class="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">{{ tire.brand?.name || 'Marca' }}</div>
-                <h3 class="text-sm font-bold text-gray-800 mb-3 leading-tight">{{ tire.width }}/{{ tire.profile }} R{{ tire.rim }} {{ tire.model }}</h3>
-                <div class="mt-auto pt-4 border-t border-gray-100 flex items-center justify-between">
-                  <div>
-                    <div class="text-xs text-gray-400 line-through">S/. {{ tire.price }}</div>
-                    <div class="text-xl font-black text-gray-900 leading-none mt-1">S/. {{ tire.offer_price }}</div>
+              <h2 class="text-4xl md:text-5xl font-black text-gray-900 leading-tight mb-4">
+                Aprovecha nuestras promociones exclusivas
+              </h2>
+              <p class="text-gray-500 mb-8 text-lg">
+                Descuentos por tiempo limitado en las mejores marcas.
+              </p>
+              <Link href="/catalog" class="inline-flex items-center gap-2 bg-action text-white px-6 py-3 rounded-lg font-bold hover:bg-red-700 transition-colors shadow-lg hover:shadow-xl">
+                Ver todo el catálogo &rarr;
+              </Link>
+            </div>
+
+            <!-- Derecha: Carrusel de Producto -->
+            <div class="w-full lg:w-7/12 flex items-center justify-center gap-4 sm:gap-6" @mouseenter="stopPromoAutoPlay" @mouseleave="startPromoAutoPlay">
+              <!-- Flecha Izquierda -->
+              <button @click="prevPromo" class="hidden sm:flex flex-shrink-0 w-10 h-10 rounded-full bg-white shadow items-center justify-center hover:bg-gray-50 transition-colors text-gray-400 focus:outline-none z-30 cursor-pointer">
+                <ChevronLeft class="w-5 h-5 mx-auto" />
+              </button>
+
+              <!-- Tarjeta (Link) -->
+              <Link :href="`/catalog/${promotions[currentPromoIndex].id}`" class="w-full bg-white rounded-[1rem] shadow-[0_10px_40px_rgb(0,0,0,0.06)] hover:shadow-[0_15px_50px_rgb(0,0,0,0.1)] p-6 md:p-8 flex flex-col md:flex-row items-center gap-8 transition-shadow cursor-pointer relative z-20 min-h-[320px]">
+                <!-- Descuento Badge -->
+                <div class="absolute top-6 right-6 bg-action text-white text-sm font-black px-3 py-2 rounded-lg shadow-md z-10 text-center leading-none">
+                  -{{ getDiscountPercentage(promotions[currentPromoIndex].price, promotions[currentPromoIndex].offer_price) }}%<br>
+                  <span class="text-[10px] font-normal uppercase">OFF</span>
+                </div>
+
+                <!-- Imagen Neumático -->
+                <div class="w-full md:w-5/12 flex-shrink-0 flex justify-center h-48 md:h-full items-center">
+                  <img :src="promotions[currentPromoIndex].image_urls && promotions[currentPromoIndex].image_urls.length ? promotions[currentPromoIndex].image_urls[0] : 'https://images.unsplash.com/photo-1620065095360-6644bcce8937?auto=format&fit=crop&q=80&w=400&h=400'" 
+                       class="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform duration-300" alt="Tire" />
+                </div>
+
+                <!-- Detalles Neumático -->
+                <div class="w-full md:w-7/12 flex flex-col justify-center h-full">
+                  <div class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">{{ promotions[currentPromoIndex].brand?.name || 'Marca' }}</div>
+                  <h3 class="text-2xl font-black text-gray-800 mb-2 leading-tight uppercase">{{ promotions[currentPromoIndex].model }}</h3>
+                  <div class="text-sm text-gray-500 mb-8">{{ promotions[currentPromoIndex].width }}/{{ promotions[currentPromoIndex].profile }} R{{ promotions[currentPromoIndex].rim }}</div>
+                  
+                  <div class="flex flex-col mt-auto">
+                    <div class="flex items-end gap-3 mb-4 md:mb-0 md:absolute md:bottom-8">
+                      <div class="text-3xl font-black text-action leading-none">S/ {{ promotions[currentPromoIndex].offer_price }}</div>
+                      <div class="text-sm text-gray-400 line-through mb-1">S/ {{ promotions[currentPromoIndex].price }}</div>
+                    </div>
                   </div>
-                  <Link :href="`/catalog/${tire.id}`" class="h-8 px-4 flex items-center justify-center bg-action/90 text-white font-semibold rounded-lg hover:bg-action transition-colors text-xs">
-                    Ver más
-                  </Link>
                 </div>
-              </div>
+              </Link>
+
+              <!-- Flecha Derecha -->
+              <button @click="nextPromo" class="hidden sm:flex flex-shrink-0 w-10 h-10 rounded-full bg-white shadow items-center justify-center hover:bg-gray-50 transition-colors text-gray-400 focus:outline-none z-30 cursor-pointer">
+                <ChevronRight class="w-5 h-5 mx-auto" />
+              </button>
             </div>
-            <div v-if="!promotions || promotions.length === 0" class="col-span-full py-12 text-center text-gray-500">
-              No hay promociones activas en este momento.
+            
+            <!-- Controles Móviles (Flechas debajo de la tarjeta en móvil) -->
+            <div class="flex justify-center gap-4 mt-6 sm:hidden w-full">
+              <button @click="prevPromo" class="w-10 h-10 rounded-full bg-white shadow flex items-center justify-center hover:bg-gray-50 transition-colors text-gray-400 focus:outline-none cursor-pointer">
+                <ChevronLeft class="w-5 h-5" />
+              </button>
+              <button @click="nextPromo" class="w-10 h-10 rounded-full bg-white shadow flex items-center justify-center hover:bg-gray-50 transition-colors text-gray-400 focus:outline-none cursor-pointer">
+                <ChevronRight class="w-5 h-5" />
+              </button>
             </div>
+          </div>
+
+          <div v-if="!promotions || promotions.length === 0" class="py-12 text-center text-gray-500">
+            No hay promociones activas en este momento.
           </div>
         </div>
       </section>
 
       <!-- Pasos de Compra -->
-      <section class="py-20 bg-white border-t border-gray-50">
+      <section class="py-20 bg-gray-100 border-t border-gray-200">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 class="text-2xl sm:text-3xl font-black text-gray-900 mb-14 tracking-tight">Cómo comprar en <span class="text-action">3 simples pasos</span></h2>
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
-            <div class="flex flex-col items-center">
-              <div class="w-20 h-20 bg-red-50 text-action rounded-[2rem] flex items-center justify-center mb-6 shadow-sm">
-                <Search class="w-8 h-8" stroke-width="2.5" />
+          <h2 class="text-3xl font-black text-gray-900 mb-3 tracking-tight">Cómo comprar en <span class="text-action">3 simples pasos</span></h2>
+          <div class="w-8 h-1 bg-action mx-auto mb-16 rounded-full"></div>
+          
+          <div class="relative flex flex-col md:flex-row justify-center items-center gap-8 lg:gap-12">
+            <!-- Línea Punteada Conectora (Fondo) -->
+            <div class="hidden md:block absolute top-1/2 left-[15%] right-[15%] h-[2px] border-t-[2px] border-dashed border-gray-300 -translate-y-1/2 z-0"></div>
+            
+            <!-- Paso 1 -->
+            <div class="relative z-10 bg-white rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-shadow p-6 lg:p-8 flex flex-col md:flex-row items-center md:items-start gap-4 lg:gap-5 w-full md:w-1/3 max-w-[360px] text-center md:text-left">
+              <div class="flex-shrink-0 w-14 h-14 lg:w-16 lg:h-16 bg-action text-white rounded-full flex items-center justify-center shadow-md">
+                <Search class="w-6 h-6 lg:w-7 lg:h-7" stroke-width="2" />
               </div>
-              <h3 class="font-bold text-lg mb-3 text-gray-800">1. Encuentra tu medida</h3>
-              <p class="text-gray-500 text-sm leading-relaxed max-w-xs">Usa nuestro buscador para ubicar el neumático exacto que necesita tu vehículo.</p>
+              <div class="mt-2 md:mt-0">
+                <h4 class="font-bold text-gray-900 text-sm lg:text-base mb-2">1. Encuentra tu medida</h4>
+                <p class="text-xs lg:text-sm text-gray-600 leading-relaxed">Usa nuestro buscador para encontrar el neumático exacto que necesita tu vehículo.</p>
+              </div>
             </div>
-            <div class="flex flex-col items-center">
-              <div class="w-20 h-20 bg-red-50 text-action rounded-[2rem] flex items-center justify-center mb-6 shadow-sm">
-                <MessageCircle class="w-8 h-8" stroke-width="2.5" />
+
+            <!-- Paso 2 -->
+            <div class="relative z-10 bg-white rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-shadow p-6 lg:p-8 flex flex-col md:flex-row items-center md:items-start gap-4 lg:gap-5 w-full md:w-1/3 max-w-[360px] text-center md:text-left">
+              <div class="hidden md:block absolute -left-4 lg:-left-6 top-1/2 -translate-y-1/2 w-3 h-3 bg-action rounded-full z-20 shadow-sm ring-4 ring-gray-100"></div>
+              <div class="flex-shrink-0 w-14 h-14 lg:w-16 lg:h-16 bg-action text-white rounded-full flex items-center justify-center shadow-md">
+                <MessageCircle class="w-6 h-6 lg:w-7 lg:h-7" stroke-width="2" />
               </div>
-              <h3 class="font-bold text-lg mb-3 text-gray-800">2. Consulta stock</h3>
-              <p class="text-gray-500 text-sm leading-relaxed max-w-xs">Haz clic en el botón de WhatsApp. Te atenderemos y confirmaremos en minutos.</p>
+              <div class="mt-2 md:mt-0">
+                <h4 class="font-bold text-gray-900 text-sm lg:text-base mb-2">2. Consulta stock</h4>
+                <p class="text-xs lg:text-sm text-gray-600 leading-relaxed">Haz clic en el botón de WhatsApp. Te atenderemos y confirmaremos disponibilidad en minutos.</p>
+              </div>
             </div>
-            <div class="flex flex-col items-center">
-              <div class="w-20 h-20 bg-red-50 text-action rounded-[2rem] flex items-center justify-center mb-6 shadow-sm">
-                <Truck class="w-8 h-8" stroke-width="2.5" />
+
+            <!-- Paso 3 -->
+            <div class="relative z-10 bg-white rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-shadow p-6 lg:p-8 flex flex-col md:flex-row items-center md:items-start gap-4 lg:gap-5 w-full md:w-1/3 max-w-[360px] text-center md:text-left">
+              <div class="hidden md:block absolute -left-4 lg:-left-6 top-1/2 -translate-y-1/2 w-3 h-3 bg-action rounded-full z-20 shadow-sm ring-4 ring-gray-100"></div>
+              <div class="flex-shrink-0 w-14 h-14 lg:w-16 lg:h-16 bg-action text-white rounded-full flex items-center justify-center shadow-md">
+                <Truck class="w-6 h-6 lg:w-7 lg:h-7" stroke-width="2" />
               </div>
-              <h3 class="font-bold text-lg mb-3 text-gray-800">3. Coordina la entrega</h3>
-              <p class="text-gray-500 text-sm leading-relaxed max-w-xs">Paga de forma segura y recibe o instala tus neumáticos el mismo día.</p>
+              <div class="mt-2 md:mt-0">
+                <h4 class="font-bold text-gray-900 text-sm lg:text-base mb-2">3. Coordina la entrega</h4>
+                <p class="text-xs lg:text-sm text-gray-600 leading-relaxed">Paga de forma segura y recibe o instala tus neumáticos el mismo día. ¡Así de fácil!</p>
+              </div>
             </div>
           </div>
         </div>

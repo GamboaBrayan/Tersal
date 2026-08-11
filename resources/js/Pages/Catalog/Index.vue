@@ -76,7 +76,7 @@ defineProps({
               <!-- Tags de Medidas -->
               <div v-if="recommendedSizes?.length" class="flex flex-wrap gap-2 mb-6">
                 <span v-for="(size, idx) in recommendedSizes" :key="idx" class="px-3 py-1 bg-green-100 text-green-800 text-sm font-bold rounded-full border border-green-200">
-                  {{ size.width }}/{{ size.profile }} R{{ size.rim }}
+                  {{ size.width }}/{{ size.profile }} Aro {{ size.rim }}
                   <span v-if="size.axis === 'front'">(Delantera)</span>
                   <span v-else-if="size.axis === 'rear'">(Trasera)</span>
                 </span>

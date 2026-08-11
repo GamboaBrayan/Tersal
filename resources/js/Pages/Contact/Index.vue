@@ -1,9 +1,9 @@
 <script setup>
-import { Head, Link } from '@inertiajs/vue3';
+import { Head } from '@inertiajs/vue3';
 import Header from '../../Shared/Header.vue';
 import Footer from '../../Shared/Footer.vue';
 import WhatsAppFloatingBtn from '../../Shared/WhatsAppFloatingBtn.vue';
-import { Phone, Mail, MapPin, Clock, MessageCircle, Map as MapIcon } from 'lucide-vue-next';
+import { Phone, Mail, Clock, MessageCircle } from 'lucide-vue-next';
 </script>
 
 <template>
@@ -35,7 +35,7 @@ import { Phone, Mail, MapPin, Clock, MessageCircle, Map as MapIcon } from 'lucid
                 </div>
                 <div>
                   <div class="text-sm text-gray-500 font-medium">Llamada Directa</div>
-                  <div class="text-xl text-gray-900">+1 (234) 567-890</div>
+                  <div class="text-xl text-gray-900">+51 987654321</div>
                 </div>
               </div>
 
@@ -45,7 +45,7 @@ import { Phone, Mail, MapPin, Clock, MessageCircle, Map as MapIcon } from 'lucid
                 </div>
                 <div>
                   <div class="text-sm text-gray-500 font-medium">Correo Electrónico</div>
-                  <div class="text-xl text-gray-900">ventas@tersal.com</div>
+                  <div class="text-xl text-gray-900">Llantastersal@gmail.com</div>
                 </div>
               </div>
             </div>
@@ -65,11 +65,11 @@ import { Phone, Mail, MapPin, Clock, MessageCircle, Map as MapIcon } from 'lucid
           <div class="space-y-4 text-gray-600">
             <div class="flex justify-between items-center py-2 border-b border-gray-50">
               <span>Lunes - Viernes</span>
-              <span class="font-bold text-gray-900">08:00 - 18:00</span>
+              <span class="font-bold text-gray-900">09:00 - 18:00</span>
             </div>
             <div class="flex justify-between items-center py-2 border-b border-gray-50">
               <span>Sábado</span>
-              <span class="font-bold text-gray-900">09:00 - 14:00</span>
+              <span class="font-bold text-gray-900">09:00 - 13:00</span>
             </div>
             <div class="flex justify-between items-center py-2">
               <span>Domingo</span>

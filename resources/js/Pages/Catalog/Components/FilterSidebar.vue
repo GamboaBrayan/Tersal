@@ -168,9 +168,9 @@ const clearFilters = () => {
           <div v-if="isWidthDropdownOpen" @click="isWidthDropdownOpen = false" class="fixed inset-0 z-40 bg-transparent cursor-default"></div>
         </div>
 
-        <!-- Alto -->
+        <!-- Perfil -->
         <div :class="['relative', isProfileDropdownOpen ? 'z-40' : 'z-20']">
-          <label class="text-xs text-gray-500 mb-1 block">Alto</label>
+          <label class="text-xs text-gray-500 mb-1 block">Perfil</label>
           <div 
             @click="isProfileDropdownOpen = !isProfileDropdownOpen; if(isProfileDropdownOpen) profileSearchQuery = ''"
             class="w-full h-10 px-3 rounded border border-gray-200 bg-white cursor-pointer flex items-center justify-between text-sm text-gray-900 relative"
@@ -209,9 +209,9 @@ const clearFilters = () => {
           <div v-if="isProfileDropdownOpen" @click="isProfileDropdownOpen = false" class="fixed inset-0 z-40 bg-transparent cursor-default"></div>
         </div>
 
-        <!-- Rin -->
+        <!-- Aro -->
         <div :class="['relative', isRimDropdownOpen ? 'z-30' : 'z-10']">
-          <label class="text-xs text-gray-500 mb-1 block">Rin</label>
+          <label class="text-xs text-gray-500 mb-1 block">Aro</label>
           <div 
             @click="isRimDropdownOpen = !isRimDropdownOpen; if(isRimDropdownOpen) rimSearchQuery = ''"
             class="w-full h-10 px-3 rounded border border-gray-200 bg-white cursor-pointer flex items-center justify-between text-sm text-gray-900 relative"
