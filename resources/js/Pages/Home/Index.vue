@@ -859,7 +859,7 @@ onUnmounted(() => {
               <h2 class="text-4xl md:text-5xl lg:text-4xl xl:text-5xl font-black text-gray-900 leading-tight mb-4">
                 Aprovecha nuestras <br class="hidden xl:block"> promociones&nbsp;exclusivas
               </h2>
-              <p class="text-gray-500 mb-8 text-lg">
+              <p class="text-black-500 font-medium mb-8 text-lg">
                 Descuentos por tiempo limitado en las mejores marcas.
               </p>
               <Link href="/catalog" class="inline-flex items-center gap-2 bg-action text-white px-6 py-3 rounded-lg font-bold hover:bg-red-700 transition-colors shadow-lg hover:shadow-xl">
@@ -943,7 +943,7 @@ onUnmounted(() => {
               </div>
               <div class="mt-2 md:mt-0">
                 <h4 class="font-bold text-gray-900 text-sm lg:text-base mb-2">1. Encuentra tu medida</h4>
-                <p class="text-xs lg:text-sm text-gray-600 leading-relaxed">Usa nuestro buscador para encontrar el neumático exacto que necesita tu vehículo.</p>
+                <p class="text-xs lg:text-sm text-black leading-relaxed">Usa nuestro buscador para encontrar el neumático exacto que necesita tu vehículo.</p>
               </div>
             </div>
 
@@ -955,7 +955,7 @@ onUnmounted(() => {
               </div>
               <div class="mt-2 md:mt-0">
                 <h4 class="font-bold text-gray-900 text-sm lg:text-base mb-2">2. Consulta stock</h4>
-                <p class="text-xs lg:text-sm text-gray-600 leading-relaxed">Haz clic en el botón de WhatsApp. Te atenderemos y confirmaremos disponibilidad en minutos.</p>
+                <p class="text-xs lg:text-sm text-black leading-relaxed">Haz clic en el botón de WhatsApp. Te atenderemos y confirmaremos disponibilidad en minutos.</p>
               </div>
             </div>
 
@@ -967,7 +967,7 @@ onUnmounted(() => {
               </div>
               <div class="mt-2 md:mt-0">
                 <h4 class="font-bold text-gray-900 text-sm lg:text-base mb-2">3. Coordina la entrega</h4>
-                <p class="text-xs lg:text-sm text-gray-600 leading-relaxed">Paga de forma segura y recibe o instala tus neumáticos el mismo día. ¡Así de fácil!</p>
+                <p class="text-xs lg:text-sm text-black leading-relaxed">Paga de forma segura y recibe o instala tus neumáticos el mismo día. ¡Así de fácil!</p>
               </div>
             </div>
           </div>

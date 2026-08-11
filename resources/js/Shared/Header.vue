@@ -64,10 +64,10 @@ watch(() => page.url, () => {
 
       <!-- Center Nav (Desktop) -->
       <nav class="text-white hidden md:flex justify-center space-x-8 text-sm font-semibold uppercase tracking-wider h-full items-center">
-        <Link href="/" :class="$page.url === '/' ? 'text-action border-action' : 'border-transparent'" class="hover:text-action flex items-center border-b-[3px] transition-colors pb-1">Inicio</Link>
-        <Link href="/catalog" :class="$page.url.startsWith('/catalog') ? 'text-action border-action' : 'border-transparent'" class="hover:text-action flex items-center border-b-[3px] transition-colors pb-1">Catálogo</Link>
-        <Link href="/guide" :class="$page.url.startsWith('/guide') ? 'text-action border-action' : 'border-transparent'" class="hover:text-action flex items-center border-b-[3px] transition-colors pb-1">Guía de Neumáticos</Link>
-        <Link href="/contacto" :class="$page.url.startsWith('/contacto') ? 'text-action border-action' : 'border-transparent'" class="hover:text-action flex items-center border-b-[3px] transition-colors pb-1">Contacto</Link>
+        <Link href="/" :class="$page.url === '/' ? 'text-action border-action' : 'border-transparent'" class="hover:text-action h-full flex items-center border-b-[3px] transition-colors">Inicio</Link>
+        <Link href="/catalog" :class="$page.url.startsWith('/catalog') ? 'text-action border-action' : 'border-transparent'" class="hover:text-action h-full flex items-center border-b-[3px] transition-colors">Catálogo</Link>
+        <Link href="/guide" :class="$page.url.startsWith('/guide') ? 'text-action border-action' : 'border-transparent'" class="hover:text-action h-full flex items-center border-b-[3px] transition-colors">Guía de Neumáticos</Link>
+        <Link href="/contacto" :class="$page.url.startsWith('/contacto') ? 'text-action border-action' : 'border-transparent'" class="hover:text-action h-full flex items-center border-b-[3px] transition-colors">Contacto</Link>
       </nav>
 
       <!-- Right Spacer (For perfect centering) -->
