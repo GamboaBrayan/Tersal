@@ -154,12 +154,12 @@ const submit = () => {
                   <div v-if="form.errors.width" class="text-red-500 text-xs mt-1">{{ form.errors.width }}</div>
                 </div>
                 <div>
-                  <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Alto <span class="text-red-500">*</span></label>
+                  <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Perfil <span class="text-red-500">*</span></label>
                   <input type="number" min="0" v-model="form.profile" required class="w-full h-12 px-3 sm:px-4 rounded-xl border border-gray-200/60 bg-gray-50/50 hover:bg-gray-50 transition-colors focus:ring-2 focus:ring-primary/20 focus:border-primary text-sm sm:text-base text-gray-700">
                   <div v-if="form.errors.profile" class="text-red-500 text-xs mt-1">{{ form.errors.profile }}</div>
                 </div>
                 <div>
-                  <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Rin <span class="text-red-500">*</span></label>
+                  <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Aro <span class="text-red-500">*</span></label>
                   <input type="number" min="0" v-model="form.rim" required class="w-full h-12 px-3 sm:px-4 rounded-xl border border-gray-200/60 bg-gray-50/50 hover:bg-gray-50 transition-colors focus:ring-2 focus:ring-primary/20 focus:border-primary text-sm sm:text-base text-gray-700">
                   <div v-if="form.errors.rim" class="text-red-500 text-xs mt-1">{{ form.errors.rim }}</div>
                 </div>

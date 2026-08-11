@@ -850,14 +850,14 @@ onUnmounted(() => {
       <section class="py-16 bg-gray-50 relative z-20">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           
-          <div v-if="promotions && promotions.length > 0" class="flex flex-col lg:flex-row items-center gap-12">
+          <div v-if="promotions && promotions.length > 0" class="flex flex-col lg:flex-row items-center gap-8 lg:gap-12">
             <!-- Izquierda: Texto y Botón -->
-            <div class="w-full lg:w-5/12">
+            <div class="w-full lg:w-1/2">
               <div class="inline-block bg-blue-50 text-primary font-bold text-xs px-3 py-1 rounded-md mb-4 uppercase tracking-wider">
                 OFERTAS ESPECIALES
               </div>
-              <h2 class="text-4xl md:text-5xl font-black text-gray-900 leading-tight mb-4">
-                Aprovecha nuestras promociones exclusivas
+              <h2 class="text-4xl md:text-5xl lg:text-4xl xl:text-5xl font-black text-gray-900 leading-tight mb-4">
+                Aprovecha nuestras <br class="hidden xl:block"> promociones&nbsp;exclusivas
               </h2>
               <p class="text-gray-500 mb-8 text-lg">
                 Descuentos por tiempo limitado en las mejores marcas.
@@ -868,7 +868,7 @@ onUnmounted(() => {
             </div>
 
             <!-- Derecha: Carrusel de Producto -->
-            <div class="w-full lg:w-7/12 flex items-center justify-center gap-4 sm:gap-6" @mouseenter="stopPromoAutoPlay" @mouseleave="startPromoAutoPlay">
+            <div class="w-full lg:w-1/2 flex items-center justify-center gap-4 sm:gap-6" @mouseenter="stopPromoAutoPlay" @mouseleave="startPromoAutoPlay">
               <!-- Flecha Izquierda -->
               <button @click="prevPromo" class="hidden sm:flex flex-shrink-0 w-10 h-10 rounded-full bg-white shadow items-center justify-center hover:bg-gray-50 transition-colors text-gray-400 focus:outline-none z-30 cursor-pointer">
                 <ChevronLeft class="w-5 h-5 mx-auto" />
