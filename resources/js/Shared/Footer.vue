@@ -4,8 +4,11 @@ import { Facebook, Instagram } from 'lucide-vue-next';
 </script>
 
 <template>
-  <footer class="bg-[#1B3BE3] text-white pt-16 pb-8 mt-auto">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+  <footer class="bg-[#1B3BE3] text-white pt-16 pb-8 mt-auto relative overflow-hidden">
+    <!-- Imagen de la llanta de fondo -->
+    <img src="/images/llantafooter.webp" alt="Tire Background" class="absolute right-[-5%] md:right-0 bottom-0 h-full max-h-[120%] object-contain pointer-events-none z-0 opacity-70" />
+    
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
         <!-- Col 1 -->
         <div>
