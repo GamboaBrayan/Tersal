@@ -51,7 +51,7 @@ class DashboardController extends Controller
     public function create()
     {
         $brands = Brand::orderBy('name')->get();
-        $categories = Category::orderBy('name')->get();
+        $categories = Category::orderBy('order')->orderBy('name')->get();
         return Inertia::render('Admin/ProductForm', [
             'brands' => $brands,
             'categories' => $categories,
@@ -62,7 +62,7 @@ class DashboardController extends Controller
     public function edit(Tire $tire)
     {
         $brands = Brand::orderBy('name')->get();
-        $categories = Category::orderBy('name')->get();
+        $categories = Category::orderBy('order')->orderBy('name')->get();
         return Inertia::render('Admin/ProductForm', [
             'brands' => $brands,
             'categories' => $categories,
@@ -353,11 +353,34 @@ class DashboardController extends Controller
             'name' => 'required|string|max:255|unique:categories,name'
         ]);
 
+        $maxOrder = Category::max('order') ?? 0;
+
         Category::create([
-            'name' => $request->name
+            'name' => $request->name,
+            'order' => $maxOrder + 1
         ]);
 
         return redirect()->back()->with('success', 'Categoría creada exitosamente.');
+    }
+
+    public function moveCategory(Category $category, Request $request)
+    {
+        $direction = $request->input('direction');
+
+        if ($direction === 'up') {
+            $swap = Category::where('order', '<', $category->order)->orderBy('order', 'desc')->first();
+        } else {
+            $swap = Category::where('order', '>', $category->order)->orderBy('order', 'asc')->first();
+        }
+
+        if ($swap) {
+            $tempOrder = $category->order;
+            // Disable global scope internally for update if needed, but update() works fine.
+            $category->update(['order' => $swap->order]);
+            $swap->update(['order' => $tempOrder]);
+        }
+
+        return redirect()->back();
     }
 
     public function updateCategory(Request $request, Category $category)

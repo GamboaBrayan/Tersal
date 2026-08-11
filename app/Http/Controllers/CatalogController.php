@@ -177,7 +177,7 @@ class CatalogController extends Controller
             $tires = $query->latest()->paginate(12)->withQueryString();
         }
         $brands = Brand::orderBy('name')->get();
-        $categories = Category::orderBy('name')->get();
+        $categories = Category::orderBy('order')->orderBy('name')->get();
         
         $widths = Tire::where('status', true)->whereNotNull('width')->distinct()->orderBy('width')->pluck('width');
         $profiles = Tire::where('status', true)->whereNotNull('profile')->distinct()->orderBy('profile')->pluck('profile');

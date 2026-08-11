@@ -69,6 +69,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         // Categories
         Route::get('/categories', [DashboardController::class, 'categories'])->name('categories');
         Route::post('/categories', [DashboardController::class, 'storeCategory'])->name('categories.store');
+        Route::post('/categories/{category}/move', [DashboardController::class, 'moveCategory'])->name('categories.move');
         Route::post('/categories/{category}', [DashboardController::class, 'updateCategory'])->name('categories.update');
         Route::delete('/categories/{category}', [DashboardController::class, 'destroyCategory'])->name('categories.destroy');
     });

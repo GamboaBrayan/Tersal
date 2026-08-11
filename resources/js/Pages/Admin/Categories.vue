@@ -1,7 +1,7 @@
 <script setup>
 import { Head, useForm, router, Link } from '@inertiajs/vue3';
 import AdminLayout from './Components/AdminLayout.vue';
-import { Plus, Trash2, AlertCircle, Edit, Save, Search, ChevronLeft, ChevronRight, Tags, X as XIcon } from 'lucide-vue-next';
+import { Plus, Trash2, AlertCircle, Edit, Save, Search, ChevronLeft, ChevronRight, ChevronUp, ChevronDown, Tags, X as XIcon } from 'lucide-vue-next';
 import { ref, watch } from 'vue';
 
 const props = defineProps({
@@ -64,6 +64,12 @@ const submit = () => {
       preserveScroll: true
     });
   }
+};
+
+const moveCategory = (category, direction) => {
+  router.post(`/admin/categories/${category.id}/move`, { direction }, {
+    preserveScroll: true
+  });
 };
 
 const showDeleteModal = ref(false);
@@ -144,8 +150,17 @@ const deleteCategory = () => {
                 <td class="p-4 text-center text-gray-500 text-sm font-medium">
                   {{ category.tires_count }} llantas
                 </td>
-                <td class="p-4 text-right">
-                  <button @click="editCategory(category)" class="w-8 h-8 inline-flex items-center justify-center rounded-lg bg-blue-50 text-blue-600 hover:bg-blue-100 transition-colors cursor-pointer mr-2" title="Editar">
+                <td class="p-4 text-right flex items-center justify-end gap-2">
+                  <div class="flex items-center bg-gray-100 rounded-lg mr-2 overflow-hidden border border-gray-200" v-if="!searchQuery">
+                    <button @click="moveCategory(category, 'up')" :disabled="categories.current_page === 1 && categories.data.indexOf(category) === 0" class="w-8 h-8 flex items-center justify-center text-gray-500 hover:bg-gray-200 hover:text-gray-900 transition-colors disabled:opacity-30 disabled:cursor-not-allowed">
+                      <ChevronUp class="w-4 h-4" />
+                    </button>
+                    <div class="w-px h-4 bg-gray-300"></div>
+                    <button @click="moveCategory(category, 'down')" :disabled="categories.current_page === categories.last_page && categories.data.indexOf(category) === categories.data.length - 1" class="w-8 h-8 flex items-center justify-center text-gray-500 hover:bg-gray-200 hover:text-gray-900 transition-colors disabled:opacity-30 disabled:cursor-not-allowed">
+                      <ChevronDown class="w-4 h-4" />
+                    </button>
+                  </div>
+                  <button @click="editCategory(category)" class="w-8 h-8 inline-flex items-center justify-center rounded-lg bg-blue-50 text-blue-600 hover:bg-blue-100 transition-colors cursor-pointer" title="Editar">
                     <Edit class="w-4 h-4" />
                   </button>
                   <button @click="confirmDelete(category)" class="w-8 h-8 inline-flex items-center justify-center rounded-lg bg-red-50 text-action hover:bg-red-100 transition-colors cursor-pointer" title="Eliminar">

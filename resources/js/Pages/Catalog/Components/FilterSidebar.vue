@@ -107,6 +107,22 @@ const clearFilters = () => {
       </button>
     </div>
 
+    <!-- Sección Categorías -->
+    <div class="mb-8">
+      <div class="flex items-center justify-between mb-4">
+        <button type="button" @click="isCategoriesExpanded = !isCategoriesExpanded" class="flex items-center gap-2 font-bold text-primary focus:outline-none hover:text-gray-900 transition-colors w-full text-left">
+          Categoría
+          <ChevronDown :class="{'rotate-180': isCategoriesExpanded}" class="w-4 h-4 transition-transform ml-auto" />
+        </button>
+      </div>
+      <div v-show="isCategoriesExpanded" class="space-y-3 max-h-48 overflow-y-auto pr-2 [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 [&::-webkit-scrollbar-thumb]:rounded-full">
+        <label v-for="category in categories" :key="category.id" class="flex items-center gap-3 cursor-pointer group">
+          <input type="checkbox" v-model="currentFilters.category_id" :value="category.id" class="w-4 h-4 text-primary rounded border-gray-300 focus:ring-primary">
+          <span class="text-sm text-gray-600 group-hover:text-gray-900">{{ category.name }}</span>
+        </label>
+      </div>
+    </div>
+
     <!-- Medidas -->
     <div class="mb-8">
       <h3 class="font-bold text-primary mb-4">Medidas</h3>
@@ -235,22 +251,6 @@ const clearFilters = () => {
         </div>
       </div>
       
-    </div>
-
-    <!-- Sección Categorías -->
-    <div class="mb-8">
-      <div class="flex items-center justify-between mb-4">
-        <button type="button" @click="isCategoriesExpanded = !isCategoriesExpanded" class="flex items-center gap-2 font-bold text-primary focus:outline-none hover:text-gray-900 transition-colors w-full text-left">
-          Categoría
-          <ChevronDown :class="{'rotate-180': isCategoriesExpanded}" class="w-4 h-4 transition-transform ml-auto" />
-        </button>
-      </div>
-      <div v-show="isCategoriesExpanded" class="space-y-3 max-h-48 overflow-y-auto pr-2 [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 [&::-webkit-scrollbar-thumb]:rounded-full">
-        <label v-for="category in categories" :key="category.id" class="flex items-center gap-3 cursor-pointer group">
-          <input type="checkbox" v-model="currentFilters.category_id" :value="category.id" class="w-4 h-4 text-primary rounded border-gray-300 focus:ring-primary">
-          <span class="text-sm text-gray-600 group-hover:text-gray-900">{{ category.name }}</span>
-        </label>
-      </div>
     </div>
 
     <!-- Sección Marcas -->
