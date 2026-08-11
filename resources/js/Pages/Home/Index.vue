@@ -345,8 +345,10 @@ onUnmounted(() => {
         <div class="relative w-full">
           <!-- Text Overlay (Desktop only) -->
           <div class="hidden md:flex absolute inset-0 w-full pointer-events-none z-10">
-            <div class="w-full px-4 sm:px-6 md:pl-[1%] lg:pl-[2%] xl:pl-[3%] 2xl:pl-[4%] flex flex-col justify-center items-start pt-12 transition-all duration-700 ease-out transform" :class="currentHeroImageIndex === 0 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'">
-              <span class="text-red-600 font-extrabold uppercase tracking-wide text-sm lg:text-base mb-3 drop-shadow-sm">Rendimiento que te lleva más lejos</span>
+            
+            <!-- Slide 1 Text -->
+            <div class="absolute inset-0 w-full px-4 sm:px-6 md:pl-[1%] lg:pl-[2%] xl:pl-[3%] 2%] 2xl:pl-[4%] flex flex-col justify-center items-start transition-all duration-700 ease-out transform pt-12" :class="currentHeroImageIndex === 0 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'">
+              <span class="text-red-600 font-extrabold uppercase tracking-wide text-sm lg:text-base mb-3 drop-shadow-sm">LÍNEA PCR | AUTO, SUV Y CAMIONETA</span>
               <h1 class="text-white font-black text-4xl lg:text-5xl xl:text-6xl 2xl:text-[4rem] leading-[1.05] uppercase tracking-tight drop-shadow-lg">
                 Encuentra el <br>
                 neumático perfecto <br>
@@ -358,27 +360,50 @@ onUnmounted(() => {
                 <span class="text-white font-semibold text-lg lg:text-xl drop-shadow-md">Más de 5,000 medidas disponibles.</span>
                 <div class="flex items-center gap-8 lg:gap-12 mt-2">
                   <!-- AUTO -->
-                  <Link href="/catalog?category_id[]=1" class="flex flex-col items-center gap-3 opacity-90 hover:opacity-100 transition-opacity cursor-pointer">
+                  <Link href="/catalog?category_id[]=1" class="flex flex-col items-center gap-3 opacity-90 hover:opacity-100 transition-opacity cursor-pointer pointer-events-auto">
                     <svg class="w-12 sm:w-14 h-6 sm:h-8 text-white fill-current -scale-x-100" viewBox="0 0 123 40" xmlns="http://www.w3.org/2000/svg">
                       <path fill-rule="evenodd" clip-rule="evenodd" d="M103.94,23.97c5.39,0,9.76,4.37,9.76,9.76c0,5.39-4.37,9.76-9.76,9.76c-5.39,0-9.76-4.37-9.76-9.76 C94.18,28.34,98.55,23.97,103.94,23.97L103.94,23.97z M23,29.07v3.51h3.51C26.09,30.86,24.73,29.49,23,29.07L23,29.07z M26.52,34.87H23v3.51C24.73,37.97,26.09,36.6,26.52,34.87L26.52,34.87z M20.71,38.39v-3.51H17.2 C17.62,36.6,18.99,37.96,20.71,38.39L20.71,38.39z M17.2,32.59h3.51v-3.51C18.99,29.49,17.62,30.86,17.2,32.59L17.2,32.59z M105.09,29.07v3.51h3.51C108.18,30.86,106.82,29.49,105.09,29.07L105.09,29.07z M108.6,34.87h-3.51v3.51 C106.82,37.97,108.18,36.6,108.6,34.87L108.6,34.87z M102.8,38.39v-3.51h-3.51C99.71,36.6,101.07,37.96,102.8,38.39L102.8,38.39z M99.28,32.59h3.51v-3.51C101.07,29.49,99.71,30.86,99.28,32.59L99.28,32.59z M49.29,12.79c-1.54-0.35-3.07-0.35-4.61-0.28 C56.73,6.18,61.46,2.07,75.57,2.9l-1.94,12.87L50.4,16.65c0.21-0.61,0.33-0.94,0.37-1.55C50.88,13.36,50.86,13.15,49.29,12.79 L49.29,12.79z M79.12,3.13L76.6,15.6l24.13-0.98c2.48-0.1,2.91-1.19,1.41-3.28c-0.68-0.95-1.44-1.89-2.31-2.82 C93.59,1.86,87.38,3.24,79.12,3.13L79.12,3.13z M0.46,27.28H1.2c0.46-2.04,1.37-3.88,2.71-5.53c2.94-3.66,4.28-3.2,8.65-3.99 l24.46-4.61c5.43-3.86,11.98-7.3,19.97-10.2C64.4,0.25,69.63-0.01,77.56,0c4.54,0.01,9.14,0.28,13.81,0.84 c2.37,0.15,4.69,0.47,6.97,0.93c2.73,0.55,5.41,1.31,8.04,2.21l9.8,5.66c2.89,1.67,3.51,3.62,3.88,6.81l1.38,11.78h1.43v6.51 c-0.2,2.19-1.06,2.52-2.88,2.52h-2.37c0.92-20.59-28.05-24.11-27.42,1.63H34.76c3.73-17.75-14.17-23.91-22.96-13.76 c-2.67,3.09-3.6,7.31-3.36,12.3H2.03c-0.51-0.24-0.91-0.57-1.21-0.98c-1.05-1.43-0.82-5.74-0.74-8.23 C0.09,27.55-0.12,27.28,0.46,27.28L0.46,27.28z M21.86,23.97c5.39,0,9.76,4.37,9.76,9.76c0,5.39-4.37,9.76-9.76,9.76 c-5.39,0-9.76-4.37-9.76-9.76C12.1,28.34,16.47,23.97,21.86,23.97L21.86,23.97z"/>
                     </svg>
                     <span class="text-white text-sm lg:text-base font-bold uppercase tracking-widest">Auto</span>
                   </Link>
                   <!-- SUV -->
-                  <Link href="/catalog?category_id[]=2" class="flex flex-col items-center gap-3 opacity-90 hover:opacity-100 transition-opacity cursor-pointer">
+                  <Link href="/catalog?category_id[]=2" class="flex flex-col items-center gap-3 opacity-90 hover:opacity-100 transition-opacity cursor-pointer pointer-events-auto">
                     <svg class="w-12 sm:w-14 h-6 sm:h-8 text-white fill-current" viewBox="0 0 260 140" xmlns="http://www.w3.org/2000/svg">
                       <path fill-rule="evenodd" clip-rule="evenodd" d="M246,90.011V59.995c0-5.523-4.48-9.995-10-9.995h-50L156.97,6.416C155.11,3.634,152.34,2,149,2H28 c-5.52,0-10,4.446-10,9.969V30h-8c-4.42,0-8,3.56-8,7.983v40.022C2,82.427,5.58,86,10,86h8v20h16.458 c2.8-15.959,16.702-28.066,33.462-28.066c16.75,0,30.708,12.107,33.518,28.066h72.958c2.8-15.959,16.764-28.066,33.524-28.066 c16.75,0,30.624,12.107,33.434,28.066H250c4.42,0,8-3.563,8-7.985v-8.004H246z M86,50H30V13.97h56V50z M98,50V13.97h48L170,50H98z M68,138c-14.336,0-26.083-11.706-26.083-26.051s11.664-26.014,26-26.014s26,11.669,26,26.014S82.336,138,68,138z M67.917,99.943 c-6.617,0-12,5.386-12,12.006c0,6.621,5.383,12.006,12,12.006s12-5.386,12-12.006C79.917,105.329,74.534,99.943,67.917,99.943z M208,138c-14.337,0-26.083-11.706-26.083-26.051s11.663-26.014,26-26.014s26,11.669,26,26.014S222.337,138,208,138z M207.917,99.943c-6.617,0-12,5.386-12,12.006c0,6.621,5.383,12.006,12,12.006s12-5.386,12-12.006 C219.917,105.329,214.534,99.943,207.917,99.943z"/>
                     </svg>
                     <span class="text-white text-sm lg:text-base font-bold uppercase tracking-widest">SUV</span>
                   </Link>
                   <!-- 4x4 (PICKUP) -->
-                  <Link href="/catalog?category_id[]=3" class="flex flex-col items-center gap-3 opacity-90 hover:opacity-100 transition-opacity cursor-pointer">
+                  <Link href="/catalog?category_id[]=3" class="flex flex-col items-center gap-3 opacity-90 hover:opacity-100 transition-opacity cursor-pointer pointer-events-auto">
                     <img src="/images/4x4.png?v=3" class="w-12 sm:w-14 h-6 sm:h-8 object-contain brightness-0 invert -scale-x-100 scale-[1.7] transform-gpu" alt="4x4">
                     <span class="text-white text-sm lg:text-base font-bold uppercase tracking-widest">4x4</span>
                   </Link>
                 </div>
               </div>
             </div>
+
+            <!-- Slide 2 Text -->
+            <div class="absolute inset-0 w-full px-4 sm:px-6 md:pl-[1%] lg:pl-[2%] xl:pl-[3%] 2xl:pl-[4%] flex flex-col justify-center items-start transition-all duration-700 ease-out transform pt-12" :class="currentHeroImageIndex === 1 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'">
+              <span class="text-action font-extrabold uppercase tracking-wide text-sm lg:text-base mb-3 drop-shadow-sm">LÍNEA TBR | TRANSPORTE, CARGA Y PASAJEROS</span>
+              <h1 class="text-white font-black text-4xl lg:text-5xl xl:text-6xl 2xl:text-[4rem] leading-[1.05] uppercase tracking-tight drop-shadow-lg">
+                NEUMÁTICOS<br>
+                PARA FLOTAS QUE <br>
+                <span class="text-action">NO SE DETIENEN</span>
+              </h1>
+              <span class="text-white font-semibold text-lg lg:text-xl drop-shadow-md mt-6">Rendimiento y respaldo para mantener cada unidad en movimiento</span>
+            </div>
+
+            <!-- Slide 3 Text -->
+            <div class="absolute inset-0 w-full px-4 sm:px-6 md:pl-[1%] lg:pl-[2%] xl:pl-[3%] 2xl:pl-[4%] flex flex-col justify-center items-start transition-all duration-700 ease-out transform pt-12" :class="currentHeroImageIndex === 2 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'">
+              <span class="text-action font-extrabold uppercase tracking-wide text-sm lg:text-base mb-3 drop-shadow-sm">LÍNEA OTR | MINERÍA, CONSTRUCCIÓN Y AGRÍCOLA</span>
+              <h1 class="text-white font-black text-4xl lg:text-5xl xl:text-6xl 2xl:text-[4rem] leading-[1.05] uppercase tracking-tight drop-shadow-lg">
+                NEUMÁTICOS PARA<br>
+                LAS OPERACIONES <br>
+                <span class="text-action">MÁS EXIGENTES</span>
+              </h1>
+              <span class="text-white font-semibold text-lg lg:text-xl drop-shadow-md mt-6">Rendimiento y resistencia para los trabajos más demandantes.</span>
+            </div>
+
           </div>
           
           <!-- Spacer to show the image proporcionalmente -->

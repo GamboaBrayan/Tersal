@@ -12,8 +12,7 @@ import { Facebook, Instagram } from 'lucide-vue-next';
           <div class="flex items-center gap-2 mb-6">
             <img src="/images/logo2.png" alt="Tersal Logo" class="h-16 w-auto object-contain px-4 py-2 rounded-xl" />
           </div>
-          <p class="text-white-200 text-sm mb-4">Encuentra el ajuste perfecto para tu vehículo con nuestra búsqueda técnica avanzada. Marcas premium, instalación experta, sin complicaciones.</p>
-          <p class="text-xs text-white-300">&copy; {{ new Date().getFullYear() }} TERSAL. Todos los derechos reservados.</p>
+          <p class="text-white-200 text-sm">Encuentra el ajuste perfecto para tu vehículo con nuestra búsqueda técnica avanzada. Marcas premium, instalación experta, sin complicaciones.</p>
         </div>
         
         <!-- Col 2 -->
@@ -54,6 +53,15 @@ import { Facebook, Instagram } from 'lucide-vue-next';
         </div>
       </div>
       
+      <!-- Bottom Section: Medios de pago & Copyright -->
+      <div class="border-t border-[#2d4df5] pt-8 mt-4 flex flex-col md:flex-row justify-between items-center gap-6">
+        <div class="flex flex-col md:flex-row items-center gap-4">
+          <span class="text-sm font-bold text-white-200 uppercase tracking-wider">Medios de pago:</span>
+          <!-- Reemplazar con la imagen real de las tarjetas -->
+          <img src="/images/tarjetas.webp" alt="Tarjetas aceptadas" class="h-8 md:h-10 w-auto object-contain" />
+        </div>
+        <p class="text-xs text-white-300">&copy; {{ new Date().getFullYear() }} TERSAL. Todos los derechos reservados.</p>
+      </div>
     </div>
   </footer>
 </template>
