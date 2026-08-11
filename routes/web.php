@@ -33,6 +33,10 @@ Route::get('/privacidad', function() {
     return Inertia::render('Legal/Privacy');
 })->name('privacidad');
 
+Route::get('/libro-reclamaciones', function() {
+    return Inertia::render('Legal/LibroReclamaciones');
+})->name('libro-reclamaciones');
+
 use App\Http\Controllers\AdminAuthController;
 
 Route::prefix('admin')->name('admin.')->group(function () {

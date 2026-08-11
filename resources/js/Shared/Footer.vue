@@ -45,6 +45,11 @@ import { Facebook, Instagram } from 'lucide-vue-next';
           <ul class="space-y-3 text-gray-200 text-sm">
             <li><a href="/legales" target="_blank" class="hover:text-white transition-colors">Enlaces Legales</a></li>
             <li><a href="/privacidad" target="_blank" class="hover:text-white transition-colors">Política de Privacidad</a></li>
+            <li class="pt-4">
+              <a href="/libro-reclamaciones" target="_blank" class="inline-block transition-transform hover:scale-105">
+                <img src="/images/libroreclamaciones.jpg" alt="Libro de Reclamaciones" class="h-12 w-auto object-contain bg-white rounded p-1" />
+              </a>
+            </li>
           </ul>
         </div>
       </div>
