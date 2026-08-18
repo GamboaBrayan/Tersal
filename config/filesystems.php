@@ -61,13 +61,13 @@ return [
         ],
         'r2' => [
             'driver' => 's3',
-            'key' => env('R2_ACCESS_KEY_ID'),
-            'secret' => env('R2_SECRET_ACCESS_KEY'),
+            'key' => env('R2_ACCESS_KEY_ID', ''),
+            'secret' => env('R2_SECRET_ACCESS_KEY', ''),
             'region' => 'auto',
-            'bucket' => env('R2_BUCKET'),
-            'endpoint' => env('R2_ENDPOINT'),
+            'bucket' => env('R2_BUCKET', ''),
+            'endpoint' => env('R2_ENDPOINT', ''),
             'use_path_style_endpoint' => true,
-            'url' => env('R2_URL'),
+            'url' => env('R2_URL', ''),
             'visibility' => 'public',
         ],
 

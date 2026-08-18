@@ -114,6 +114,7 @@ const getDiscountPercentage = (price, offerPrice) => {
             {{ tire.description || 'Neumático de alto rendimiento diseñado para proporcionar agarre excepcional, seguridad en condiciones húmedas y secas, y una experiencia de conducción superior para los conductores más exigentes.' }}
           </p>
 
+          <!--
           <div class="mb-8">
             <div v-if="tire.has_discount" class="text-sm text-gray-400 line-through mb-1">Precio Regular: S/. {{ tire.price }}</div>
             <div class="flex items-end gap-2">
@@ -122,9 +123,10 @@ const getDiscountPercentage = (price, offerPrice) => {
             </div>
             <div class="text-xs text-gray-400 mt-1">Precio incluye IGV</div>
           </div>
+          -->
 
           <div class="bg-gray-50 p-6 rounded-xl border border-gray-100 mb-8">
-            <div class="flex items-center justify-between mb-6">
+            <div class="flex items-center justify-between">
               <div class="font-bold text-gray-900 text-sm tracking-wider">CANTIDAD</div>
               <div class="flex items-center border border-gray-300 rounded-lg overflow-hidden bg-white shadow-sm">
                 <button @click="decreaseQuantity" class="w-10 h-10 flex items-center justify-center text-gray-500 hover:bg-gray-100 hover:text-gray-900 transition-colors focus:outline-none">-</button>
@@ -132,10 +134,12 @@ const getDiscountPercentage = (price, offerPrice) => {
                 <button @click="increaseQuantity" class="w-10 h-10 flex items-center justify-center text-gray-500 hover:bg-gray-100 hover:text-gray-900 transition-colors focus:outline-none">+</button>
               </div>
             </div>
+            <!--
             <div class="flex items-center justify-between pt-4 border-t border-gray-200">
               <div class="text-sm text-gray-600 font-medium">Total a pagar:</div>
               <div class="text-xl font-bold text-gray-900">S/. {{ totalAmount() }}</div>
             </div>
+            -->
           </div>
 
           <a :href="'https://wa.me/' + $page.props.global_whatsapp + '?text=' + whatsappText()" target="_blank" class="w-full h-14 flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2 bg-action text-white font-bold text-sm sm:text-lg rounded-xl hover:bg-red-700 transition-colors shadow-lg mb-6 leading-tight px-4 text-center">
@@ -208,10 +212,12 @@ const getDiscountPercentage = (price, offerPrice) => {
                 <h3 class="text-lg font-bold text-gray-900 mb-2 truncate">{{ relTire.model }}</h3>
                 <div class="text-sm text-gray-600 font-medium mb-3">{{ relTire.width }}/{{ relTire.profile }} R{{ relTire.rim }}</div>
                 
+                <!--
                 <div class="flex items-end gap-2">
                   <span class="text-xl font-black text-primary">S/. {{ relTire.has_discount ? relTire.offer_price : relTire.price }}</span>
                   <span v-if="relTire.has_discount" class="text-xs text-gray-400 line-through mb-1">S/. {{ relTire.price }}</span>
                 </div>
+                -->
               </div>
             </Link>
           </div>

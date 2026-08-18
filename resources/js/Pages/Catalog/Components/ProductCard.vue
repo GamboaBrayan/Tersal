@@ -53,10 +53,12 @@ const getDiscountPercentage = (price, offerPrice) => {
         <p class="text-sm text-gray-600 font-medium">{{ tire.model }}</p>
       </div>
       
+      <!--
       <div class="text-center mb-4">
         <div v-if="tire.has_discount" class="text-xs text-gray-400 line-through">Precio Regular: S/. {{ tire.price }}</div>
         <div class="text-xs text-gray-500 font-medium mt-1">Precio Especial: <span class="text-xl font-black text-gray-900">S/. {{ tire.has_discount ? tire.offer_price : tire.price }}</span></div>
       </div>
+      -->
       
       <Link :href="`/catalog/${tire.id}`" 
          class="w-full h-10 flex items-center justify-center bg-action/90 text-white font-semibold rounded-lg hover:bg-action transition-colors text-sm">
