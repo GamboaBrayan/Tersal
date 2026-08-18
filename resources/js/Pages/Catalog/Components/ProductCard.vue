@@ -37,10 +37,15 @@ const getDiscountPercentage = (price, offerPrice) => {
     </Link>
     
     <div class="p-4 flex-grow flex flex-col">
-      <div class="flex items-center justify-center mb-3">
-        <div class="bg-gray-900 text-white text-xs font-black px-3 py-1 uppercase tracking-widest">
-          {{ tire.brand?.name || 'MARCA' }}
-        </div>
+      <div class="flex items-center justify-center mb-3 h-8">
+        <template v-if="tire.brand?.logo_full_url">
+          <img :src="tire.brand.logo_full_url" :alt="tire.brand.name" class="h-full max-w-[120px] object-contain" />
+        </template>
+        <template v-else>
+          <div class="bg-gray-900 text-white text-xs font-black px-3 py-1 uppercase tracking-widest">
+            {{ tire.brand?.name || 'MARCA' }}
+          </div>
+        </template>
       </div>
       
       <div class="text-center mb-4 flex-grow">
