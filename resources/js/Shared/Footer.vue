@@ -4,11 +4,11 @@ import { Facebook, Instagram } from 'lucide-vue-next';
 </script>
 
 <template>
-  <footer class="bg-[#1B3BE3] text-white pt-16 pb-8 mt-auto relative overflow-hidden">
+  <footer class="bg-[#1B3BE3] text-white pt-16 pb-8 mt-auto relative overflow-hidden flex flex-col">
     <!-- Imagen de la llanta de fondo -->
-    <img src="/images/llantafooter.webp" alt="Tire Background" class="absolute right-[-5%] md:right-0 bottom-0 h-full max-h-[120%] object-contain pointer-events-none z-0 opacity-70" />
+    <img src="/images/llantafooter.webp" alt="Tire Background" class="absolute right-[-5%] md:right-0 bottom-[-11px] h-full max-h-[120%] object-contain object-bottom pointer-events-none z-10 opacity-70" />
     
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-20 w-full">
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
         <!-- Col 1 -->
         <div>
@@ -55,9 +55,16 @@ import { Facebook, Instagram } from 'lucide-vue-next';
           </ul>
         </div>
       </div>
-      
-      <!-- Bottom Section: Medios de pago & Copyright -->
-      <div class="mt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 items-center">
+    </div>
+    
+    <!-- Línea divisora separada para que quede detrás de la llanta (z-0) -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full relative z-0">
+      <div class="border-t border-[#2d4df5] w-full"></div>
+    </div>
+
+    <!-- Bottom Section: Medios de pago & Copyright (z-20) -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-20 w-full mt-8">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 items-center">
         <div class="lg:col-span-3 flex items-center gap-4">
           <span class="text-sm font-bold text-white-200 uppercase tracking-wider">Medios de pago:</span>
           <!-- Reemplazar con la imagen real de las tarjetas -->
