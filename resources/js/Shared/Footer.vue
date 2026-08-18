@@ -57,13 +57,15 @@ import { Facebook, Instagram } from 'lucide-vue-next';
       </div>
       
       <!-- Bottom Section: Medios de pago & Copyright -->
-      <div class="border-t border-[#2d4df5] pt-8 mt-4 flex flex-col md:flex-row justify-between items-center gap-6">
-        <div class="flex flex-col md:flex-row items-center gap-4">
+      <div class="mt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 items-center">
+        <div class="lg:col-span-3 flex items-center gap-4">
           <span class="text-sm font-bold text-white-200 uppercase tracking-wider">Medios de pago:</span>
           <!-- Reemplazar con la imagen real de las tarjetas -->
           <img src="/images/tarjetas.webp" alt="Tarjetas aceptadas" class="h-8 md:h-10 w-auto object-contain" />
         </div>
-        <p class="text-xs text-white-300">&copy; {{ new Date().getFullYear() }} TERSAL. Todos los derechos reservados.</p>
+        <div class="lg:col-span-1">
+          <p class="text-xs text-white-300">&copy; {{ new Date().getFullYear() }} TERSAL. Todos los derechos reservados.</p>
+        </div>
       </div>
     </div>
   </footer>

@@ -39,15 +39,15 @@ const toggleFaq = (index) => {
             <div class="w-full lg:w-1/3 space-y-4">
               <div class="bg-white p-4 rounded-xl border border-gray-100">
                 <div class="text-primary font-bold mb-1"><span class="text-lg">195</span> ANCHO DEL NEUMÁTICO</div>
-                <div class="text-sm text-gray-500">Medido en milímetros de flanco a flanco.</div>
+                <div class="text-sm font-medium text-gray-800">Medido en milímetros de flanco a flanco.</div>
               </div>
               <div class="bg-white p-4 rounded-xl border border-gray-100">
                 <div class="text-primary font-bold mb-1"><span class="text-lg">65</span> PERFIL (RELACIÓN DE ASPECTO)</div>
-                <div class="text-sm text-gray-500">Altura de la sección transversal del neumático como % del ancho.</div>
+                <div class="text-sm font-medium text-gray-800">Altura de la sección transversal del neumático como % del ancho.</div>
               </div>
               <div class="bg-white p-4 rounded-xl border border-gray-100">
-                <div class="text-action font-bold mb-1"><span class="text-lg">R</span> CONSTRUCCIÓN</div>
-                <div class="text-sm text-gray-500">Construcción radial, el estándar de la industria.</div>
+                <div class="text-primary font-bold mb-1"><span class="text-lg">R</span> CONSTRUCCIÓN</div>
+                <div class="text-sm font-medium text-gray-800">Construcción radial, el estándar de la industria.</div>
               </div>
             </div>
 
@@ -62,14 +62,14 @@ const toggleFaq = (index) => {
             <div class="w-full lg:w-1/3 space-y-4">
               <div class="bg-white p-4 rounded-xl border border-gray-100">
                 <div class="text-primary font-bold mb-1"><span class="text-lg">15</span> DIÁMETRO DEL ARO</div>
-                <div class="text-sm text-gray-500">Diámetro de la rueda (en pulgadas) en la que encaja el neumático.</div>
+                <div class="text-sm font-medium text-gray-800">Diámetro de la rueda (en pulgadas) en la que encaja el neumático.</div>
               </div>
               <div class="bg-white p-4 rounded-xl border border-gray-100">
-                <div class="text-gray-900 font-bold mb-1">ÍNDICE DE CARGA</div>
+                <div class="text-primary font-bold mb-1">ÍNDICE DE CARGA</div>
                 <div class="text-lg font-black text-gray-900">98 (750 kg)</div>
               </div>
               <div class="bg-white p-4 rounded-xl border border-gray-100">
-                <div class="text-action font-bold mb-1">ÍNDICE DE VELOCIDAD</div>
+                <div class="text-primary font-bold mb-1">ÍNDICE DE VELOCIDAD</div>
                 <div class="text-lg font-black text-gray-900">V (240 km/h)</div>
               </div>
             </div>
