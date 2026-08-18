@@ -357,7 +357,7 @@ onUnmounted(() => {
               
               <!-- Vehículos Disponibles (Extra Section) -->
               <div class="mt-10 flex flex-col items-start gap-4">
-                <span class="text-white font-semibold text-lg lg:text-xl drop-shadow-md">Más de 5,000 medidas disponibles.</span>
+                <span class="text-white font-semibold text-lg lg:text-xl drop-shadow-md">Más de 5,000 medidas disponibles</span>
                 <div class="flex items-center gap-8 lg:gap-12 mt-2">
                   <!-- AUTO -->
                   <Link href="/catalog?category_id[]=1" class="flex flex-col items-center gap-3 opacity-90 hover:opacity-100 transition-opacity cursor-pointer pointer-events-auto">
@@ -390,7 +390,7 @@ onUnmounted(() => {
                 PARA FLOTAS QUE <br>
                 <span class="text-action">NO SE DETIENEN</span>
               </h1>
-              <span class="text-white font-semibold text-lg lg:text-xl drop-shadow-md mt-6">Rendimiento y respaldo para mantener cada unidad en movimiento</span>
+              <span class="text-white font-semibold text-lg lg:text-xl drop-shadow-md mt-6">Mayor rendimiento en cada kilómetro</span>
             </div>
 
             <!-- Slide 3 Text -->
@@ -401,7 +401,7 @@ onUnmounted(() => {
                 LAS OPERACIONES <br>
                 <span class="text-action">MÁS EXIGENTES</span>
               </h1>
-              <span class="text-white font-semibold text-lg lg:text-xl drop-shadow-md mt-6">Rendimiento y resistencia para los trabajos más demandantes.</span>
+              <span class="text-white font-semibold text-lg lg:text-xl drop-shadow-md mt-6">Preparados para cualquier terreno</span>
             </div>
 
           </div>
