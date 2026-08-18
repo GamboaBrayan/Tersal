@@ -58,7 +58,7 @@ watch(() => page.url, () => {
       <!-- Logo (Centered on Mobile, Left on Desktop) -->
       <div class="flex items-center justify-center flex-[2] md:flex-1 md:justify-start">
         <Link href="/" class="flex items-center">
-          <img src="/images/logo2.png" alt="Tersal Logo" class="w-auto object-contain transition-all duration-300" :class="isScrolled ? 'h-12' : 'h-16'" />
+          <img src="/images/logo.png" alt="Tersal Logo" class="w-auto object-contain transition-all duration-300" :class="isScrolled ? 'h-12' : 'h-16'" />
         </Link>
       </div>
 

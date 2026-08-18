@@ -27,7 +27,7 @@ const toggleFaq = (index) => {
       <section class="bg-gray-50 py-16 text-center">
         <div class="max-w-3xl mx-auto px-4">
           <h1 class="text-4xl font-black text-primary mb-4">Entiende tus Neumáticos</h1>
-          <p class="text-gray-600">Descifrar los números en el flanco de su neumático es crucial para la seguridad y el rendimiento. Use nuestra guía visual interactiva para encontrar el ajuste perfecto.</p>
+          <p class="text-black font-medium ">Descifrar los números en el flanco de su neumático es crucial para la seguridad y el rendimiento. Use nuestra guía visual interactiva para encontrar el ajuste perfecto.</p>
         </div>
       </section>
 
@@ -82,7 +82,7 @@ const toggleFaq = (index) => {
         <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <div class="text-center mb-12">
             <h2 class="text-3xl font-black text-primary mb-2">Preguntas Frecuentes</h2>
-            <p class="text-gray-500">Respuestas técnicas para una compra informada.</p>
+            <p class="text-black font-medium ">Respuestas técnicas para una compra informada.</p>
           </div>
           
           <div class="max-w-3xl mx-auto border border-gray-200 rounded-xl bg-white shadow-sm">
