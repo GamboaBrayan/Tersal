@@ -55,7 +55,7 @@ const submitForm = async () => {
 
     <!-- Banner Principal -->
     <div class="bg-[#1B3BE3] text-white py-16 px-4 relative overflow-hidden shrink-0">
-      <div class="absolute inset-0 bg-[url('/images/pattern.png')] opacity-10"></div>
+      <div class="absolute inset-0 opacity-10"></div>
       <div class="max-w-4xl mx-auto relative z-10 text-center">
         <h1 class="text-3xl md:text-5xl font-black mb-4 uppercase tracking-tight">Libro de Reclamaciones</h1>
         <p class="text-white-200 text-sm md:text-base max-w-2xl mx-auto">
@@ -69,7 +69,7 @@ const submitForm = async () => {
       <div class="max-w-4xl mx-auto">
         
         <!-- Estado de Éxito -->
-        <div v-if="isSubmitted" class="bg-white rounded-2xl shadow-xl border border-gray-100 p-10 text-center flex flex-col items-center justify-center min-h-[400px]">
+        <div v-if="isSubmitted" class="w-full text-center flex flex-col items-center justify-center min-h-[400px]">
           <div class="w-20 h-20 bg-green-100 text-green-600 rounded-full flex items-center justify-center mb-6">
             <CheckCircle2 class="w-10 h-10" />
           </div>
@@ -85,9 +85,15 @@ const submitForm = async () => {
         </div>
 
         <!-- Formulario -->
-        <div v-else class="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
+        <div v-else class="w-full">
           
-          <div class="p-6 md:p-10 border-b border-gray-100 bg-gray-50/50">
+          <div class="px-6 pt-6 md:px-10 md:pt-10 pb-4">
+            <Link href="/" class="inline-flex items-center gap-2 text-gray-500 hover:text-gray-800 font-bold transition-colors mb-6">
+              <ChevronLeft class="w-4 h-4" /> Volver al Inicio
+            </Link>
+          </div>
+
+          <div class="px-6 pb-6 md:px-10 md:pb-10 border-b border-gray-200">
             <h2 class="text-xl font-bold text-gray-800">Hoja de Reclamación</h2>
             <p class="text-sm text-gray-500 mt-2">Por favor, completa el siguiente formulario con información veraz y detallada. Todos los campos con asterisco (<span class="text-red-500">*</span>) son obligatorios.</p>
           </div>
@@ -274,16 +280,13 @@ const submitForm = async () => {
             </div>
 
             <!-- Botón Submit -->
-            <div class="flex flex-col sm:flex-row items-center justify-between gap-4 pt-6 border-t border-gray-100">
-              <Link href="/" class="flex items-center gap-2 text-gray-500 hover:text-gray-800 font-bold transition-colors">
-                <ChevronLeft class="w-5 h-5" /> Volver al Inicio
-              </Link>
+            <div class="flex flex-col sm:flex-row items-center justify-end gap-4 pt-6 border-t border-gray-100">
               
               <div class="flex flex-col items-end gap-2 w-full sm:w-auto">
                 <div v-if="errorMessage" class="text-sm font-bold text-red-500 bg-red-50 px-4 py-2 rounded-lg w-full text-center sm:text-right">
                   {{ errorMessage }}
                 </div>
-                <button type="submit" :disabled="!form.acepta_privacidad || isSubmitting" class="w-full sm:w-auto px-10 py-4 bg-action text-white font-black uppercase tracking-wider rounded-xl shadow-lg hover:shadow-xl hover:-translate-y-0.5 hover:bg-red-700 transition-all focus:outline-none focus:ring-4 focus:ring-red-500/30 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2">
+                <button type="submit" :disabled="!form.acepta_privacidad || isSubmitting" class="w-full sm:w-auto px-6 py-2.5 border-2 border-action text-action bg-transparent font-bold text-sm uppercase tracking-wider rounded-xl hover:bg-action hover:text-white transition-all focus:outline-none focus:ring-4 focus:ring-red-500/30 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2">
                   <span v-if="isSubmitting">Enviando...</span>
                   <span v-else>Enviar Formulario</span>
                   <Send v-if="!isSubmitting" class="w-5 h-5" />

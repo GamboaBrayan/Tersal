@@ -61,7 +61,7 @@ class ComplaintController extends Controller
             ])->post('https://api.brevo.com/v3/smtp/email', [
                 'sender' => [
                     'name' => 'Libro de Reclamaciones Tersal',
-                    'email' => 'no-reply@tersal.pe'
+                    'email' => env('BREVO_SENDER_EMAIL', 'no-reply@tersal.pe') // Use the authenticated domain
                 ],
                 'to' => [
                     [
