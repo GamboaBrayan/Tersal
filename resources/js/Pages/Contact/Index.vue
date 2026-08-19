@@ -35,7 +35,7 @@ import { Phone, Mail, Clock, MessageCircle } from 'lucide-vue-next';
                 </div>
                 <div>
                   <div class="text-sm text-gray-500 font-medium">Llamada Directa</div>
-                  <div class="text-xl text-gray-900">+51 987654321</div>
+                  <div class="text-xl text-gray-900">+51 904830422</div>
                 </div>
               </div>
 

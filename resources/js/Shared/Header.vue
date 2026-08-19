@@ -33,7 +33,7 @@ watch(() => page.url, () => {
       <div class="flex items-center gap-4 lg:gap-6">
         <div class="flex items-center gap-2 font-medium">
           <Phone class="w-4 h-4" /> 
-          <span>+51 987654321</span>
+          <span>+51 904830422</span>
         </div>
         <div class="flex items-center gap-2 font-medium">
           <Mail class="w-4 h-4" /> 
