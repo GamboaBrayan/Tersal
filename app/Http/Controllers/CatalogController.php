@@ -176,12 +176,25 @@ class CatalogController extends Controller
         } else {
             $tires = $query->latest()->paginate(12)->withQueryString();
         }
-        $brands = Brand::orderBy('name')->get();
-        $categories = Category::orderBy('order')->orderBy('name')->get();
+        $brands = \Illuminate\Support\Facades\Cache::remember('brands.all', 86400, function() {
+            return Brand::orderBy('name')->get();
+        });
         
-        $widths = Tire::where('status', true)->whereNotNull('width')->distinct()->orderBy('width')->pluck('width');
-        $profiles = Tire::where('status', true)->whereNotNull('profile')->distinct()->orderBy('profile')->pluck('profile');
-        $rims = Tire::where('status', true)->whereNotNull('rim')->distinct()->orderBy('rim')->pluck('rim');
+        $categories = \Illuminate\Support\Facades\Cache::remember('categories.all', 86400, function() {
+            return Category::orderBy('order')->orderBy('name')->get();
+        });
+        
+        $widths = \Illuminate\Support\Facades\Cache::remember('tires.widths_active', 86400, function() {
+            return Tire::where('status', true)->whereNotNull('width')->distinct()->orderBy('width')->pluck('width');
+        });
+        
+        $profiles = \Illuminate\Support\Facades\Cache::remember('tires.profiles_active', 86400, function() {
+            return Tire::where('status', true)->whereNotNull('profile')->distinct()->orderBy('profile')->pluck('profile');
+        });
+        
+        $rims = \Illuminate\Support\Facades\Cache::remember('tires.rims_active', 86400, function() {
+            return Tire::where('status', true)->whereNotNull('rim')->distinct()->orderBy('rim')->pluck('rim');
+        });
 
         return Inertia::render('Catalog/Index', [
             'tires' => $tires,

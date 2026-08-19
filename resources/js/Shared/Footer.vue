@@ -45,8 +45,8 @@ import { Facebook, Instagram } from 'lucide-vue-next';
         <div>
           <h3 class="font-bold uppercase tracking-wider mb-4 text-sm">Legal</h3>
           <ul class="space-y-3 text-gray-200 text-sm">
-            <li><a href="/legales" target="_blank" class="hover:text-white transition-colors">Enlaces Legales</a></li>
-            <li><a href="/privacidad" target="_blank" class="hover:text-white transition-colors">Política de Privacidad</a></li>
+            <li><span class="text-white-200 cursor-not-allowed opacity-75">Términos y condiciones</span></li>
+            <li><span class="text-white-200 cursor-not-allowed opacity-75">Política de Privacidad</span></li>
             <li class="pt-4">
               <a href="/libro-reclamaciones" target="_blank" class="inline-block transition-transform hover:scale-105">
                 <img src="/images/libroreclamaciones.jpg" alt="Libro de Reclamaciones" class="h-12 w-auto object-contain bg-white rounded p-1" />
@@ -59,7 +59,7 @@ import { Facebook, Instagram } from 'lucide-vue-next';
     
     <!-- Línea divisora separada para que quede detrás de la llanta (z-0) -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full relative z-0">
-      <div class="border-t border-[#2d4df5] w-full"></div>
+      <div class="border-t border-[#3C58E8] w-full"></div>
     </div>
 
     <!-- Bottom Section: Medios de pago & Copyright (z-20) -->

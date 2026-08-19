@@ -15,7 +15,7 @@ class Tire extends Model
         'brand_id', 'category_id', 'model', 'year', 'version', 'width', 'profile', 'rim', 
         'load_index', 'speed_rating', 'terrain_type', 'is_run_flat', 
         'description', 'price', 'offer_price', 'stock', 
-        'images_json', 'status', 'product_code'
+        'images_json', 'status', 'product_code', 'is_promoted'
     ];
 
     protected $casts = [
@@ -34,6 +34,26 @@ class Tire extends Model
             // Generate product code using ID padded with zeros (e.g. TT000001)
             $tire->product_code = 'TT' . str_pad($tire->id, 6, '0', STR_PAD_LEFT);
             $tire->saveQuietly();
+        });
+
+        static::saved(function ($tire) {
+            \Illuminate\Support\Facades\Cache::forget('promotions.home');
+            \Illuminate\Support\Facades\Cache::forget('tires.widths');
+            \Illuminate\Support\Facades\Cache::forget('tires.profiles');
+            \Illuminate\Support\Facades\Cache::forget('tires.rims');
+            \Illuminate\Support\Facades\Cache::forget('tires.widths_active');
+            \Illuminate\Support\Facades\Cache::forget('tires.profiles_active');
+            \Illuminate\Support\Facades\Cache::forget('tires.rims_active');
+        });
+
+        static::deleted(function ($tire) {
+            \Illuminate\Support\Facades\Cache::forget('promotions.home');
+            \Illuminate\Support\Facades\Cache::forget('tires.widths');
+            \Illuminate\Support\Facades\Cache::forget('tires.profiles');
+            \Illuminate\Support\Facades\Cache::forget('tires.rims');
+            \Illuminate\Support\Facades\Cache::forget('tires.widths_active');
+            \Illuminate\Support\Facades\Cache::forget('tires.profiles_active');
+            \Illuminate\Support\Facades\Cache::forget('tires.rims_active');
         });
 
         static::forceDeleted(function ($tire) {

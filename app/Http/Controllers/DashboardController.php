@@ -626,4 +626,54 @@ class DashboardController extends Controller
         $progress = Cache::get('import_progress_' . auth()->id(), null);
         return response()->json(['progress' => $progress]);
     }
+
+    public function promotions(Request $request)
+    {
+        $query = Tire::with('brand')->where('is_promoted', true)->latest();
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('model', 'like', "%{$search}%")
+                  ->orWhere('width', 'like', "%{$search}%")
+                  ->orWhereHas('brand', function($b) use ($search) {
+                      $b->where('name', 'like', "%{$search}%");
+                  });
+            });
+        }
+
+        $promotions = $query->paginate(15)->withQueryString();
+
+        return Inertia::render('Admin/Promotions', [
+            'promotions' => $promotions,
+            'filters' => $request->only(['search'])
+        ]);
+    }
+
+    public function searchTires(Request $request)
+    {
+        $query = Tire::with('brand')->where('is_promoted', false)->latest();
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('model', 'like', "%{$search}%")
+                  ->orWhere('width', 'like', "%{$search}%")
+                  ->orWhereHas('brand', function($b) use ($search) {
+                      $b->where('name', 'like', "%{$search}%");
+                  });
+            });
+        }
+
+        return response()->json($query->take(20)->get());
+    }
+
+    public function togglePromotion(Tire $tire, Request $request)
+    {
+        $tire->update([
+            'is_promoted' => $request->boolean('is_promoted')
+        ]);
+
+        return redirect()->back()->with('success', 'Estado de promoción actualizado.');
+    }
 }

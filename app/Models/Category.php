@@ -26,6 +26,14 @@ class Category extends Model
         static::addGlobalScope('order', function (Builder $builder) {
             $builder->orderBy('order', 'asc');
         });
+
+        static::saved(function ($category) {
+            \Illuminate\Support\Facades\Cache::forget('categories.all');
+        });
+
+        static::deleted(function ($category) {
+            \Illuminate\Support\Facades\Cache::forget('categories.all');
+        });
     }
 
     public function tires()

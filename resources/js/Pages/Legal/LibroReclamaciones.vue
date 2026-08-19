@@ -2,6 +2,7 @@
 import { Head, Link } from '@inertiajs/vue3';
 import { ref } from 'vue';
 import { ShieldCheck, Info, ChevronLeft, Send, CheckCircle2 } from 'lucide-vue-next';
+import axios from 'axios';
 
 const form = ref({
   es_menor: false,
@@ -24,24 +25,27 @@ const form = ref({
 });
 
 const isSubmitted = ref(false);
+const isSubmitting = ref(false);
 const generatedId = ref('');
+const errorMessage = ref('');
 
-const submitForm = () => {
-  // Generar ID único basado en la fecha y hora actual hasta milisegundos
-  const now = new Date();
-  const year = now.getFullYear();
-  const month = String(now.getMonth() + 1).padStart(2, '0');
-  const day = String(now.getDate()).padStart(2, '0');
-  const hours = String(now.getHours()).padStart(2, '0');
-  const minutes = String(now.getMinutes()).padStart(2, '0');
-  const seconds = String(now.getSeconds()).padStart(2, '0');
-  const ms = String(now.getMilliseconds()).padStart(3, '0');
+const submitForm = async () => {
+  if (isSubmitting.value) return;
+  isSubmitting.value = true;
+  errorMessage.value = '';
   
-  const prefix = form.value.tipo_reclamo === 'queja' ? 'QUE' : 'REC';
-  generatedId.value = `${prefix}-${year}${month}${day}-${hours}${minutes}${seconds}${ms}`;
-
-  // Aquí se implementaría la lógica de envío al servidor (API/Controlador)
-  isSubmitted.value = true;
+  try {
+    const response = await axios.post('/libro-reclamaciones', form.value);
+    if (response.data.success) {
+      generatedId.value = response.data.generated_id;
+      isSubmitted.value = true;
+    }
+  } catch (error) {
+    console.error(error);
+    errorMessage.value = error.response?.data?.error || 'Ocurrió un error al enviar el formulario. Por favor, intenta nuevamente.';
+  } finally {
+    isSubmitting.value = false;
+  }
 };
 </script>
 
@@ -275,9 +279,16 @@ const submitForm = () => {
                 <ChevronLeft class="w-5 h-5" /> Volver al Inicio
               </Link>
               
-              <button type="submit" :disabled="!form.acepta_privacidad" class="w-full sm:w-auto px-10 py-4 bg-action text-white font-black uppercase tracking-wider rounded-xl shadow-lg hover:shadow-xl hover:-translate-y-0.5 hover:bg-red-700 transition-all focus:outline-none focus:ring-4 focus:ring-red-500/30 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2">
-                Enviar Formulario <Send class="w-5 h-5" />
-              </button>
+              <div class="flex flex-col items-end gap-2 w-full sm:w-auto">
+                <div v-if="errorMessage" class="text-sm font-bold text-red-500 bg-red-50 px-4 py-2 rounded-lg w-full text-center sm:text-right">
+                  {{ errorMessage }}
+                </div>
+                <button type="submit" :disabled="!form.acepta_privacidad || isSubmitting" class="w-full sm:w-auto px-10 py-4 bg-action text-white font-black uppercase tracking-wider rounded-xl shadow-lg hover:shadow-xl hover:-translate-y-0.5 hover:bg-red-700 transition-all focus:outline-none focus:ring-4 focus:ring-red-500/30 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2">
+                  <span v-if="isSubmitting">Enviando...</span>
+                  <span v-else>Enviar Formulario</span>
+                  <Send v-if="!isSubmitting" class="w-5 h-5" />
+                </button>
+              </div>
             </div>
 
           </form>

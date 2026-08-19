@@ -36,12 +36,13 @@ Route::get('/privacidad', function() {
 Route::get('/libro-reclamaciones', function() {
     return Inertia::render('Legal/LibroReclamaciones');
 })->name('libro-reclamaciones');
+Route::post('/libro-reclamaciones', [\App\Http\Controllers\ComplaintController::class, 'store'])->middleware('throttle:3,1')->name('libro-reclamaciones.store');
 
 use App\Http\Controllers\AdminAuthController;
 
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/login', [AdminAuthController::class, 'showLogin'])->name('login');
-    Route::post('/login', [AdminAuthController::class, 'login'])->name('login.post');
+    Route::post('/login', [AdminAuthController::class, 'login'])->middleware('throttle:5,1')->name('login.post');
     Route::post('/logout', [AdminAuthController::class, 'logout'])->name('logout');
 
     Route::middleware('auth')->group(function () {
@@ -58,6 +59,11 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::put('/inventory/{tire}', [DashboardController::class, 'update'])->name('inventory.update');
         Route::delete('/inventory/{tire}', [DashboardController::class, 'destroy'])->name('inventory.destroy');
         
+        // Promotions
+        Route::get('/promotions', [DashboardController::class, 'promotions'])->name('promotions');
+        Route::get('/promotions/search', [DashboardController::class, 'searchTires'])->name('promotions.search');
+        Route::post('/promotions/{tire}/toggle', [DashboardController::class, 'togglePromotion'])->name('promotions.toggle');
+
         // Settings
         Route::get('/settings', [DashboardController::class, 'settings'])->name('settings');
         Route::post('/settings', [DashboardController::class, 'updateSettings'])->name('settings.update');
@@ -86,9 +92,4 @@ Route::prefix('api/vehicles')->group(function () {
     Route::get('/trims', [VehicleSearchController::class, 'getTrims']);
 });
 
-use Illuminate\Support\Facades\Artisan;
 
-Route::get('/run-migrations-secret', function () {
-    Artisan::call('migrate:fresh', ['--seed' => true, '--force' => true]);
-    return "¡Migraciones y Seeders ejecutados con éxito! " . Artisan::output();
-});

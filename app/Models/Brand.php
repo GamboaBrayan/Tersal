@@ -15,6 +15,16 @@ class Brand extends Model
 
     protected static function booted()
     {
+        static::saved(function ($brand) {
+            \Illuminate\Support\Facades\Cache::forget('brands.all');
+            \Illuminate\Support\Facades\Cache::forget('brands.home');
+        });
+
+        static::deleted(function ($brand) {
+            \Illuminate\Support\Facades\Cache::forget('brands.all');
+            \Illuminate\Support\Facades\Cache::forget('brands.home');
+        });
+
         static::deleting(function ($brand) {
             if (!empty($brand->logo_url) && !str_starts_with($brand->logo_url, 'http')) {
                 try {
