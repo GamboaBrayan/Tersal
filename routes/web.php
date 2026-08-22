@@ -63,6 +63,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/promotions', [DashboardController::class, 'promotions'])->name('promotions');
         Route::get('/promotions/search', [DashboardController::class, 'searchTires'])->name('promotions.search');
         Route::post('/promotions/{tire}/toggle', [DashboardController::class, 'togglePromotion'])->name('promotions.toggle');
+        Route::get('/inventory/template-promotions', [DashboardController::class, 'downloadTemplatePromotions'])->name('inventory.template-promotions');
+        Route::post('/inventory/import-promotions', [DashboardController::class, 'importPromotions'])->name('inventory.import-promotions');
 
         // Settings
         Route::get('/settings', [DashboardController::class, 'settings'])->name('settings');
