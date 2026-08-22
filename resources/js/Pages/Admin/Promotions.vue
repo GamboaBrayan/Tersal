@@ -198,7 +198,7 @@ const handleImportPromo = (e) => {
       <!-- Bulk Actions Bar -->
       <div v-if="selectedItems.length > 0" class="bg-gray-900 text-white p-4 rounded-2xl shadow-lg mb-6 flex items-center justify-between animate-fade-in-up">
         <div class="flex items-center gap-3">
-          <div class="bg-primary/20 text-primary px-3 py-1 rounded-lg font-bold text-sm">
+          <div class="bg-white/20 text-white px-3 py-1 rounded-lg font-bold text-sm">
             {{ selectedItems.length }} seleccionados
           </div>
         </div>
@@ -250,8 +250,8 @@ const handleImportPromo = (e) => {
                     </div>
                   </div>
                 </td>
-                <td class="p-4 font-bold text-gray-700 text-sm sm:text-base">
-                  {{ tire.width }}/{{ tire.profile }} R{{ tire.rim }}
+                <td class="p-4">
+                  <span class="font-bold text-gray-700 block mb-1 whitespace-nowrap">{{ tire.width }}{{ tire.profile && tire.profile > 0 ? '/' + tire.profile : '' }} R{{ tire.rim }}</span>
                 </td>
                 <td class="p-4">
                   <div class="font-bold text-primary text-sm sm:text-base">S/. {{ tire.offer_price || tire.price }}</div>
@@ -343,7 +343,7 @@ const handleImportPromo = (e) => {
                 </div>
                 <div>
                   <div class="font-bold text-gray-900 text-sm">{{ tire.brand?.name }} {{ tire.model }}</div>
-                  <div class="text-xs text-gray-500">{{ tire.width }}/{{ tire.profile }} R{{ tire.rim }} | Precio: S/. {{ tire.offer_price || tire.price }}</div>
+                  <div class="text-xs text-gray-500">{{ tire.width }}{{ tire.profile && tire.profile > 0 ? '/' + tire.profile : '' }} R{{ tire.rim }} | Precio: S/. {{ tire.offer_price || tire.price }}</div>
                 </div>
               </div>
               <button @click="addToPromotions(tire)" class="px-3 py-1.5 bg-action text-white text-sm font-bold rounded-lg hover:bg-red-700 transition-colors flex-shrink-0">

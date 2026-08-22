@@ -139,7 +139,7 @@ const deleteCategory = () => {
       <!-- Bulk Actions Bar -->
       <div v-if="selectedItems.length > 0" class="bg-gray-900 text-white p-4 rounded-2xl shadow-lg mb-6 flex items-center justify-between animate-fade-in-up">
         <div class="flex items-center gap-3">
-          <div class="bg-primary/20 text-primary px-3 py-1 rounded-lg font-bold text-sm">
+          <div class="bg-white/20 text-white px-3 py-1 rounded-lg font-bold text-sm">
             {{ selectedItems.length }} seleccionados
           </div>
         </div>

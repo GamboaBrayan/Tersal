@@ -49,7 +49,7 @@ const getDiscountPercentage = (price, offerPrice) => {
       </div>
       
       <div class="text-center mb-4 flex-grow">
-        <h3 class="text-xl font-black text-gray-900 leading-tight mb-1">{{ tire.width }}/{{ tire.profile }} R{{ tire.rim }}</h3>
+        <h3 class="text-xl font-black text-gray-900 leading-tight mb-1">{{ tire.width }}{{ tire.profile && tire.profile > 0 ? '/' + tire.profile : '' }} R{{ tire.rim }}</h3>
         <p class="text-sm text-gray-600 font-medium">{{ tire.model }}</p>
       </div>
       

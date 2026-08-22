@@ -154,8 +154,8 @@ const submit = () => {
                   <div v-if="form.errors.width" class="text-red-500 text-xs mt-1">{{ form.errors.width }}</div>
                 </div>
                 <div>
-                  <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Perfil <span class="text-red-500">*</span></label>
-                  <input type="number" min="0" v-model="form.profile" required class="w-full h-12 px-3 sm:px-4 rounded-xl border border-gray-200/60 bg-gray-50/50 hover:bg-gray-50 transition-colors focus:ring-2 focus:ring-primary/20 focus:border-primary text-sm sm:text-base text-gray-700">
+                  <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Perfil</label>
+                  <input type="number" min="0" v-model="form.profile" class="w-full h-12 px-3 sm:px-4 rounded-xl border border-gray-200/60 bg-gray-50/50 hover:bg-gray-50 transition-colors focus:ring-2 focus:ring-primary/20 focus:border-primary text-sm sm:text-base text-gray-700">
                   <div v-if="form.errors.profile" class="text-red-500 text-xs mt-1">{{ form.errors.profile }}</div>
                 </div>
                 <div>
@@ -168,7 +168,7 @@ const submit = () => {
               <div class="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-7 mb-5 sm:mb-7">
                 <div>
                   <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Índice de Carga <span class="text-red-500">*</span></label>
-                  <input type="number" min="0" v-model="form.load_index" required class="w-full h-12 px-4 rounded-xl border border-gray-200/60 bg-gray-50/50 hover:bg-gray-50 transition-colors focus:ring-2 focus:ring-primary/20 focus:border-primary text-sm sm:text-base text-gray-700">
+                  <input type="text" v-model="form.load_index" required class="w-full h-12 px-4 rounded-xl border border-gray-200/60 bg-gray-50/50 hover:bg-gray-50 transition-colors focus:ring-2 focus:ring-primary/20 focus:border-primary text-sm sm:text-base text-gray-700">
                   <div v-if="form.errors.load_index" class="text-red-500 text-xs mt-1">{{ form.errors.load_index }}</div>
                 </div>
                 <div>

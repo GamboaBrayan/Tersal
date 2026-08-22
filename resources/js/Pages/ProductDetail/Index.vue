@@ -38,7 +38,7 @@ const totalAmount = () => {
 };
 
 const whatsappText = () => {
-  return encodeURIComponent(`¡Hola! Estoy interesado en el neumático ${props.tire.brand?.name || ''} ${props.tire.model} en la medida ${props.tire.width}/${props.tire.profile} R${props.tire.rim} que vi en su web. Deseo confirmar el stock para ${quantity.value} unidades y coordinar la atención.`);
+  return encodeURIComponent(`¡Hola! Estoy interesado en el neumático ${props.tire.brand?.name || ''} ${props.tire.model} en la medida ${props.tire.width}${props.tire.profile && props.tire.profile > 0 ? '/' + props.tire.profile : ''} R${props.tire.rim} que vi en su web. Deseo confirmar el stock para ${quantity.value} unidades y coordinar la atención.`);
 };
 
 const getDiscountPercentage = (price, offerPrice) => {
@@ -103,7 +103,7 @@ const getDiscountPercentage = (price, offerPrice) => {
             <div>
               <div class="text-sm font-black text-gray-900 uppercase tracking-widest mb-2">{{ tire.brand?.name || 'MARCA' }}</div>
               <h1 class="text-3xl md:text-4xl font-black text-gray-900 leading-tight mb-2">{{ tire.model }}</h1>
-              <div class="text-xl text-gray-600 font-medium">{{ tire.width }}/{{ tire.profile }} R{{ tire.rim }} {{ tire.load_index }}{{ tire.speed_rating }}</div>
+              <div class="text-xl text-gray-600 font-medium">{{ tire.width }}{{ tire.profile && tire.profile > 0 ? '/' + tire.profile : '' }} R{{ tire.rim }} {{ tire.load_index }}{{ tire.speed_rating }}</div>
             </div>
             <div class="bg-green-50 text-green-700 px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1 border border-green-200 shadow-sm">
               <CheckCircle2 class="w-3 h-3" /> Stock Disponible
