@@ -52,6 +52,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/inventory', [DashboardController::class, 'inventory'])->name('inventory');
         Route::get('/inventory/template', [DashboardController::class, 'downloadTemplateInventory'])->name('inventory.template');
         Route::post('/inventory/import', [DashboardController::class, 'importInventory'])->name('inventory.import');
+        Route::post('/inventory/bulk-delete', [DashboardController::class, 'bulkDeleteInventory'])->name('inventory.bulk-delete');
+        Route::post('/inventory/bulk-promote', [DashboardController::class, 'bulkPromote'])->name('inventory.bulk-promote');
         Route::get('/import-progress', [DashboardController::class, 'importProgress'])->name('import.progress');
         Route::post('/inventory', [DashboardController::class, 'store'])->name('inventory.store');
         Route::get('/inventory/create', [DashboardController::class, 'create'])->name('inventory.create');
@@ -65,6 +67,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::post('/promotions/{tire}/toggle', [DashboardController::class, 'togglePromotion'])->name('promotions.toggle');
         Route::get('/inventory/template-promotions', [DashboardController::class, 'downloadTemplatePromotions'])->name('inventory.template-promotions');
         Route::post('/inventory/import-promotions', [DashboardController::class, 'importPromotions'])->name('inventory.import-promotions');
+        Route::post('/promotions/bulk-delete', [DashboardController::class, 'bulkDeletePromotions'])->name('promotions.bulk-delete');
 
         // Settings
         Route::get('/settings', [DashboardController::class, 'settings'])->name('settings');
@@ -74,12 +77,14 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/brands', [DashboardController::class, 'brands'])->name('brands');
         Route::get('/brands/template', [DashboardController::class, 'downloadTemplateBrands'])->name('brands.template');
         Route::post('/brands/import', [DashboardController::class, 'importBrands'])->name('brands.import');
+        Route::post('/brands/bulk-delete', [DashboardController::class, 'bulkDeleteBrands'])->name('brands.bulk-delete');
         Route::post('/brands', [DashboardController::class, 'storeBrand'])->name('brands.store');
         Route::post('/brands/{brand}', [DashboardController::class, 'updateBrand'])->name('brands.update');
         Route::delete('/brands/{brand}', [DashboardController::class, 'destroyBrand'])->name('brands.destroy');
 
         // Categories
         Route::get('/categories', [DashboardController::class, 'categories'])->name('categories');
+        Route::post('/categories/bulk-delete', [DashboardController::class, 'bulkDeleteCategories'])->name('categories.bulk-delete');
         Route::post('/categories', [DashboardController::class, 'storeCategory'])->name('categories.store');
         Route::post('/categories/{category}/move', [DashboardController::class, 'moveCategory'])->name('categories.move');
         Route::post('/categories/{category}', [DashboardController::class, 'updateCategory'])->name('categories.update');

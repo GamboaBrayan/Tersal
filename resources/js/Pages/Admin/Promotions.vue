@@ -1,8 +1,8 @@
 <script setup>
 import { Head, Link, router } from '@inertiajs/vue3';
 import AdminLayout from './Components/AdminLayout.vue';
-import { ref, watch } from 'vue';
-import { Search, Plus, Package, ChevronLeft, ChevronRight, X, Loader2, Download, Upload } from 'lucide-vue-next';
+import { ref, watch, computed } from 'vue';
+import { Search, Plus, Package, ChevronLeft, ChevronRight, X, Loader2, Download, Upload, Trash2 } from 'lucide-vue-next';
 import axios from 'axios';
 
 const props = defineProps({
@@ -23,6 +23,32 @@ watch(searchQuery, (value) => {
     });
   }, 300);
 });
+
+const selectedItems = ref([]);
+
+const selectAll = computed({
+  get: () => {
+    return props.promotions?.data?.length > 0 && selectedItems.value.length === props.promotions.data.length;
+  },
+  set: (value) => {
+    if (value) {
+      selectedItems.value = props.promotions.data.map(t => t.id);
+    } else {
+      selectedItems.value = [];
+    }
+  }
+});
+
+const bulkDelete = () => {
+  if (confirm(`¿Estás seguro de eliminar ${selectedItems.value.length} promociones? Esta acción no se puede deshacer.`)) {
+    router.post('/admin/promotions/bulk-delete', { ids: selectedItems.value }, {
+      preserveScroll: true,
+      onSuccess: () => {
+        selectedItems.value = [];
+      }
+    });
+  }
+};
 
 const removeFromPromotions = (tire) => {
   router.post(`/admin/promotions/${tire.id}/toggle`, { is_promoted: false }, {
@@ -169,12 +195,32 @@ const handleImportPromo = (e) => {
         </div>
       </div>
 
+      <!-- Bulk Actions Bar -->
+      <div v-if="selectedItems.length > 0" class="bg-gray-900 text-white p-4 rounded-2xl shadow-lg mb-6 flex items-center justify-between animate-fade-in-up">
+        <div class="flex items-center gap-3">
+          <div class="bg-primary/20 text-primary px-3 py-1 rounded-lg font-bold text-sm">
+            {{ selectedItems.length }} seleccionados
+          </div>
+        </div>
+        <div class="flex items-center gap-3">
+          <button @click="bulkDelete" class="px-4 py-2 bg-action text-white text-sm font-bold rounded-xl hover:bg-red-600 transition-colors shadow-sm flex items-center gap-2">
+            Eliminar
+          </button>
+          <button @click="selectedItems = []" class="p-2 text-gray-400 hover:text-white transition-colors" title="Cancelar selección">
+            <X class="w-5 h-5" />
+          </button>
+        </div>
+      </div>
+
       <!-- Data Table -->
       <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
         <div class="overflow-x-auto">
           <table class="w-full text-left border-collapse min-w-[700px]">
             <thead>
               <tr class="bg-gray-50 border-b border-gray-200 text-xs uppercase tracking-wider text-gray-500 font-bold">
+                <th class="p-4 w-12">
+                  <input type="checkbox" v-model="selectAll" class="rounded border-gray-300 text-primary focus:ring-primary h-4 w-4">
+                </th>
                 <th class="p-4">Código</th>
                 <th class="p-4">Neumático</th>
                 <th class="p-4">Medida</th>
@@ -183,7 +229,10 @@ const handleImportPromo = (e) => {
               </tr>
             </thead>
             <tbody class="divide-y divide-gray-100">
-              <tr v-for="tire in promotions.data" :key="tire.id" class="hover:bg-gray-50 transition-colors">
+              <tr v-for="tire in promotions.data" :key="tire.id" class="hover:bg-gray-50 transition-colors" :class="{'bg-primary/5': selectedItems.includes(tire.id)}">
+                <td class="p-4">
+                  <input type="checkbox" :value="tire.id" v-model="selectedItems" class="rounded border-gray-300 text-primary focus:ring-primary h-4 w-4">
+                </td>
                 <td class="p-4 font-bold text-gray-600 text-xs whitespace-nowrap">
                   {{ tire.product_code || '-' }}
                 </td>
@@ -215,7 +264,7 @@ const handleImportPromo = (e) => {
                 </td>
               </tr>
               <tr v-if="promotions.data.length === 0">
-                <td colspan="5" class="p-8 text-center text-gray-500 text-sm sm:text-base">
+                <td colspan="6" class="p-8 text-center text-gray-500 text-sm sm:text-base">
                   No hay neumáticos promocionados.
                 </td>
               </tr>

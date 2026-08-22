@@ -814,6 +814,16 @@ class DashboardController extends Controller
             );
 
             $measure = $row['MEDIDA'] ?? '';
+            
+            $parsedWidth = 0;
+            $parsedProfile = 0;
+            $parsedRim = 0;
+            if (preg_match('/(\d{2,3})[^\d]+(\d{2,3})[^\d]+([\d\.]+)/', $measure, $matches)) {
+                $parsedWidth = intval($matches[1]);
+                $parsedProfile = intval($matches[2]);
+                $parsedRim = intval($matches[3]);
+            }
+
             $desc = $row['DESCRIPCION'] ?? 'Promo Tire';
             $price = floatval($row['PRECIO'] ?? 0);
             $stock = intval($row['STOCK'] ?? 10);
@@ -831,6 +841,9 @@ class DashboardController extends Controller
                 $promoTire->update([
                     'brand_id' => $brand->id,
                     'model' => $desc,
+                    'width' => $parsedWidth,
+                    'profile' => $parsedProfile,
+                    'rim' => $parsedRim,
                     'description' => $fullDesc,
                     'price' => $price * 1.2,
                     'offer_price' => $price,
@@ -842,9 +855,9 @@ class DashboardController extends Controller
                     'brand_id' => $brand->id,
                     'category_id' => $defaultCategoryId,
                     'model' => $desc,
-                    'width' => 0,
-                    'profile' => 0,
-                    'rim' => 0,
+                    'width' => $parsedWidth,
+                    'profile' => $parsedProfile,
+                    'rim' => $parsedRim,
                     'load_index' => 0,
                     'speed_rating' => 'N/A',
                     'description' => $fullDesc,
@@ -923,5 +936,51 @@ class DashboardController extends Controller
         ]);
 
         return redirect()->back()->with('success', 'Estado de promoción actualizado.');
+    }
+
+    public function bulkDeleteInventory(Request $request)
+    {
+        $request->validate(['ids' => 'required|array']);
+        Tire::whereIn('id', $request->ids)->delete();
+        return redirect()->back()->with('success', 'Neumáticos eliminados correctamente.');
+    }
+
+    public function bulkPromote(Request $request)
+    {
+        $request->validate(['ids' => 'required|array']);
+        Tire::whereIn('id', $request->ids)->update(['is_promoted' => true]);
+        \Illuminate\Support\Facades\Cache::forget('promotions.home');
+        return redirect()->back()->with('success', 'Neumáticos movidos a promociones correctamente.');
+    }
+
+    public function bulkDeletePromotions(Request $request)
+    {
+        $request->validate(['ids' => 'required|array']);
+        Tire::whereIn('id', $request->ids)->delete();
+        \Illuminate\Support\Facades\Cache::forget('promotions.home');
+        return redirect()->back()->with('success', 'Promociones eliminadas correctamente.');
+    }
+
+    public function bulkDeleteBrands(Request $request)
+    {
+        $request->validate(['ids' => 'required|array']);
+        $brands = Brand::whereIn('id', $request->ids)->get();
+        foreach ($brands as $brand) {
+            $brand->tires()->delete();
+            $brand->delete();
+        }
+        \Illuminate\Support\Facades\Cache::forget('brands.home');
+        return redirect()->back()->with('success', 'Marcas eliminadas correctamente.');
+    }
+
+    public function bulkDeleteCategories(Request $request)
+    {
+        $request->validate(['ids' => 'required|array']);
+        $categories = Category::whereIn('id', $request->ids)->get();
+        foreach ($categories as $category) {
+            $category->tires()->delete();
+            $category->delete();
+        }
+        return redirect()->back()->with('success', 'Categorías eliminadas correctamente.');
     }
 }

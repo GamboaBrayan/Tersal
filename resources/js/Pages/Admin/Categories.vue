@@ -1,8 +1,8 @@
 <script setup>
 import { Head, useForm, router, Link } from '@inertiajs/vue3';
 import AdminLayout from './Components/AdminLayout.vue';
+import { ref, watch, computed } from 'vue';
 import { Plus, Trash2, AlertCircle, Edit, Save, Search, ChevronLeft, ChevronRight, ChevronUp, ChevronDown, Tags, X as XIcon } from 'lucide-vue-next';
-import { ref, watch } from 'vue';
 
 const props = defineProps({
   categories: Object,
@@ -22,6 +22,32 @@ watch(searchQuery, (value) => {
     });
   }, 300);
 });
+
+const selectedItems = ref([]);
+
+const selectAll = computed({
+  get: () => {
+    return props.categories?.data?.length > 0 && selectedItems.value.length === props.categories.data.length;
+  },
+  set: (value) => {
+    if (value) {
+      selectedItems.value = props.categories.data.map(t => t.id);
+    } else {
+      selectedItems.value = [];
+    }
+  }
+});
+
+const bulkDelete = () => {
+  if (confirm(`¿Estás seguro de eliminar ${selectedItems.value.length} categorías? Esto eliminará todos los neumáticos asociados. Esta acción no se puede deshacer.`)) {
+    router.post('/admin/categories/bulk-delete', { ids: selectedItems.value }, {
+      preserveScroll: true,
+      onSuccess: () => {
+        selectedItems.value = [];
+      }
+    });
+  }
+};
 
 const form = useForm({
   name: ''
@@ -110,6 +136,23 @@ const deleteCategory = () => {
         </div>
       </div>
 
+      <!-- Bulk Actions Bar -->
+      <div v-if="selectedItems.length > 0" class="bg-gray-900 text-white p-4 rounded-2xl shadow-lg mb-6 flex items-center justify-between animate-fade-in-up">
+        <div class="flex items-center gap-3">
+          <div class="bg-primary/20 text-primary px-3 py-1 rounded-lg font-bold text-sm">
+            {{ selectedItems.length }} seleccionados
+          </div>
+        </div>
+        <div class="flex items-center gap-3">
+          <button @click="bulkDelete" class="px-4 py-2 bg-action text-white text-sm font-bold rounded-xl hover:bg-red-600 transition-colors shadow-sm flex items-center gap-2">
+            Eliminar
+          </button>
+          <button @click="selectedItems = []" class="p-2 text-gray-400 hover:text-white transition-colors" title="Cancelar selección">
+            <XIcon class="w-5 h-5" />
+          </button>
+        </div>
+      </div>
+
       <!-- Search Bar -->
       <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 mb-6 flex items-center">
         <div class="relative w-full max-w-md">
@@ -130,13 +173,19 @@ const deleteCategory = () => {
           <table class="w-full text-left border-collapse table-fixed min-w-[500px]">
             <thead>
               <tr class="bg-gray-50 border-b border-gray-200 text-xs uppercase tracking-wider text-gray-500 font-bold">
-                <th class="p-4 w-1/2">Categoría</th>
-                <th class="p-4 text-center w-1/4">Neumáticos Asignados</th>
-                <th class="p-4 text-right w-1/4">Acciones</th>
+                <th class="p-4 w-12">
+                  <input type="checkbox" v-model="selectAll" class="rounded border-gray-300 text-primary focus:ring-primary h-4 w-4">
+                </th>
+                <th class="p-4">Categoría</th>
+                <th class="p-4 text-center">Neumáticos Asignados</th>
+                <th class="p-4 text-right">Acciones</th>
               </tr>
             </thead>
             <tbody class="divide-y divide-gray-100">
-              <tr v-for="category in categories.data" :key="category.id" class="hover:bg-gray-50 transition-colors">
+              <tr v-for="category in categories.data" :key="category.id" class="hover:bg-gray-50 transition-colors" :class="{'bg-primary/5': selectedItems.includes(category.id)}">
+                <td class="p-4">
+                  <input type="checkbox" :value="category.id" v-model="selectedItems" class="rounded border-gray-300 text-primary focus:ring-primary h-4 w-4">
+                </td>
                 <td class="p-4">
                   <div class="flex items-center gap-3">
                     <div class="w-12 h-12 rounded-lg border border-gray-200 bg-white flex items-center justify-center flex-shrink-0 p-1">
@@ -169,7 +218,7 @@ const deleteCategory = () => {
                 </td>
               </tr>
               <tr v-if="categories.data.length === 0">
-                <td colspan="3" class="p-8 text-center text-gray-500 text-sm sm:text-base">
+                <td colspan="4" class="p-8 text-center text-gray-500 text-sm sm:text-base">
                   No hay categorías registradas.
                 </td>
               </tr>
