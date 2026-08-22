@@ -254,8 +254,8 @@ const handleImportPromo = (e) => {
                   <span class="font-bold text-gray-700 block mb-1 whitespace-nowrap">{{ tire.width }}{{ tire.profile && tire.profile > 0 ? '/' + tire.profile : '' }} R{{ tire.rim }}</span>
                 </td>
                 <td class="p-4">
-                  <div class="font-bold text-primary text-sm sm:text-base">S/. {{ tire.offer_price || tire.price }}</div>
-                  <div v-if="tire.offer_price" class="text-xs text-gray-400 line-through">S/. {{ tire.price }}</div>
+                  <div class="font-bold text-primary text-sm sm:text-base">{{ tire.category?.name === 'TBR' ? '$' : 'S/.' }} {{ tire.offer_price || tire.price }}</div>
+                  <div v-if="tire.offer_price" class="text-xs text-gray-400 line-through">{{ tire.category?.name === 'TBR' ? '$' : 'S/.' }} {{ tire.price }}</div>
                 </td>
                 <td class="p-4 text-right">
                   <button @click="removeFromPromotions(tire)" class="px-3 py-1.5 flex items-center justify-center rounded-lg bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors ml-auto text-sm font-bold">
@@ -343,7 +343,7 @@ const handleImportPromo = (e) => {
                 </div>
                 <div>
                   <div class="font-bold text-gray-900 text-sm">{{ tire.brand?.name }} {{ tire.model }}</div>
-                  <div class="text-xs text-gray-500">{{ tire.width }}{{ tire.profile && tire.profile > 0 ? '/' + tire.profile : '' }} R{{ tire.rim }} | Precio: S/. {{ tire.offer_price || tire.price }}</div>
+                  <div class="text-xs text-gray-500">{{ tire.width }}{{ tire.profile && tire.profile > 0 ? '/' + tire.profile : '' }} R{{ tire.rim }} | Precio: {{ tire.category?.name === 'TBR' ? '$' : 'S/.' }} {{ tire.offer_price || tire.price }}</div>
                 </div>
               </div>
               <button @click="addToPromotions(tire)" class="px-3 py-1.5 bg-action text-white text-sm font-bold rounded-lg hover:bg-red-700 transition-colors flex-shrink-0">

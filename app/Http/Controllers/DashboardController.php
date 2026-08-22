@@ -613,7 +613,7 @@ class DashboardController extends Controller
                 return;
             }
 
-            $categoryName = $row['CATEGORIA *'] ?? $row['CATEGORIA (Obligatorio - Autos, Camionetas, Camiones, OTR)'] ?? $row['CATEGORIA (Opcional - Autos, Camionetas, Camiones, OTR)'] ?? $row['CATEGORIA'] ?? null;
+            $categoryName = $row['CATEGORIA *'] ?? $row['CATEGORIA (Obligatorio - Autos, Camionetas, Camiones, OTR)'] ?? $row['CATEGORIA (Opcional - Autos, Camionetas, Camiones, OTR)'] ?? $row['CATEGORIA'] ?? $row['TIPO'] ?? $row['TIPO *'] ?? null;
             $categoryId = null;
             if (empty($categoryName)) {
                 $errors[] = "Fila $currentRow: La categoría es obligatoria.";
@@ -834,6 +834,13 @@ class DashboardController extends Controller
             $aplicacion = $row['APLICACIÓN'] ?? '';
             $fullDesc = trim("$tipo $aplicacion") ?: $desc;
 
+            // Find category by TIPO
+            $matchedCategory = null;
+            if (!empty($tipo)) {
+                $matchedCategory = Category::where('name', 'like', trim($tipo))->first();
+            }
+            $finalCategoryId = $matchedCategory ? $matchedCategory->id : $defaultCategoryId;
+
             if (!empty($id)) {
                 $promoTire = Tire::find($id);
                 if (!$promoTire) {
@@ -842,6 +849,7 @@ class DashboardController extends Controller
                 }
                 $promoTire->update([
                     'brand_id' => $brand->id,
+                    'category_id' => $finalCategoryId,
                     'model' => $desc,
                     'width' => $parsedWidth,
                     'profile' => $parsedProfile,
@@ -855,7 +863,7 @@ class DashboardController extends Controller
             } else {
                 Tire::create([
                     'brand_id' => $brand->id,
-                    'category_id' => $defaultCategoryId,
+                    'category_id' => $finalCategoryId,
                     'model' => $desc,
                     'width' => $parsedWidth,
                     'profile' => $parsedProfile,
@@ -892,7 +900,7 @@ class DashboardController extends Controller
 
     public function promotions(Request $request)
     {
-        $query = Tire::with('brand')->where('is_promoted', true)->latest();
+        $query = Tire::with(['brand', 'category'])->where('is_promoted', true)->latest();
 
         if ($request->filled('search')) {
             $search = $request->search;
@@ -915,7 +923,7 @@ class DashboardController extends Controller
 
     public function searchTires(Request $request)
     {
-        $query = Tire::with('brand')->where('is_promoted', false)->latest();
+        $query = Tire::with(['brand', 'category'])->where('is_promoted', false)->latest();
 
         if ($request->filled('search')) {
             $search = $request->search;

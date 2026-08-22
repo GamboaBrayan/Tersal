@@ -99,4 +99,8 @@ Route::prefix('api/vehicles')->group(function () {
     Route::get('/trims', [VehicleSearchController::class, 'getTrims']);
 });
 
+Route::fallback(function () {
+    return Inertia::render('Error/404');
+});
+
 
