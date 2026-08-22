@@ -112,6 +112,7 @@ class DashboardController extends Controller
             }
         }
         $validated['images_json'] = $imagePaths;
+        $validated['profile'] = $validated['profile'] ?? 0;
 
         Tire::create($validated);
 
@@ -175,6 +176,7 @@ class DashboardController extends Controller
             }
         }
         $validated['images_json'] = $imagePaths;
+        $validated['profile'] = $validated['profile'] ?? 0;
 
         $tire->update($validated);
 
