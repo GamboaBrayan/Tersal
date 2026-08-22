@@ -2,7 +2,7 @@
 import { Head, Link, router } from '@inertiajs/vue3';
 import AdminLayout from './Components/AdminLayout.vue';
 import { ref, watch } from 'vue';
-import { Search, Plus, Package, ChevronLeft, ChevronRight, X, Loader2 } from 'lucide-vue-next';
+import { Search, Plus, Package, ChevronLeft, ChevronRight, X, Loader2, Download, Upload } from 'lucide-vue-next';
 import axios from 'axios';
 
 const props = defineProps({
@@ -73,6 +73,61 @@ const addToPromotions = (tire) => {
     }
   });
 };
+
+const importPromoInput = ref(null);
+const isImportingPromo = ref(false);
+const importProgress = ref(0);
+let progressInterval = null;
+
+const startProgressPolling = () => {
+  importProgress.value = 0;
+  progressInterval = setInterval(async () => {
+    try {
+      const response = await fetch('/admin/import-progress');
+      const data = await response.json();
+      if (data.progress !== null) {
+        importProgress.value = data.progress;
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  }, 1000);
+};
+
+const stopProgressPolling = () => {
+  if (progressInterval) {
+    clearInterval(progressInterval);
+    progressInterval = null;
+  }
+};
+
+const handleImportPromo = (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  
+  isImportingPromo.value = true;
+  startProgressPolling();
+  const formData = new FormData();
+  formData.append('file', file);
+  
+  router.post('/admin/inventory/import-promotions', formData, {
+    onSuccess: () => {
+      stopProgressPolling();
+      importProgress.value = 100;
+      setTimeout(() => {
+        isImportingPromo.value = false;
+        importProgress.value = 0;
+      }, 3000);
+      if (importPromoInput.value) importPromoInput.value.value = '';
+    },
+    onError: () => {
+      stopProgressPolling();
+      isImportingPromo.value = false;
+      if (importPromoInput.value) importPromoInput.value.value = '';
+    }
+  });
+};
+
 </script>
 
 <template>
@@ -84,6 +139,19 @@ const addToPromotions = (tire) => {
       <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 sm:mb-8">
         <h1 class="text-2xl sm:text-3xl font-black text-gray-900">Neumáticos en Promoción</h1>
         <div class="flex items-center gap-2">
+          <!-- Input Oculto -->
+          <input type="file" ref="importPromoInput" @change="handleImportPromo" class="hidden" accept=".xlsx,.xls,.csv" />
+          
+          <div class="flex border border-orange-200 rounded-xl overflow-hidden shadow-sm">
+            <a href="/admin/inventory/template-promotions" class="inline-flex items-center justify-center w-12 h-12 bg-orange-50 text-orange-600 hover:bg-orange-100 transition-colors" title="Descargar Plantilla Promociones">
+              <Download class="w-5 h-5" />
+            </a>
+            <button @click="$refs.importPromoInput.click()" :disabled="isImportingPromo" class="inline-flex items-center justify-center px-4 h-12 bg-white text-orange-600 hover:bg-orange-50 transition-colors text-sm font-bold disabled:opacity-50" title="Importar Excel de Promociones">
+              <Upload class="w-5 h-5 mr-2" />
+              Importar Excel Especial
+            </button>
+          </div>
+
           <button @click="openAddModal" class="inline-flex items-center justify-center px-4 h-12 bg-action text-white font-bold rounded-xl hover:bg-red-700 transition-colors shadow-sm flex-shrink-0">
             <Plus class="w-5 h-5 mr-2" />
             Añadir de Inventario

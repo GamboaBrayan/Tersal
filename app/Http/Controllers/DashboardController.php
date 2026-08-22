@@ -406,12 +406,26 @@ class DashboardController extends Controller
 
     public function downloadTemplateBrands()
     {
-        $headers = [
-            'MARCA *' => '',
-            'LOGO_URL' => ''
-        ];
+        $brands = Brand::all();
+        $data = [];
+        
+        foreach ($brands as $brand) {
+            $data[] = [
+                'ID' => $brand->id,
+                'MARCA *' => $brand->name,
+                'LOGO_URL' => $brand->logo_url
+            ];
+        }
 
-        return (new FastExcel(collect([$headers])))->download('Plantilla_Marcas.xlsx');
+        if (empty($data)) {
+            $data[] = [
+                'ID' => '',
+                'MARCA *' => '',
+                'LOGO_URL' => ''
+            ];
+        }
+
+        return (new \Rap2hpoutre\FastExcel\FastExcel(collect($data)))->download('Plantilla_Marcas.xlsx');
     }
 
     public function importBrands(Request $request)
@@ -421,7 +435,7 @@ class DashboardController extends Controller
         $filePath = $request->file('file')->getRealPath();
         
         $totalRows = 0;
-        (new FastExcel)->import($filePath, function ($line) use (&$totalRows) {
+        (new \Rap2hpoutre\FastExcel\FastExcel)->import($filePath, function ($line) use (&$totalRows) {
             $totalRows++;
         });
 
@@ -429,11 +443,29 @@ class DashboardController extends Controller
         Cache::put($cacheKey, 0);
 
         $currentRow = 0;
-        (new FastExcel)->import($filePath, function ($row) use ($totalRows, &$currentRow, $cacheKey) {
+        $errors = [];
+        (new \Rap2hpoutre\FastExcel\FastExcel)->import($filePath, function ($row) use ($totalRows, &$currentRow, $cacheKey, &$errors) {
+            $currentRow++;
+            if ($currentRow % 10 === 0 || $currentRow === $totalRows) {
+                Cache::put($cacheKey, round(($currentRow / max(1, $totalRows)) * 100));
+            }
+
+            $id = $row['ID'] ?? null;
             $brandName = $row['MARCA *'] ?? $row['MARCA (Obligatorio)'] ?? $row['MARCA'] ?? null;
             $logoUrl = $row['LOGO_URL'] ?? $row['LOGO_URL (Opcional)'] ?? null;
             
-            if ($brandName) {
+            if (!empty($id)) {
+                $brand = Brand::find($id);
+                if (!$brand) {
+                    $errors[] = "Fila $currentRow: La marca con ID $id no existe.";
+                    return;
+                }
+                if ($brandName) $brand->name = trim($brandName);
+                if (isset($row['LOGO_URL']) || isset($row['LOGO_URL (Opcional)'])) {
+                    $brand->logo_url = trim($logoUrl);
+                }
+                $brand->save();
+            } else if ($brandName) {
                 $brand = Brand::firstOrCreate(
                     ['name' => trim($brandName)],
                     ['show_on_home' => true]
@@ -443,44 +475,76 @@ class DashboardController extends Controller
                     $brand->update(['logo_url' => trim($logoUrl)]);
                 }
             }
-            
-            $currentRow++;
-            if ($currentRow % 10 === 0 || $currentRow === $totalRows) {
-                Cache::put($cacheKey, round(($currentRow / max(1, $totalRows)) * 100));
-            }
         });
         
         Cache::forget($cacheKey);
         
+        if (count($errors) > 0) {
+            return redirect()->back()->with('error', 'Se importaron algunos registros, pero hubo errores: ' . implode(' | ', array_slice($errors, 0, 5)));
+        }
+
         return redirect()->back()->with('success', 'Marcas importadas correctamente.');
     }
 
     public function downloadTemplateInventory()
     {
-        $headers = [
-            'MARCA *' => '',
-            'CATEGORIA *' => '',
-            'MODELO *' => '',
-            'VERSIÓN' => '',
-            'AÑO' => '',
-            'ANCHO *' => '',
-            'ALTO *' => '',
-            'RIN *' => '',
-            'PRECIO *' => '',
-            'PRECIO_OFERTA' => '',
-            'STOCK *' => '',
-            'INDICE_CARGA *' => '',
-            'INDICE_VELOCIDAD *' => '',
-            'TIPO_TERRENO' => '',
-            'RUN_FLAT' => '',
-            'DESCRIPCION' => '',
-            'IMAGEN_1' => '',
-            'IMAGEN_2' => '',
-            'IMAGEN_3' => ''
-        ];
+        $tires = Tire::with(['brand', 'category'])->where('is_promo_only', false)->get();
+        $data = [];
+
+        foreach ($tires as $tire) {
+            $images = is_array($tire->images_json) ? $tire->images_json : [];
+            $data[] = [
+                'ID' => $tire->id,
+                'MARCA *' => $tire->brand ? $tire->brand->name : '',
+                'CATEGORIA *' => $tire->category ? $tire->category->name : '',
+                'MODELO *' => $tire->model,
+                'VERSIÓN' => $tire->version,
+                'AÑO' => $tire->year,
+                'ANCHO *' => $tire->width,
+                'ALTO *' => $tire->profile,
+                'RIN *' => $tire->rim,
+                'PRECIO *' => $tire->price,
+                'PRECIO_OFERTA' => $tire->offer_price,
+                'STOCK *' => $tire->stock,
+                'INDICE_CARGA *' => $tire->load_index,
+                'INDICE_VELOCIDAD *' => $tire->speed_rating,
+                'TIPO_TERRENO' => $tire->terrain_type,
+                'RUN_FLAT' => $tire->is_run_flat ? 'SI' : 'NO',
+                'DESCRIPCION' => $tire->description,
+                'IMAGEN_1' => $images[0] ?? '',
+                'IMAGEN_2' => $images[1] ?? '',
+                'IMAGEN_3' => $images[2] ?? ''
+            ];
+        }
+
+        if (empty($data)) {
+            $data[] = [
+                'ID' => '',
+                'MARCA *' => '',
+                'CATEGORIA *' => '',
+                'MODELO *' => '',
+                'VERSIÓN' => '',
+                'AÑO' => '',
+                'ANCHO *' => '',
+                'ALTO *' => '',
+                'RIN *' => '',
+                'PRECIO *' => '',
+                'PRECIO_OFERTA' => '',
+                'STOCK *' => '',
+                'INDICE_CARGA *' => '',
+                'INDICE_VELOCIDAD *' => '',
+                'TIPO_TERRENO' => '',
+                'RUN_FLAT' => '',
+                'DESCRIPCION' => '',
+                'IMAGEN_1' => '',
+                'IMAGEN_2' => '',
+                'IMAGEN_3' => ''
+            ];
+        }
 
         $categoriasValidas = Category::pluck('name')->implode(', ');
         $instructions = [
+            ['CAMPO' => 'ID', 'EXPLICACIÓN' => 'IMPORTANTE: No modificar si se está editando un registro existente. Dejar vacío para crear uno nuevo.'],
             ['CAMPO' => 'CATEGORIA *', 'EXPLICACIÓN' => "Obligatorio. Debe ser idéntica a una categoría de tu sistema (ej: $categoriasValidas)."],
             ['CAMPO' => 'TIPO_TERRENO', 'EXPLICACIÓN' => 'Opcional. Colocar: H/T (Carretera), A/T (Todo Terreno) o M/T (Lodo/Barro).'],
             ['CAMPO' => 'RUN_FLAT', 'EXPLICACIÓN' => 'Opcional. Colocar "SI" si tiene tecnología Run Flat, de lo contrario dejar vacío.'],
@@ -492,10 +556,10 @@ class DashboardController extends Controller
 
         $sheets = new \Rap2hpoutre\FastExcel\SheetCollection([
             'Instrucciones' => collect($instructions),
-            'Plantilla Datos' => collect([$headers])
+            'Plantilla Datos' => collect($data)
         ]);
 
-        return (new FastExcel($sheets))->download('Plantilla_Neumaticos.xlsx');
+        return (new \Rap2hpoutre\FastExcel\FastExcel($sheets))->download('Plantilla_Neumaticos.xlsx');
     }
 
     public function importInventory(Request $request)
@@ -590,35 +654,219 @@ class DashboardController extends Controller
             $runFlatVal = strtoupper(trim($runFlatRaw));
             $isRunFlat = in_array($runFlatVal, ['SI', 'SÍ', 'YES', '1']);
 
-            Tire::create([
-                'brand_id' => $brand->id,
-                'category_id' => $categoryId,
-                'model' => $model,
-                'version' => $version,
-                'year' => $year,
-                'width' => $width,
-                'profile' => $profile,
-                'rim' => $rim,
-                'price' => $price,
-                'offer_price' => $offerPrice,
-                'stock' => $stock,
-                'load_index' => $loadIndex,
-                'speed_rating' => $speedRating,
-                'terrain_type' => $terrainType,
-                'is_run_flat' => $isRunFlat,
-                'description' => $desc,
-                'status' => true,
-                'images_json' => $images
-            ]);
+            $id = $row['ID'] ?? null;
+
+            if (!empty($id)) {
+                $tire = Tire::find($id);
+                if (!$tire) {
+                    $errors[] = "Fila $currentRow: El neumático con ID $id no existe.";
+                    return;
+                }
+                $tire->update([
+                    'brand_id' => $brand->id,
+                    'category_id' => $categoryId,
+                    'model' => $model,
+                    'version' => $version,
+                    'year' => $year,
+                    'width' => $width,
+                    'profile' => $profile,
+                    'rim' => $rim,
+                    'price' => $price,
+                    'offer_price' => $offerPrice,
+                    'stock' => $stock,
+                    'load_index' => $loadIndex,
+                    'speed_rating' => $speedRating,
+                    'terrain_type' => $terrainType,
+                    'is_run_flat' => $isRunFlat,
+                    'description' => $desc,
+                    'images_json' => !empty($images) ? $images : $tire->images_json
+                ]);
+            } else {
+                Tire::create([
+                    'brand_id' => $brand->id,
+                    'category_id' => $categoryId,
+                    'model' => $model,
+                    'version' => $version,
+                    'year' => $year,
+                    'width' => $width,
+                    'profile' => $profile,
+                    'rim' => $rim,
+                    'price' => $price,
+                    'offer_price' => $offerPrice,
+                    'stock' => $stock,
+                    'load_index' => $loadIndex,
+                    'speed_rating' => $speedRating,
+                    'terrain_type' => $terrainType,
+                    'is_run_flat' => $isRunFlat,
+                    'description' => $desc,
+                    'status' => true,
+                    'is_promoted' => false,
+                    'images_json' => $images
+                ]);
+            }
         });
         
         Cache::forget($cacheKey);
+        Cache::forget('promotions.home');
+        Cache::forget('brands.home');
+        Cache::forget('tires.widths');
+        Cache::forget('tires.profiles');
+        Cache::forget('tires.rims');
         
         if (count($errors) > 0) {
             return redirect()->back()->with('error', 'Se importaron algunos registros, pero hubo errores: ' . implode(' | ', array_slice($errors, 0, 5)));
         }
         
         return redirect()->back()->with('success', 'Neumáticos importados correctamente.');
+    }
+
+    public function downloadTemplatePromotions()
+    {
+        $promotions = Tire::with(['brand'])->where('is_promo_only', true)->get();
+        $data = [];
+
+        foreach ($promotions as $promo) {
+            $data[] = [
+                'ID' => $promo->id,
+                'REFERENCIA' => $promo->product_code ?? '',
+                'MEDIDA' => $promo->measure_text,
+                'DESCRIPCION' => $promo->model,
+                'MARCA' => $promo->brand ? $promo->brand->name : '',
+                'TIPO' => '', // Cannot easily extract from description, so leave blank or map if needed.
+                'APLICACIÓN' => '', // Cannot easily extract, user can see original in description if needed
+                'PRECIO' => $promo->offer_price ?? $promo->price,
+                'STOCK' => $promo->stock
+            ];
+        }
+
+        if (empty($data)) {
+            $data[] = [
+                'ID' => '',
+                'REFERENCIA' => '',
+                'MEDIDA' => '',
+                'DESCRIPCION' => '',
+                'MARCA' => '',
+                'TIPO' => '',
+                'APLICACIÓN' => '',
+                'PRECIO' => '',
+                'STOCK' => ''
+            ];
+        }
+
+        $instructions = [
+            ['CAMPO' => 'ID', 'EXPLICACIÓN' => 'IMPORTANTE: No modificar si se edita una promoción existente. Dejar vacío para crear una nueva.'],
+            ['CAMPO' => 'Todos', 'EXPLICACIÓN' => 'Completa los campos. Estos neumáticos aparecerán SOLO en promociones.']
+        ];
+
+        $sheets = new \Rap2hpoutre\FastExcel\SheetCollection([
+            'Instrucciones' => collect($instructions),
+            'Plantilla Promociones' => collect($data)
+        ]);
+
+        return (new \Rap2hpoutre\FastExcel\FastExcel($sheets))->download('Plantilla_Promociones.xlsx');
+    }
+
+    public function importPromotions(Request $request)
+    {
+        $request->validate(['file' => 'required|file|mimes:xlsx,xls,csv,txt']);
+        
+        $filePath = $request->file('file')->getRealPath();
+        
+        $sheetIndex = 1;
+        try {
+            (new \Rap2hpoutre\FastExcel\FastExcel)->import($filePath, function ($row) use (&$sheetIndex) {
+                if (isset($row['CAMPO']) || isset($row['EXPLICACIÓN'])) {
+                    $sheetIndex = 2;
+                }
+                throw new \Exception("StopLoop");
+            });
+        } catch (\Exception $e) {}
+
+        $totalRows = 0;
+        (new \Rap2hpoutre\FastExcel\FastExcel)->sheet($sheetIndex)->import($filePath, function ($line) use (&$totalRows) {
+            $totalRows++;
+        });
+
+        $cacheKey = 'import_progress_' . auth()->id();
+        \Illuminate\Support\Facades\Cache::put($cacheKey, 0);
+
+        $defaultCategory = Category::first();
+        $defaultCategoryId = $defaultCategory ? $defaultCategory->id : 1;
+
+        $currentRow = 0;
+        $errors = [];
+        (new \Rap2hpoutre\FastExcel\FastExcel)->sheet($sheetIndex)->import($filePath, function ($row) use ($totalRows, &$currentRow, $cacheKey, $defaultCategoryId, &$errors) {
+            $currentRow++;
+            if ($currentRow % 10 === 0 || $currentRow === $totalRows) {
+                \Illuminate\Support\Facades\Cache::put($cacheKey, round(($currentRow / max(1, $totalRows)) * 100));
+            }
+
+            $id = $row['ID'] ?? null;
+            $brandName = $row['MARCA'] ?? null;
+            if (empty($brandName)) {
+                $errors[] = "Fila $currentRow: La columna de Marca está vacía.";
+                return;
+            }
+
+            $brand = Brand::firstOrCreate(
+                ['name' => trim($brandName)],
+                ['show_on_home' => true]
+            );
+
+            $measure = $row['MEDIDA'] ?? '';
+            $desc = $row['DESCRIPCION'] ?? 'Promo Tire';
+            $price = floatval($row['PRECIO'] ?? 0);
+            $stock = intval($row['STOCK'] ?? 10);
+            
+            $tipo = $row['TIPO'] ?? '';
+            $aplicacion = $row['APLICACIÓN'] ?? '';
+            $fullDesc = trim("$tipo $aplicacion") ?: $desc;
+
+            if (!empty($id)) {
+                $promoTire = Tire::find($id);
+                if (!$promoTire) {
+                    $errors[] = "Fila $currentRow: El neumático con ID $id no existe.";
+                    return;
+                }
+                $promoTire->update([
+                    'brand_id' => $brand->id,
+                    'model' => $desc,
+                    'description' => $fullDesc,
+                    'price' => $price * 1.2,
+                    'offer_price' => $price,
+                    'stock' => $stock,
+                    'measure_text' => $measure,
+                ]);
+            } else {
+                Tire::create([
+                    'brand_id' => $brand->id,
+                    'category_id' => $defaultCategoryId,
+                    'model' => $desc,
+                    'width' => 0,
+                    'profile' => 0,
+                    'rim' => 0,
+                    'load_index' => 0,
+                    'speed_rating' => 'N/A',
+                    'description' => $fullDesc,
+                    'price' => $price * 1.2, // Simulate a 20% discount visually
+                    'offer_price' => $price,
+                    'stock' => $stock,
+                    'status' => true,
+                    'is_promoted' => true,
+                    'is_promo_only' => true,
+                    'measure_text' => $measure,
+                ]);
+            }
+        });
+
+        \Illuminate\Support\Facades\Cache::forget($cacheKey);
+        \Illuminate\Support\Facades\Cache::forget('promotions.home');
+
+        if (count($errors) > 0) {
+            return redirect()->back()->with('error', 'Se importaron algunos registros, pero hubo errores: ' . implode(' | ', array_slice($errors, 0, 5)));
+        }
+
+        return redirect()->back()->with('success', 'Promociones importadas correctamente.');
     }
 
     public function importProgress()
