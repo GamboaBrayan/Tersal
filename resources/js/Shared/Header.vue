@@ -44,7 +44,7 @@ watch(() => page.url, () => {
   </div>
 
   <!-- Main Header -->
-  <header class="bg-black sticky top-0 z-50 shadow-md transition-all duration-300 w-full">
+  <header class="bg-black sticky top-0 z-50 transition-all duration-300 w-full relative after:content-[''] after:absolute after:-bottom-3 after:left-0 after:w-full after:h-3 after:bg-gradient-to-b after:from-black after:to-transparent after:pointer-events-none after:transition-opacity after:duration-300" :class="isScrolled ? 'shadow-md after:opacity-0' : 'shadow-[0_4px_15px_rgba(0,0,0,0.5)] after:opacity-100'">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between transition-all duration-300" :class="isScrolled ? 'h-16' : 'h-20'">
       
       <!-- Mobile Hamburger Button (Left) -->
