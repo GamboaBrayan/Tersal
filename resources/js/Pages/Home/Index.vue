@@ -340,7 +340,7 @@ onUnmounted(() => {
         </div>
         <!-- Overlay gradients -->
         <div class="absolute top-0 left-0 right-0 h-[320px] sm:h-auto sm:inset-0 bg-gradient-to-t from-black via-black/0 to-transparent z-0"></div>
-        <div class="hidden sm:block absolute inset-0 bg-gradient-to-r from-black/90 via-black/40 to-transparent z-0"></div>
+        <div class="hidden sm:block absolute inset-0 bg-gradient-to-r from-black/10 via-black/10 to-transparent z-0"></div>
 
         <!-- Spacer Block -->
         <div class="relative w-full">
@@ -894,7 +894,7 @@ onUnmounted(() => {
             </div>
 
             <!-- Derecha: Carrusel de Producto -->
-            <div class="w-full lg:w-1/2 flex items-center justify-center gap-4 sm:gap-6" @mouseenter="stopPromoAutoPlay" @mouseleave="startPromoAutoPlay">
+            <div class="w-full lg:w-1/2 lg:-mr-8 xl:-mr-16 flex items-center justify-center gap-4 sm:gap-6" @mouseenter="stopPromoAutoPlay" @mouseleave="startPromoAutoPlay">
               <!-- Flecha Izquierda -->
               <button @click="prevPromo" class="hidden sm:flex flex-shrink-0 w-10 h-10 rounded-full bg-white shadow items-center justify-center hover:bg-gray-50 transition-colors text-gray-400 focus:outline-none z-30 cursor-pointer">
                 <ChevronLeft class="w-5 h-5 mx-auto" />
@@ -915,9 +915,9 @@ onUnmounted(() => {
                 </div>
 
                 <!-- Detalles Neumático -->
-                <div class="w-full md:w-7/12 flex flex-col justify-center h-full min-h-[160px]">
+                <div class="w-full md:w-7/12 flex flex-col justify-center h-full">
                   <div class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">{{ promotions[currentPromoIndex].brand?.name || 'Marca' }}</div>
-                  <h3 class="text-2xl sm:text-xl md:text-2xl font-black text-gray-800 mb-2 leading-tight uppercase break-words">{{ promotions[currentPromoIndex].model }}</h3>
+                  <h3 class="text-2xl sm:text-xl md:text-2xl font-black text-gray-800 mb-2 leading-tight uppercase line-clamp-2" :title="promotions[currentPromoIndex].model">{{ promotions[currentPromoIndex].model }}</h3>
                   <div class="text-sm text-gray-500 mb-4">{{ promotions[currentPromoIndex].width }}{{ promotions[currentPromoIndex].profile && promotions[currentPromoIndex].profile > 0 ? '/' + promotions[currentPromoIndex].profile : '' }} R{{ promotions[currentPromoIndex].rim }}</div>
                   
                   <div class="flex flex-col mt-auto pt-2">
