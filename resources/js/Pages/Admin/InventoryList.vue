@@ -239,8 +239,8 @@ const handleImport = (e) => {
                   <span class="font-bold text-gray-700 block mb-1 whitespace-nowrap">{{ tire.width }}{{ tire.profile && tire.profile > 0 ? '/' + tire.profile : '' }} R{{ tire.rim }}</span>
                 </td>
                 <td class="p-4">
-                  <div class="font-bold text-primary text-sm sm:text-base">S/. {{ tire.offer_price || tire.price }}</div>
-                  <div v-if="tire.offer_price" class="text-xs text-gray-400 line-through">S/. {{ tire.price }}</div>
+                  <div class="font-bold text-primary text-sm sm:text-base">{{ tire.currency === 'USD' ? '$' : 'S/.' }} {{ tire.offer_price || tire.price }}</div>
+                  <div v-if="tire.offer_price" class="text-xs text-gray-400 line-through">{{ tire.currency === 'USD' ? '$' : 'S/.' }} {{ tire.price }}</div>
                 </td>
                 <td class="p-4">
                   <span :class="[

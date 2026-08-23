@@ -325,8 +325,8 @@ onUnmounted(() => {
 
     <main class="flex-grow relative z-10">
       <!-- Sección Principal (Hero) -->
-      <section class="relative flex flex-col bg-black">
-        <div class="absolute inset-0 z-0 bg-black overflow-hidden">
+      <section class="relative flex flex-col bg-transparent sm:bg-black">
+        <div class="absolute top-0 left-0 right-0 h-[320px] sm:h-auto sm:inset-0 z-0 bg-black overflow-hidden">
           <template v-if="heroImages && heroImages.length > 0">
             <div v-for="(img, index) in heroImages" :key="img"
                  class="absolute inset-0 w-full h-full transition-opacity duration-1000 ease-in-out"
@@ -339,30 +339,27 @@ onUnmounted(() => {
           </template>
         </div>
         <!-- Overlay gradients -->
-        <div class="absolute inset-0 bg-gradient-to-t from-black via-black/0 to-transparent z-0"></div>
+        <div class="absolute top-0 left-0 right-0 h-[320px] sm:h-auto sm:inset-0 bg-gradient-to-t from-black via-black/0 to-transparent z-0"></div>
         <div class="hidden sm:block absolute inset-0 bg-gradient-to-r from-black/90 via-black/40 to-transparent z-0"></div>
-        
-        <!-- Extensión del fondo negro para cubrir el texto desplazado en móvil sin estirar la imagen -->
-        <div class="absolute top-full left-0 right-0 h-64 bg-black z-0 sm:hidden"></div>
 
         <!-- Spacer Block -->
         <div class="relative w-full">
-          <!-- Text Overlay (Desktop only) -->
-          <div class="hidden md:flex absolute inset-0 w-full pointer-events-none z-10">
+          <!-- Text Overlay (Desktop and Mobile) -->
+          <div class="flex absolute top-0 left-0 right-0 h-[280px] sm:h-auto sm:inset-0 w-full pointer-events-none z-10">
             
             <!-- Slide 1 Text -->
-            <div class="absolute inset-0 w-full px-4 sm:px-6 md:pl-[1%] lg:pl-[2%] xl:pl-[3%] 2%] 2xl:pl-[4%] flex flex-col justify-center items-start transition-all duration-700 ease-out transform pt-12" :class="currentHeroImageIndex === 0 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'">
-              <span class="text-red-600 font-extrabold uppercase tracking-wide text-sm lg:text-base mb-3 drop-shadow-sm">LÍNEA PCR | AUTO, SUV Y CAMIONETA</span>
-              <h1 class="text-white font-black text-4xl lg:text-5xl xl:text-6xl 2xl:text-[4rem] leading-[1.05] uppercase tracking-tight drop-shadow-lg">
+            <div class="absolute inset-0 w-full px-4 sm:px-6 md:pl-[1%] lg:pl-[2%] xl:pl-[3%] 2xl:pl-[4%] flex flex-col justify-center items-start transition-all duration-700 ease-out transform pt-0 sm:pt-12" :class="currentHeroImageIndex === 0 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'">
+              <span class="text-red-600 font-extrabold uppercase tracking-wide text-[10px] sm:text-sm lg:text-base mb-1 sm:mb-3 drop-shadow-sm">LÍNEA PCR | AUTO, SUV Y CAMIONETA</span>
+              <h1 class="text-white font-black text-2xl sm:text-4xl lg:text-5xl xl:text-6xl 2xl:text-[4rem] leading-[1.05] uppercase tracking-tight drop-shadow-lg">
                 Encuentra el <br>
                 neumático perfecto <br>
                 <span class="text-red-600">para tu vehículo</span>
               </h1>
               
               <!-- Vehículos Disponibles (Extra Section) -->
-              <div class="mt-10 flex flex-col items-start gap-4">
-                <span class="text-white font-semibold text-lg lg:text-xl drop-shadow-md">Más de 5,000 medidas disponibles.</span>
-                <div class="flex items-center gap-8 lg:gap-12 mt-2">
+              <div class="mt-2 sm:mt-10 flex flex-col items-start gap-1 sm:gap-4 scale-[0.8] sm:scale-100 origin-left">
+                <span class="text-white font-semibold text-xs sm:text-lg lg:text-xl drop-shadow-md">Más de 5,000 medidas disponibles.</span>
+                <div class="flex items-center gap-6 sm:gap-8 lg:gap-12 mt-1 sm:mt-2">
                   <!-- AUTO -->
                   <Link href="/catalog?category_id[]=1" class="flex flex-col items-center gap-3 opacity-90 hover:opacity-100 transition-opacity cursor-pointer pointer-events-auto">
                     <svg class="w-12 sm:w-14 h-6 sm:h-8 text-white fill-current -scale-x-100" viewBox="0 0 123 40" xmlns="http://www.w3.org/2000/svg">
@@ -387,38 +384,38 @@ onUnmounted(() => {
             </div>
 
             <!-- Slide 2 Text -->
-            <div class="absolute inset-0 w-full px-4 sm:px-6 md:pl-[1%] lg:pl-[2%] xl:pl-[3%] 2xl:pl-[4%] flex flex-col justify-center items-start transition-all duration-700 ease-out transform pt-12" :class="currentHeroImageIndex === 1 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'">
-              <span class="text-action font-extrabold uppercase tracking-wide text-sm lg:text-base mb-3 drop-shadow-sm">LÍNEA TBR | TRANSPORTE, CARGA Y PASAJEROS</span>
-              <h1 class="text-white font-black text-4xl lg:text-5xl xl:text-6xl 2xl:text-[4rem] leading-[1.05] uppercase tracking-tight drop-shadow-lg">
+            <div class="absolute inset-0 w-full px-4 sm:px-6 md:pl-[1%] lg:pl-[2%] xl:pl-[3%] 2xl:pl-[4%] flex flex-col justify-center items-start transition-all duration-700 ease-out transform pt-0 sm:pt-12" :class="currentHeroImageIndex === 1 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'">
+              <span class="text-action font-extrabold uppercase tracking-wide text-[10px] sm:text-sm lg:text-base mb-1 sm:mb-3 drop-shadow-sm">LÍNEA TBR | TRANSPORTE, CARGA Y PASAJEROS</span>
+              <h1 class="text-white font-black text-2xl sm:text-4xl lg:text-5xl xl:text-6xl 2xl:text-[4rem] leading-[1.05] uppercase tracking-tight drop-shadow-lg">
                 NEUMÁTICOS<br>
                 PARA FLOTAS QUE <br>
                 <span class="text-action">NO SE DETIENEN</span>
               </h1>
-              <span class="text-white font-semibold text-lg lg:text-xl drop-shadow-md mt-6">Mayor rendimiento en cada kilómetro.</span>
+              <span class="text-white font-semibold text-xs sm:text-lg lg:text-xl drop-shadow-md mt-2 sm:mt-6">Mayor rendimiento en cada kilómetro.</span>
             </div>
 
             <!-- Slide 3 Text -->
-            <div class="absolute inset-0 w-full px-4 sm:px-6 md:pl-[1%] lg:pl-[2%] xl:pl-[3%] 2xl:pl-[4%] flex flex-col justify-center items-start transition-all duration-700 ease-out transform pt-12" :class="currentHeroImageIndex === 2 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'">
-              <span class="text-action font-extrabold uppercase tracking-wide text-sm lg:text-base mb-3 drop-shadow-sm">LÍNEA OTR | MINERÍA, CONSTRUCCIÓN Y AGRÍCOLA</span>
-              <h1 class="text-white font-black text-4xl lg:text-5xl xl:text-6xl 2xl:text-[4rem] leading-[1.05] uppercase tracking-tight drop-shadow-lg">
+            <div class="absolute inset-0 w-full px-4 sm:px-6 md:pl-[1%] lg:pl-[2%] xl:pl-[3%] 2xl:pl-[4%] flex flex-col justify-center items-start transition-all duration-700 ease-out transform pt-0 sm:pt-12" :class="currentHeroImageIndex === 2 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'">
+              <span class="text-action font-extrabold uppercase tracking-wide text-[10px] sm:text-sm lg:text-base mb-1 sm:mb-3 drop-shadow-sm">LÍNEA OTR | MINERÍA, CONSTRUCCIÓN Y AGRÍCOLA</span>
+              <h1 class="text-white font-black text-2xl sm:text-4xl lg:text-5xl xl:text-6xl 2xl:text-[4rem] leading-[1.05] uppercase tracking-tight drop-shadow-lg">
                 NEUMÁTICOS PARA<br>
                 LAS OPERACIONES <br>
                 <span class="text-action">MÁS EXIGENTES</span>
               </h1>
-              <span class="text-white font-semibold text-lg lg:text-xl drop-shadow-md mt-6">Preparados para cualquier terreno.</span>
+              <span class="text-white font-semibold text-xs sm:text-lg lg:text-xl drop-shadow-md mt-2 sm:mt-6">Preparados para cualquier terreno.</span>
             </div>
 
           </div>
           
           <!-- Spacer to show the image proporcionalmente -->
-          <div class="w-full pb-[5%] sm:pb-[50%] md:pb-[20%] lg:pb-[29%]"></div>
+          <div class="w-full h-[320px] sm:h-auto sm:pb-[50%] md:pb-[20%] lg:pb-[29%]"></div>
         </div>
         
         <!-- Buscador Block (Pushing the header up) -->
         <div class="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 relative z-40 text-center pointer-events-auto">
-          <!-- Buscador overlapping exactly 50% on the bottom border minus 3 pixels -->
-          <div class="mt-[calc(30%+1rem)] sm:mt-0 transform translate-y-45 sm:translate-y-[calc(50%-3px)] relative z-20">
-            <div class="max-w-[1050px] mx-auto px-6 py-4 sm:px-8 sm:py-5 text-left bg-white/80 backdrop-blur-none shadow-[0_8px_40px_rgb(0,0,0,0.08)] rounded-[1rem] border border-gray-100/50">
+          <!-- Buscador overlapping exactly 50% on the bottom border minus 3 pixels on desktop -->
+          <div class="-mt-16 sm:mt-0 transform sm:translate-y-[calc(50%-3px)] relative z-20">
+            <div class="max-w-[1050px] mx-auto px-6 py-4 sm:px-8 sm:py-5 text-left bg-white sm:bg-white/80 backdrop-blur-none shadow-[0_8px_40px_rgb(0,0,0,0.08)] rounded-[1rem] border border-gray-100/50">
 
             <!-- Título Principal del Buscador -->
             <h2 class="text-xl sm:text-2xl font-black text-action mb-4 uppercase tracking-wide text-left">
@@ -797,41 +794,41 @@ onUnmounted(() => {
         </div>
         
         <!-- Barra de Características (Features Bar) merged into Hero -->
-        <div class="relative z-10 text-white w-full transform translate-y-45 sm:translate-y-0">
-          <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 sm:pt-36 lg:pt-40 pb-12 sm:pb-16">
+        <div class="relative z-10 text-gray-900 sm:text-white w-full transform sm:translate-y-0 pt-4 sm:pt-0">
+          <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12 sm:pb-16 pt-8 sm:pt-36 lg:pt-40">
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-0">
             <!-- Feature 1 -->
-            <div class="flex items-center gap-4 px-2 lg:px-6 py-6 sm:py-0 justify-center lg:justify-start border-b border-white/50 sm:border-b-0 sm:border-r">
-              <Truck class="w-8 h-8 text-white shrink-0" stroke-width="1.5" />
+            <div class="flex items-center gap-4 px-2 lg:px-6 py-6 sm:py-0 justify-center lg:justify-start border-b border-gray-200 sm:border-white/50 sm:border-b-0 sm:border-r">
+              <Truck class="w-8 h-8 shrink-0" stroke-width="1.5" />
               <div>
                 <h4 class="font-black text-sm uppercase tracking-wide">Envíos a todo el Perú</h4>
-                <p class="text-xs text-gray-100 mt-0.5">Rápidos y seguros</p>
+                <p class="text-xs text-gray-500 sm:text-gray-100 mt-0.5">Rápidos y seguros</p>
               </div>
             </div>
             <!-- Feature 2 -->
-            <div class="flex items-center gap-4 px-2 lg:px-6 py-6 sm:py-0 justify-center lg:justify-start border-b border-white/50 sm:border-b-0 lg:border-r">
-              <ShieldCheck class="w-8 h-8 text-white shrink-0" stroke-width="1.5" />
+            <div class="flex items-center gap-4 px-2 lg:px-6 py-6 sm:py-0 justify-center lg:justify-start border-b border-gray-200 sm:border-white/50 sm:border-b-0 lg:border-r">
+              <ShieldCheck class="w-8 h-8 shrink-0" stroke-width="1.5" />
               <div>
                 <h4 class="font-black text-sm uppercase tracking-wide">Neumáticos Certificados</h4>
-                <p class="text-xs text-gray-100 mt-0.5">Calidad garantizada</p>
+                <p class="text-xs text-gray-500 sm:text-gray-100 mt-0.5">Calidad garantizada</p>
               </div>
             </div>
             <!-- Feature 3 -->
-            <div class="flex items-center gap-4 px-2 lg:px-6 py-6 sm:py-0 justify-center lg:justify-start border-b border-white/50 sm:border-b-0 sm:border-r">
-              <svg class="w-8 h-8 text-white shrink-0" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <div class="flex items-center gap-4 px-2 lg:px-6 py-6 sm:py-0 justify-center lg:justify-start border-b border-gray-200 sm:border-white/50 sm:border-b-0 sm:border-r">
+              <svg class="w-8 h-8 shrink-0" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                 <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
               </svg>
               <div>
                 <h4 class="font-black text-sm uppercase tracking-wide">Asesoría por WhatsApp</h4>
-                <p class="text-xs text-gray-100 mt-0.5">Te ayudamos a elegir</p>
+                <p class="text-xs text-gray-500 sm:text-gray-100 mt-0.5">Te ayudamos a elegir</p>
               </div>
             </div>
             <!-- Feature 4 -->
             <div class="flex items-center gap-4 px-2 lg:px-6 py-6 sm:py-0 justify-center lg:justify-start">
-              <CheckCircle class="w-8 h-8 text-white shrink-0" stroke-width="1.5" />
+              <CheckCircle class="w-8 h-8 shrink-0" stroke-width="1.5" />
               <div>
                 <h4 class="font-black text-sm uppercase tracking-wide">Garantía de fábrica</h4>
-                <p class="text-xs text-gray-100 mt-0.5">Respaldo total</p>
+                <p class="text-xs text-gray-500 sm:text-gray-100 mt-0.5">Respaldo total</p>
               </div>
             </div>
           </div>
@@ -839,7 +836,7 @@ onUnmounted(() => {
         </div>
       </section>
       <!-- Carrusel de Marcas (Estilo Píldora) -->
-      <section v-if="brands && brands.length > 0" class="bg-gray-50 pb-8 mt-48 sm:mt-0 pt-4 sm:-mt-12 relative z-20">
+      <section v-if="brands && brands.length > 0" class="bg-gray-50 pb-8 mt-0 sm:mt-0 pt-4 sm:-mt-12 relative z-20">
         <div class="w-11/12 max-w-[1600px] mx-auto">
           <div 
             class="bg-white rounded-[2.5rem] shadow-lg border border-gray-100 p-2 sm:p-4 flex items-center relative"
@@ -925,8 +922,8 @@ onUnmounted(() => {
                   
                   <div class="flex flex-col mt-auto">
                     <div class="flex items-end gap-3 mb-4 md:mb-0 md:absolute md:bottom-8">
-                      <div class="text-3xl font-black text-action leading-none">{{ promotions[currentPromoIndex].category?.name === 'TBR' ? '$' : 'S/.' }} {{ promotions[currentPromoIndex].offer_price }}</div>
-                      <div class="text-sm text-gray-400 line-through mb-1">{{ promotions[currentPromoIndex].category?.name === 'TBR' ? '$' : 'S/.' }} {{ promotions[currentPromoIndex].price }}</div>
+                      <div class="text-3xl font-black text-action leading-none">{{ promotions[currentPromoIndex].currency === 'USD' ? '$' : 'S/.' }} {{ promotions[currentPromoIndex].offer_price }}</div>
+                      <div class="text-sm text-gray-400 line-through mb-1">{{ promotions[currentPromoIndex].currency === 'USD' ? '$' : 'S/.' }} {{ promotions[currentPromoIndex].price }}</div>
                     </div>
                   </div>
                 </div>

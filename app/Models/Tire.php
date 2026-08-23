@@ -15,7 +15,7 @@ class Tire extends Model
         'brand_id', 'category_id', 'model', 'year', 'version', 'width', 'profile', 'rim', 
         'load_index', 'speed_rating', 'terrain_type', 'is_run_flat', 
         'description', 'price', 'offer_price', 'stock', 
-        'images_json', 'status', 'product_code', 'is_promoted'
+        'images_json', 'status', 'product_code', 'is_promoted', 'currency'
     ];
 
     protected $casts = [

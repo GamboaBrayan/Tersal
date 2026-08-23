@@ -55,8 +55,8 @@ const getDiscountPercentage = (price, offerPrice) => {
       
       <!--
       <div class="text-center mb-4">
-        <div v-if="tire.has_discount" class="text-xs text-gray-400 line-through">Precio Regular: S/. {{ tire.price }}</div>
-        <div class="text-xs text-gray-500 font-medium mt-1">Precio Especial: <span class="text-xl font-black text-gray-900">S/. {{ tire.has_discount ? tire.offer_price : tire.price }}</span></div>
+        <div v-if="tire.has_discount" class="text-xs text-gray-400 line-through">Precio Regular: {{ tire.currency === 'USD' ? '$' : 'S/.' }} {{ tire.price }}</div>
+        <div class="text-xs text-gray-500 font-medium mt-1">Precio Especial: <span class="text-xl font-black text-gray-900">{{ tire.currency === 'USD' ? '$' : 'S/.' }} {{ tire.has_discount ? tire.offer_price : tire.price }}</span></div>
       </div>
       -->
       

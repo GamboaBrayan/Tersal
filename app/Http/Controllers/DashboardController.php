@@ -90,6 +90,8 @@ class DashboardController extends Controller
             'offer_price' => 'nullable|numeric|min:0',
             'stock' => 'required|integer|min:0',
             'status' => 'boolean',
+            'is_promoted' => 'boolean',
+            'currency' => 'required|string|in:PEN,USD',
             'images.*' => 'nullable|image|max:2048',
             'image_urls' => 'nullable|array',
             'image_urls.*' => 'nullable|url'
@@ -139,6 +141,8 @@ class DashboardController extends Controller
             'offer_price' => 'nullable|numeric|min:0',
             'stock' => 'required|integer|min:0',
             'status' => 'boolean',
+            'is_promoted' => 'boolean',
+            'currency' => 'required|string|in:PEN,USD',
             'images.*' => 'nullable|image|max:2048',
             'existing_images' => 'nullable|array',
             'image_urls' => 'nullable|array',
@@ -490,7 +494,7 @@ class DashboardController extends Controller
 
     public function downloadTemplateInventory()
     {
-        $tires = Tire::with(['brand', 'category'])->where('is_promo_only', false)->get();
+        $tires = Tire::with(['brand', 'category'])->get();
         $data = [];
 
         foreach ($tires as $tire) {
@@ -505,6 +509,7 @@ class DashboardController extends Controller
                 'ANCHO *' => $tire->width,
                 'ALTO *' => $tire->profile,
                 'RIN *' => $tire->rim,
+                'MONEDA (PEN/USD) *' => $tire->currency ?? 'PEN',
                 'PRECIO *' => $tire->price,
                 'PRECIO_OFERTA' => $tire->offer_price,
                 'STOCK *' => $tire->stock,
@@ -530,6 +535,7 @@ class DashboardController extends Controller
                 'ANCHO *' => '',
                 'ALTO *' => '',
                 'RIN *' => '',
+                'MONEDA (PEN/USD) *' => '',
                 'PRECIO *' => '',
                 'PRECIO_OFERTA' => '',
                 'STOCK *' => '',
@@ -552,6 +558,7 @@ class DashboardController extends Controller
             ['CAMPO' => 'RUN_FLAT', 'EXPLICACIÓN' => 'Opcional. Colocar "SI" si tiene tecnología Run Flat, de lo contrario dejar vacío.'],
             ['CAMPO' => 'INDICE_CARGA *', 'EXPLICACIÓN' => 'Obligatorio. Número de 2-3 dígitos (Ej: 91, 102).'],
             ['CAMPO' => 'INDICE_VELOCIDAD *', 'EXPLICACIÓN' => 'Obligatorio. Letra (Ej: H, V, W, Y).'],
+            ['CAMPO' => 'MONEDA (PEN/USD) *', 'EXPLICACIÓN' => 'Obligatorio. Colocar PEN para Soles o USD para Dólares.'],
             ['CAMPO' => 'IMAGEN_1, IMAGEN_2, IMAGEN_3', 'EXPLICACIÓN' => 'Opcional. Pegar el link (http://...) de la foto. Si no tienes, déjalo vacío.'],
             ['CAMPO' => '*', 'EXPLICACIÓN' => 'Los campos con (*) son obligatorios, si faltan, esa llanta no se importará.']
         ];
@@ -638,6 +645,10 @@ class DashboardController extends Controller
             $width = floatval($row['ANCHO *'] ?? $row['ANCHO (Obligatorio)'] ?? $row['ANCHO'] ?? 0);
             $profile = intval($row['ALTO *'] ?? $row['ALTO (Obligatorio)'] ?? $row['ALTO'] ?? 0);
             $rim = floatval($row['RIN *'] ?? $row['RIN (Obligatorio)'] ?? $row['RIN'] ?? 0);
+            
+            $currencyRaw = strtoupper(trim($row['MONEDA (PEN/USD) *'] ?? $row['MONEDA'] ?? 'PEN'));
+            $currency = in_array($currencyRaw, ['PEN', 'USD']) ? $currencyRaw : 'PEN';
+            
             $price = floatval($row['PRECIO *'] ?? $row['PRECIO (Obligatorio)'] ?? $row['PRECIO'] ?? 0);
             $offerPrice = !empty($row['PRECIO_OFERTA']) ? floatval($row['PRECIO_OFERTA']) : (!empty($row['PRECIO_OFERTA (Opcional)']) ? floatval($row['PRECIO_OFERTA (Opcional)']) : null);
             $stock = intval($row['STOCK *'] ?? $row['STOCK (Obligatorio)'] ?? $row['STOCK'] ?? 10);
@@ -673,6 +684,7 @@ class DashboardController extends Controller
                     'width' => $width,
                     'profile' => $profile,
                     'rim' => $rim,
+                    'currency' => $currency,
                     'price' => $price,
                     'offer_price' => $offerPrice,
                     'stock' => $stock,
@@ -693,6 +705,7 @@ class DashboardController extends Controller
                     'width' => $width,
                     'profile' => $profile,
                     'rim' => $rim,
+                    'currency' => $currency,
                     'price' => $price,
                     'offer_price' => $offerPrice,
                     'stock' => $stock,
@@ -724,7 +737,7 @@ class DashboardController extends Controller
 
     public function downloadTemplatePromotions()
     {
-        $promotions = Tire::with(['brand'])->where('is_promo_only', true)->get();
+        $promotions = Tire::with(['brand'])->where('is_promoted', true)->get();
         $data = [];
 
         foreach ($promotions as $promo) {
@@ -733,9 +746,9 @@ class DashboardController extends Controller
                 'REFERENCIA' => $promo->product_code ?? '',
                 'MEDIDA' => $promo->measure_text,
                 'DESCRIPCION' => $promo->model,
-                'MARCA' => $promo->brand ? $promo->brand->name : '',
                 'TIPO' => '', // Cannot easily extract from description, so leave blank or map if needed.
                 'APLICACIÓN' => '', // Cannot easily extract, user can see original in description if needed
+                'MONEDA (PEN/USD) *' => $promo->currency ?? 'PEN',
                 'PRECIO' => $promo->offer_price ?? $promo->price,
                 'STOCK' => $promo->stock
             ];
@@ -747,9 +760,9 @@ class DashboardController extends Controller
                 'REFERENCIA' => '',
                 'MEDIDA' => '',
                 'DESCRIPCION' => '',
-                'MARCA' => '',
                 'TIPO' => '',
                 'APLICACIÓN' => '',
+                'MONEDA (PEN/USD) *' => '',
                 'PRECIO' => '',
                 'STOCK' => ''
             ];
@@ -757,6 +770,7 @@ class DashboardController extends Controller
 
         $instructions = [
             ['CAMPO' => 'ID', 'EXPLICACIÓN' => 'IMPORTANTE: No modificar si se edita una promoción existente. Dejar vacío para crear una nueva.'],
+            ['CAMPO' => 'MONEDA (PEN/USD) *', 'EXPLICACIÓN' => 'Obligatorio. Colocar PEN para Soles o USD para Dólares.'],
             ['CAMPO' => 'Todos', 'EXPLICACIÓN' => 'Completa los campos. Estos neumáticos aparecerán SOLO en promociones.']
         ];
 
@@ -827,6 +841,10 @@ class DashboardController extends Controller
             }
 
             $desc = $row['DESCRIPCION'] ?? 'Promo Tire';
+            
+            $currencyRaw = strtoupper(trim($row['MONEDA (PEN/USD) *'] ?? $row['MONEDA'] ?? 'PEN'));
+            $currency = in_array($currencyRaw, ['PEN', 'USD']) ? $currencyRaw : 'PEN';
+            
             $price = floatval($row['PRECIO'] ?? 0);
             $stock = intval($row['STOCK'] ?? 10);
             
@@ -855,6 +873,7 @@ class DashboardController extends Controller
                     'profile' => $parsedProfile,
                     'rim' => $parsedRim,
                     'description' => $fullDesc,
+                    'currency' => $currency,
                     'price' => $price * 1.2,
                     'offer_price' => $price,
                     'stock' => $stock,
@@ -871,12 +890,12 @@ class DashboardController extends Controller
                     'load_index' => 0,
                     'speed_rating' => 'N/A',
                     'description' => $fullDesc,
+                    'currency' => $currency,
                     'price' => $price * 1.2, // Simulate a 20% discount visually
                     'offer_price' => $price,
                     'stock' => $stock,
-                    'status' => true,
                     'is_promoted' => true,
-                    'is_promo_only' => true,
+                    'status' => true,
                     'measure_text' => $measure,
                 ]);
             }

@@ -29,8 +29,9 @@ const form = useForm({
   price: props.tire?.price || '',
   offer_price: props.tire?.offer_price || '',
   stock: props.tire?.stock ?? 10,
-  status: props.tire?.status ?? true,
-  status: props.tire?.status ?? true,
+  status: props.tire ? !!props.tire.status : true,
+  is_promoted: props.tire ? !!props.tire.is_promoted : false,
+  currency: props.tire?.currency ?? 'PEN',
   images: [],
   image_urls: [],
   existing_images: props.tire?.images_json || []
@@ -262,43 +263,63 @@ const submit = () => {
               </div>
             </div>
 
-            <!-- Card 3: Inventory Pricing -->
-            <div class="bg-white rounded-3xl shadow-[0_4px_20px_rgba(0,0,0,0.02)] border border-gray-100/50 p-6 sm:p-8">
-              <h2 class="text-base sm:text-lg font-bold text-gray-800 mb-6 sm:mb-8 flex items-center gap-2">
-                <span class="w-2 h-6 bg-green-500 rounded-full"></span>
-                Inventario y Precios
-              </h2>
-              
-              <div class="space-y-5 sm:space-y-6">
-                <div>
-                  <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Precio Regular (S/.) <span class="text-red-500">*</span></label>
-                  <input type="number" min="0" step="0.01" v-model="form.price" required class="w-full h-12 px-4 rounded-xl border border-gray-200/60 bg-gray-50/50 hover:bg-gray-50 transition-colors focus:ring-2 focus:ring-green-500/20 focus:border-green-500 text-base sm:text-lg font-bold text-gray-800">
-                  <div v-if="form.errors.price" class="text-red-500 text-xs mt-1">{{ form.errors.price }}</div>
-                </div>
-                
-                <div>
-                  <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2 flex items-center justify-between">
-                    Precio Oferta (S/.) <span class="text-[10px] bg-gray-100 px-2 py-0.5 rounded text-gray-400">Opcional</span>
-                  </label>
-                  <input type="number" min="0" step="0.01" v-model="form.offer_price" class="w-full h-12 px-4 rounded-xl border border-gray-200/60 bg-gray-50/50 hover:bg-gray-50 transition-colors focus:ring-2 focus:ring-green-500/20 focus:border-green-500 text-base sm:text-lg font-bold text-action">
-                  <div v-if="form.errors.offer_price" class="text-red-500 text-xs mt-1">{{ form.errors.offer_price }}</div>
-                </div>
-                
-                <div>
-                  <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Stock Físico <span class="text-red-500">*</span></label>
-                  <input type="number" min="0" v-model="form.stock" required class="w-full h-12 px-4 rounded-xl border border-gray-200/60 bg-gray-50/50 hover:bg-gray-50 transition-colors focus:ring-2 focus:ring-green-500/20 focus:border-green-500 text-sm sm:text-base text-gray-700">
-                  <div v-if="form.errors.stock" class="text-red-500 text-xs mt-1">{{ form.errors.stock }}</div>
-                </div>
-
-                <div>
-                  <label class="flex items-center justify-between px-5 py-4 border border-gray-200/60 rounded-xl bg-gray-50/50 cursor-pointer hover:bg-gray-50 hover:border-gray-300 transition-colors">
-                    <span class="font-medium text-gray-700 text-sm sm:text-base">Visible en Catálogo</span>
-                    <input type="checkbox" v-model="form.status" class="w-5 h-5 text-green-500 rounded border-gray-300 focus:ring-green-500/20 focus:ring-offset-0 transition-shadow">
-                  </label>
-                </div>
+          </div>
+        </div>
+        
+        <!-- Card 3: Inventory Pricing (Horizontal) -->
+        <div class="mt-6 sm:mt-8 bg-white rounded-3xl shadow-[0_4px_20px_rgba(0,0,0,0.02)] border border-gray-100/50 p-6 sm:p-8">
+          <h2 class="text-base sm:text-lg font-bold text-gray-800 mb-6 sm:mb-8 flex items-center gap-2">
+            <span class="w-2 h-6 bg-green-500 rounded-full"></span>
+            Inventario y Precios
+          </h2>
+          
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-5 sm:gap-6">
+            <div>
+              <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Moneda <span class="text-red-500">*</span></label>
+              <div class="flex gap-4 h-12 items-center">
+                <label class="flex items-center gap-2 cursor-pointer">
+                  <input type="radio" v-model="form.currency" value="PEN" class="w-4 h-4 text-green-500 focus:ring-green-500 border-gray-300">
+                  <span class="text-sm font-medium text-gray-700">Soles (PEN)</span>
+                </label>
+                <label class="flex items-center gap-2 cursor-pointer">
+                  <input type="radio" v-model="form.currency" value="USD" class="w-4 h-4 text-green-500 focus:ring-green-500 border-gray-300">
+                  <span class="text-sm font-medium text-gray-700">Dólares (USD)</span>
+                </label>
               </div>
+              <div v-if="form.errors.currency" class="text-red-500 text-xs mt-1">{{ form.errors.currency }}</div>
+            </div>
+            
+            <div>
+              <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Precio Regular {{ form.currency === 'USD' ? '($)' : '(S/.)' }} <span class="text-red-500">*</span></label>
+              <input type="number" min="0" step="0.01" v-model="form.price" required class="w-full h-12 px-4 rounded-xl border border-gray-200/60 bg-gray-50/50 hover:bg-gray-50 transition-colors focus:ring-2 focus:ring-green-500/20 focus:border-green-500 text-base sm:text-lg font-bold text-gray-800">
+              <div v-if="form.errors.price" class="text-red-500 text-xs mt-1">{{ form.errors.price }}</div>
+            </div>
+            
+            <div>
+              <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2 flex items-center justify-between">
+                Precio Oferta {{ form.currency === 'USD' ? '($)' : '(S/.)' }} <span class="text-[10px] bg-gray-100 px-2 py-0.5 rounded text-gray-400">Opcional</span>
+              </label>
+              <input type="number" min="0" step="0.01" v-model="form.offer_price" class="w-full h-12 px-4 rounded-xl border border-gray-200/60 bg-gray-50/50 hover:bg-gray-50 transition-colors focus:ring-2 focus:ring-green-500/20 focus:border-green-500 text-base sm:text-lg font-bold text-action">
+              <div v-if="form.errors.offer_price" class="text-red-500 text-xs mt-1">{{ form.errors.offer_price }}</div>
+            </div>
+            
+            <div>
+              <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Stock Físico <span class="text-red-500">*</span></label>
+              <input type="number" min="0" v-model="form.stock" required class="w-full h-12 px-4 rounded-xl border border-gray-200/60 bg-gray-50/50 hover:bg-gray-50 transition-colors focus:ring-2 focus:ring-green-500/20 focus:border-green-500 text-sm sm:text-base text-gray-700">
+              <div v-if="form.errors.stock" class="text-red-500 text-xs mt-1">{{ form.errors.stock }}</div>
             </div>
 
+            <div class="flex flex-col justify-end">
+              <label class="flex items-center justify-between px-3 py-2 sm:px-4 sm:py-3 border border-gray-200/60 rounded-xl bg-gray-50/50 cursor-pointer hover:bg-gray-50 hover:border-gray-300 transition-colors mb-2">
+                <span class="font-medium text-gray-700 text-xs sm:text-sm">En Catálogo</span>
+                <input type="checkbox" v-model="form.status" class="w-4 h-4 sm:w-5 sm:h-5 text-green-500 rounded border-gray-300 focus:ring-green-500/20 focus:ring-offset-0 transition-shadow">
+              </label>
+              
+              <label class="flex items-center justify-between px-3 py-2 sm:px-4 sm:py-3 border border-gray-200/60 rounded-xl bg-gray-50/50 cursor-pointer hover:bg-gray-50 hover:border-gray-300 transition-colors">
+                <span class="font-medium text-gray-700 text-xs sm:text-sm">En Promociones</span>
+                <input type="checkbox" v-model="form.is_promoted" class="w-4 h-4 sm:w-5 sm:h-5 text-green-500 rounded border-gray-300 focus:ring-green-500/20 focus:ring-offset-0 transition-shadow">
+              </label>
+            </div>
           </div>
         </div>
       </div>

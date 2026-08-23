@@ -115,9 +115,9 @@ const getDiscountPercentage = (price, offerPrice) => {
           </p>
 
           <div v-if="tire.is_promoted" class="mb-8">
-            <div v-if="tire.has_discount" class="text-sm text-gray-400 line-through mb-1">Precio Regular: {{ tire.category?.name === 'TBR' ? '$' : 'S/.' }} {{ tire.price }}</div>
+            <div v-if="tire.has_discount" class="text-sm text-gray-400 line-through mb-1">Precio Regular: {{ tire.currency === 'USD' ? '$' : 'S/.' }} {{ tire.price }}</div>
             <div class="flex items-end gap-2">
-              <span class="text-4xl font-black text-primary">{{ tire.category?.name === 'TBR' ? '$' : 'S/.' }} {{ tire.has_discount ? tire.offer_price : tire.price }}</span>
+              <span class="text-4xl font-black text-primary">{{ tire.currency === 'USD' ? '$' : 'S/.' }} {{ tire.has_discount ? tire.offer_price : tire.price }}</span>
               <span class="text-gray-500 font-medium mb-1">c/u</span>
             </div>
             <div class="text-xs text-gray-400 mt-1">Precio incluye IGV</div>
@@ -134,7 +134,7 @@ const getDiscountPercentage = (price, offerPrice) => {
             </div>
             <div v-if="tire.is_promoted" class="flex items-center justify-between pt-4 border-t border-gray-200">
               <div class="text-sm text-gray-600 font-medium">Total a pagar:</div>
-              <div class="text-xl font-bold text-gray-900">{{ tire.category?.name === 'TBR' ? '$' : 'S/.' }} {{ totalAmount() }}</div>
+              <div class="text-xl font-bold text-gray-900">{{ tire.currency === 'USD' ? '$' : 'S/.' }} {{ totalAmount() }}</div>
             </div>
           </div>
 
@@ -209,8 +209,8 @@ const getDiscountPercentage = (price, offerPrice) => {
                 <div class="text-sm text-gray-600 font-medium mb-3">{{ relTire.width }}{{ relTire.profile && relTire.profile > 0 ? '/' + relTire.profile : '' }} R{{ relTire.rim }}</div>
                 
                 <div v-if="relTire.is_promoted" class="flex items-end gap-2">
-                  <span class="text-xl font-black text-primary">{{ relTire.category?.name === 'TBR' ? '$' : 'S/.' }} {{ relTire.has_discount ? relTire.offer_price : relTire.price }}</span>
-                  <span v-if="relTire.has_discount" class="text-xs text-gray-400 line-through mb-1">{{ relTire.category?.name === 'TBR' ? '$' : 'S/.' }} {{ relTire.price }}</span>
+                  <span class="text-xl font-black text-primary">{{ relTire.currency === 'USD' ? '$' : 'S/.' }} {{ relTire.has_discount ? relTire.offer_price : relTire.price }}</span>
+                  <span v-if="relTire.has_discount" class="text-xs text-gray-400 line-through mb-1">{{ relTire.currency === 'USD' ? '$' : 'S/.' }} {{ relTire.price }}</span>
                 </div>
               </div>
             </Link>
