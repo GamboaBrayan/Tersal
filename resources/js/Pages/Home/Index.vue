@@ -915,15 +915,15 @@ onUnmounted(() => {
                 </div>
 
                 <!-- Detalles Neumático -->
-                <div class="w-full md:w-7/12 flex flex-col justify-center h-full">
+                <div class="w-full md:w-7/12 flex flex-col justify-center h-full min-h-[160px]">
                   <div class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">{{ promotions[currentPromoIndex].brand?.name || 'Marca' }}</div>
-                  <h3 class="text-2xl font-black text-gray-800 mb-2 leading-tight uppercase">{{ promotions[currentPromoIndex].model }}</h3>
-                  <div class="text-sm text-gray-500 mb-8">{{ promotions[currentPromoIndex].width }}{{ promotions[currentPromoIndex].profile && promotions[currentPromoIndex].profile > 0 ? '/' + promotions[currentPromoIndex].profile : '' }} R{{ promotions[currentPromoIndex].rim }}</div>
+                  <h3 class="text-2xl sm:text-xl md:text-2xl font-black text-gray-800 mb-2 leading-tight uppercase break-words">{{ promotions[currentPromoIndex].model }}</h3>
+                  <div class="text-sm text-gray-500 mb-4">{{ promotions[currentPromoIndex].width }}{{ promotions[currentPromoIndex].profile && promotions[currentPromoIndex].profile > 0 ? '/' + promotions[currentPromoIndex].profile : '' }} R{{ promotions[currentPromoIndex].rim }}</div>
                   
-                  <div class="flex flex-col mt-auto">
-                    <div class="flex items-end gap-3 mb-4 md:mb-0 md:absolute md:bottom-8">
-                      <div class="text-3xl font-black text-action leading-none">{{ promotions[currentPromoIndex].currency === 'USD' ? '$' : 'S/.' }} {{ promotions[currentPromoIndex].offer_price }}</div>
-                      <div class="text-sm text-gray-400 line-through mb-1">{{ promotions[currentPromoIndex].currency === 'USD' ? '$' : 'S/.' }} {{ promotions[currentPromoIndex].price }}</div>
+                  <div class="flex flex-col mt-auto pt-2">
+                    <div class="flex items-end gap-3 flex-wrap">
+                      <div class="text-3xl font-black text-action leading-none whitespace-nowrap">{{ promotions[currentPromoIndex].currency === 'USD' ? '$' : 'S/.' }} {{ promotions[currentPromoIndex].offer_price }}</div>
+                      <div class="text-sm text-gray-400 line-through mb-1 whitespace-nowrap">{{ promotions[currentPromoIndex].currency === 'USD' ? '$' : 'S/.' }} {{ promotions[currentPromoIndex].price }}</div>
                     </div>
                   </div>
                 </div>
