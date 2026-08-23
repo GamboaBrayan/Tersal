@@ -80,7 +80,7 @@ class DashboardController extends Controller
             'version' => 'nullable|string|max:255',
             'width' => 'required|numeric',
             'profile' => 'nullable|integer',
-            'rim' => 'required|integer',
+            'rim' => 'required|numeric',
             'load_index' => 'required|string|max:50',
             'speed_rating' => 'required|string|max:10',
             'terrain_type' => 'nullable|string|in:H/T,A/T,M/T',
@@ -129,7 +129,7 @@ class DashboardController extends Controller
             'version' => 'nullable|string|max:255',
             'width' => 'required|numeric',
             'profile' => 'nullable|integer',
-            'rim' => 'required|integer',
+            'rim' => 'required|numeric',
             'load_index' => 'required|string|max:50',
             'speed_rating' => 'required|string|max:10',
             'terrain_type' => 'nullable|string|in:H/T,A/T,M/T',
@@ -635,9 +635,9 @@ class DashboardController extends Controller
             $model = $row['MODELO *'] ?? $row['MODELO (Obligatorio)'] ?? $row['MODELO'] ?? 'S/M';
             $version = $row['VERSIÓN'] ?? $row['VERSIÓN (Opcional)'] ?? null;
             $year = $row['AÑO'] ?? $row['AÑO (Opcional)'] ?? null;
-            $width = intval($row['ANCHO *'] ?? $row['ANCHO (Obligatorio)'] ?? $row['ANCHO'] ?? 0);
+            $width = floatval($row['ANCHO *'] ?? $row['ANCHO (Obligatorio)'] ?? $row['ANCHO'] ?? 0);
             $profile = intval($row['ALTO *'] ?? $row['ALTO (Obligatorio)'] ?? $row['ALTO'] ?? 0);
-            $rim = intval($row['RIN *'] ?? $row['RIN (Obligatorio)'] ?? $row['RIN'] ?? 0);
+            $rim = floatval($row['RIN *'] ?? $row['RIN (Obligatorio)'] ?? $row['RIN'] ?? 0);
             $price = floatval($row['PRECIO *'] ?? $row['PRECIO (Obligatorio)'] ?? $row['PRECIO'] ?? 0);
             $offerPrice = !empty($row['PRECIO_OFERTA']) ? floatval($row['PRECIO_OFERTA']) : (!empty($row['PRECIO_OFERTA (Opcional)']) ? floatval($row['PRECIO_OFERTA (Opcional)']) : null);
             $stock = intval($row['STOCK *'] ?? $row['STOCK (Obligatorio)'] ?? $row['STOCK'] ?? 10);

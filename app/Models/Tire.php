@@ -24,6 +24,8 @@ class Tire extends Model
         'images_json' => 'array',
         'price' => 'decimal:2',
         'offer_price' => 'decimal:2',
+        'width' => 'float',
+        'rim' => 'float',
     ];
 
     protected $appends = ['has_discount', 'is_available', 'image_urls'];
