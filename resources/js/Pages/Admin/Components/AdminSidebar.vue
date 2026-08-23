@@ -64,11 +64,12 @@ const logout = () => {
           @click="emit('close')"
           :class="[
             $page.url.startsWith(item.href) ? 'bg-primary/5 text-primary shadow-sm border border-primary/10' : 'text-gray-500 hover:bg-gray-50 hover:text-primary border border-transparent',
-            'group flex items-center px-4 py-2.5 text-sm rounded-lg transition-all relative'
+            'group flex items-center px-3 py-2.5 text-sm rounded-lg transition-all relative'
           ]"
           :title="isCollapsed ? item.name : ''"
         >
-          <span :class="[isCollapsed ? 'opacity-0 w-0 hidden' : 'opacity-100 font-medium', 'transition-opacity duration-200 whitespace-nowrap']">
+          <component :is="item.icon" :class="[$page.url.startsWith(item.href) ? 'text-primary' : 'text-gray-400 group-hover:text-primary', 'w-5 h-5 shrink-0 transition-colors']" />
+          <span :class="[isCollapsed ? 'opacity-0 w-0 hidden' : 'opacity-100 ml-3 font-medium', 'transition-opacity duration-200 whitespace-nowrap']">
             {{ item.name }}
           </span>
         </Link>
@@ -78,10 +79,11 @@ const logout = () => {
     <div class="p-3 border-t border-gray-100 space-y-1">
       <button 
         @click="logout"
-        class="w-full group flex items-center px-4 py-2.5 text-sm font-medium rounded-lg text-gray-500 hover:bg-red-50 hover:text-red-600 transition-colors border border-transparent"
+        class="w-full group flex items-center px-3 py-2.5 text-sm font-medium rounded-lg text-gray-500 hover:bg-red-50 hover:text-red-600 transition-colors border border-transparent"
         :title="isCollapsed ? 'Cerrar Sesión' : ''"
       >
-        <span :class="[isCollapsed ? 'opacity-0 w-0 hidden' : 'opacity-100', 'transition-opacity duration-200 whitespace-nowrap']">
+        <LogOut class="w-5 h-5 shrink-0 text-gray-400 group-hover:text-red-500 transition-colors" />
+        <span :class="[isCollapsed ? 'opacity-0 w-0 hidden' : 'opacity-100 ml-3', 'transition-opacity duration-200 whitespace-nowrap']">
           Cerrar Sesión
         </span>
       </button>
