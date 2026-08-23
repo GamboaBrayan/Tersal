@@ -317,7 +317,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="min-h-screen flex flex-col bg-gray-50 overflow-x-hidden">
+  <div class="min-h-screen flex flex-col bg-gray-50 overflow-x-clip">
     <Head title="Inicio" />
     <WhatsAppFloatingBtn />
 
