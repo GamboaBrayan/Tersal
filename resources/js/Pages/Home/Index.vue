@@ -317,7 +317,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="min-h-screen flex flex-col bg-gray-50">
+  <div class="min-h-screen flex flex-col bg-gray-50 overflow-x-hidden">
     <Head title="Inicio" />
     <WhatsAppFloatingBtn />
 
@@ -325,22 +325,26 @@ onUnmounted(() => {
 
     <main class="flex-grow relative z-10">
       <!-- Sección Principal (Hero) -->
-      <section class="relative flex flex-col">
-        <div class="absolute inset-0 z-0 bg-gray-900 overflow-hidden">
+      <section class="relative flex flex-col bg-black">
+        <div class="absolute inset-0 z-0 bg-black overflow-hidden">
           <template v-if="heroImages && heroImages.length > 0">
             <div v-for="(img, index) in heroImages" :key="img"
                  class="absolute inset-0 w-full h-full transition-opacity duration-1000 ease-in-out"
                  :class="index === currentHeroImageIndex ? 'opacity-100 z-0' : 'opacity-0 -z-10'">
-              <img :src="img" class="w-full h-full object-cover object-[75%_top] lg:object-top" alt="Tire Background">
+              <img :src="img" class="w-full h-full object-cover object-[80%_top] sm:object-[75%_top] lg:object-top" alt="Tire Background">
             </div>
           </template>
           <template v-else>
-            <img src="/images/hero3.png" class="absolute inset-0 w-full h-full object-cover object-[75%_top] lg:object-top" alt="Tire Background">
+            <img src="/images/hero3.png" class="absolute inset-0 w-full h-full object-cover object-[80%_top] sm:object-[75%_top] lg:object-top" alt="Tire Background">
           </template>
-          <!-- Difuminado superior para fusionar con el header negro -->
-          <div class="absolute top-0 left-0 w-full h-40 md:h-20 bg-gradient-to-b from-black via-black/0 to-transparent z-10"></div>
         </div>
+        <!-- Overlay gradients -->
+        <div class="absolute inset-0 bg-gradient-to-t from-black via-black/0 to-transparent z-0"></div>
+        <div class="hidden sm:block absolute inset-0 bg-gradient-to-r from-black/90 via-black/40 to-transparent z-0"></div>
         
+        <!-- Extensión del fondo negro para cubrir el texto desplazado en móvil sin estirar la imagen -->
+        <div class="absolute top-full left-0 right-0 h-64 bg-black z-0 sm:hidden"></div>
+
         <!-- Spacer Block -->
         <div class="relative w-full">
           <!-- Text Overlay (Desktop only) -->
@@ -407,14 +411,14 @@ onUnmounted(() => {
           </div>
           
           <!-- Spacer to show the image proporcionalmente -->
-          <div class="w-full pb-[100%] sm:pb-[60%] md:pb-[20%] lg:pb-[29%]"></div>
+          <div class="w-full pb-[5%] sm:pb-[50%] md:pb-[20%] lg:pb-[29%]"></div>
         </div>
         
         <!-- Buscador Block (Pushing the header up) -->
         <div class="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 relative z-40 text-center pointer-events-auto">
           <!-- Buscador overlapping exactly 50% on the bottom border minus 3 pixels -->
-          <div class="transform translate-y-[calc(50%-3px)] relative z-20">
-            <div class="max-w-[1050px] mx-auto px-6 py-5 sm:px-8 sm:py-5 text-left bg-white/80 backdrop-blur-none shadow-[0_8px_40px_rgb(0,0,0,0.08)] rounded-[1rem] border border-gray-100/50">
+          <div class="mt-[calc(30%+1rem)] sm:mt-0 transform translate-y-45 sm:translate-y-[calc(50%-3px)] relative z-20">
+            <div class="max-w-[1050px] mx-auto px-6 py-4 sm:px-8 sm:py-5 text-left bg-white/80 backdrop-blur-none shadow-[0_8px_40px_rgb(0,0,0,0.08)] rounded-[1rem] border border-gray-100/50">
 
             <!-- Título Principal del Buscador -->
             <h2 class="text-xl sm:text-2xl font-black text-action mb-4 uppercase tracking-wide text-left">
@@ -444,7 +448,7 @@ onUnmounted(() => {
             <div v-if="activeTab === 'medida'">
               <form @submit.prevent="searchByMeasure">
                 <!-- 4 columns for large screens: 3 dropdowns + 1 button -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-2">
+                <div class="grid grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-3 mb-2">
                 
                   <!-- Dropdown Ancho -->
                   <div :class="['relative', isWidthDropdownOpen ? 'z-50' : 'z-20']" class="col-span-1">
@@ -457,7 +461,7 @@ onUnmounted(() => {
                       <ChevronDown class="w-4 h-4 text-gray-400 pointer-events-none" />
                     </div>
                     
-                    <div v-if="isWidthDropdownOpen" class="absolute mt-2 w-full sm:w-[300px] max-h-80 overflow-hidden bg-white border border-gray-100 shadow-[0_10px_40px_rgb(0,0,0,0.08)] rounded-2xl flex flex-col left-0 z-50">
+                    <div v-if="isWidthDropdownOpen" class="absolute mt-2 w-[280px] sm:w-[300px] max-h-80 overflow-hidden bg-white border border-gray-100 shadow-[0_10px_40px_rgb(0,0,0,0.08)] rounded-2xl flex flex-col left-0 z-50">
                       <!-- Buscador interno -->
                       <div class="p-3 border-b border-gray-100 bg-gray-50">
                         <div class="relative">
@@ -508,7 +512,7 @@ onUnmounted(() => {
                       <ChevronDown class="w-4 h-4 text-gray-400 pointer-events-none" />
                     </div>
                     
-                    <div v-if="isProfileDropdownOpen" class="absolute mt-2 w-full sm:w-[300px] max-h-80 overflow-hidden bg-white border border-gray-100 shadow-[0_10px_40px_rgb(0,0,0,0.08)] rounded-2xl flex flex-col left-0 z-50">
+                    <div v-if="isProfileDropdownOpen" class="absolute mt-2 w-[280px] sm:w-[300px] max-h-80 overflow-hidden bg-white border border-gray-100 shadow-[0_10px_40px_rgb(0,0,0,0.08)] rounded-2xl flex flex-col left-1/2 -translate-x-1/2 sm:left-0 sm:translate-x-0 z-50">
                       <!-- Buscador interno -->
                       <div class="p-3 border-b border-gray-100 bg-gray-50">
                         <div class="relative">
@@ -559,7 +563,7 @@ onUnmounted(() => {
                       <ChevronDown class="w-4 h-4 text-gray-400 pointer-events-none" />
                     </div>
                     
-                    <div v-if="isRimDropdownOpen" class="absolute mt-2 w-full sm:w-[300px] max-h-80 overflow-hidden bg-white border border-gray-100 shadow-[0_10px_40px_rgb(0,0,0,0.08)] rounded-2xl flex flex-col left-0 z-50">
+                    <div v-if="isRimDropdownOpen" class="absolute mt-2 w-[280px] sm:w-[300px] max-h-80 overflow-hidden bg-white border border-gray-100 shadow-[0_10px_40px_rgb(0,0,0,0.08)] rounded-2xl flex flex-col right-0 sm:left-0 sm:right-auto z-50">
                       <!-- Buscador interno -->
                       <div class="p-3 border-b border-gray-100 bg-gray-50">
                         <div class="relative">
@@ -600,7 +604,7 @@ onUnmounted(() => {
                   </div>
 
                   <!-- Submit Button -->
-                  <div class="flex items-end relative z-20">
+                  <div class="col-span-3 lg:col-span-1 flex items-end relative z-20">
                     <button type="submit" @click.prevent="searchByMeasure" class="w-full h-14 flex items-center justify-center gap-2 bg-action text-white text-sm font-bold rounded-xl hover:bg-red-700 transition-all shadow-[0_4px_14px_0_rgb(220,38,38,0.39)] hover:shadow-[0_6px_20px_rgba(220,38,38,0.23)] cursor-pointer relative z-20 pointer-events-auto">
                       <Search class="w-4 h-4 pointer-events-none" /> BUSCAR MIS NEUMÁTICOS
                     </button>
@@ -613,7 +617,7 @@ onUnmounted(() => {
             <div v-if="activeTab === 'vehiculo'">
               <form @submit.prevent="searchByVehicle">
                 <!-- 5 columns for large screens to fit all inline -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 mb-2">
+                <div class="grid grid-cols-2 lg:grid-cols-5 gap-2 sm:gap-3 mb-2">
                   
                   <!-- Dropdown Marca -->
                   <div :class="['relative', isMakeDropdownOpen ? 'z-50' : 'z-20']">
@@ -627,7 +631,7 @@ onUnmounted(() => {
                     </div>
                     
                     <!-- Desplegable -->
-                    <div v-if="isMakeDropdownOpen" class="absolute mt-2 w-full sm:w-[450px] md:w-[550px] max-h-80 overflow-hidden bg-white border border-gray-100 shadow-[0_10px_40px_rgb(0,0,0,0.08)] rounded-2xl flex flex-col left-0 z-50">
+                    <div v-if="isMakeDropdownOpen" class="absolute mt-2 w-[300px] sm:w-[450px] md:w-[550px] max-h-80 overflow-hidden bg-white border border-gray-100 shadow-[0_10px_40px_rgb(0,0,0,0.08)] rounded-2xl flex flex-col left-0 z-50">
                       <!-- Buscador interno -->
                       <div class="p-3 border-b border-gray-100 bg-gray-50">
                         <div class="relative">
@@ -677,7 +681,7 @@ onUnmounted(() => {
                       <ChevronDown class="w-4 h-4 text-gray-400 pointer-events-none" />
                     </div>
                     
-                    <div v-if="isModelDropdownOpen" class="absolute mt-2 w-full sm:w-[400px] max-h-80 overflow-hidden bg-white border border-gray-100 shadow-[0_10px_40px_rgb(0,0,0,0.08)] rounded-2xl flex flex-col left-0 z-50">
+                    <div v-if="isModelDropdownOpen" class="absolute mt-2 w-[300px] sm:w-[400px] max-h-80 overflow-hidden bg-white border border-gray-100 shadow-[0_10px_40px_rgb(0,0,0,0.08)] rounded-2xl flex flex-col right-0 sm:left-0 sm:right-auto z-50">
                       <!-- Buscador interno -->
                       <div class="p-3 border-b border-gray-100 bg-gray-50">
                         <div class="relative">
@@ -726,7 +730,7 @@ onUnmounted(() => {
                       <ChevronDown class="w-4 h-4 text-gray-400 pointer-events-none" />
                     </div>
                     
-                    <div v-if="isYearDropdownOpen" class="absolute mt-2 w-full sm:w-[300px] max-h-80 overflow-y-auto bg-white border border-gray-100 shadow-[0_10px_40px_rgb(0,0,0,0.08)] rounded-2xl p-4 left-0 z-50">
+                    <div v-if="isYearDropdownOpen" class="absolute mt-2 w-[300px] sm:w-[300px] max-h-80 overflow-y-auto bg-white border border-gray-100 shadow-[0_10px_40px_rgb(0,0,0,0.08)] rounded-2xl p-4 left-0 z-50">
                       <div class="grid grid-cols-3 sm:grid-cols-4 gap-2">
                         <button 
                           v-for="year in vehicleYears" 
@@ -758,7 +762,7 @@ onUnmounted(() => {
                       <ChevronDown class="w-4 h-4 text-gray-400 pointer-events-none shrink-0" />
                     </div>
                     
-                    <div v-if="isTrimDropdownOpen" class="absolute mt-2 w-full sm:w-[350px] max-h-80 overflow-y-auto bg-white border border-gray-100 shadow-[0_10px_40px_rgb(0,0,0,0.08)] rounded-2xl p-4 right-0 lg:left-0 lg:right-auto z-50">
+                    <div v-if="isTrimDropdownOpen" class="absolute mt-2 w-[300px] sm:w-[350px] max-h-80 overflow-y-auto bg-white border border-gray-100 shadow-[0_10px_40px_rgb(0,0,0,0.08)] rounded-2xl p-4 right-0 lg:left-0 lg:right-auto z-50">
                       <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
                         <button 
                           v-for="trim in vehicleTrims" 
@@ -779,7 +783,7 @@ onUnmounted(() => {
                   </div>
 
                   <!-- Submit Button -->
-                  <div class="flex items-end">
+                  <div class="col-span-2 lg:col-span-1 flex items-end">
                     <button @click.prevent="searchByVehicle" type="button" :disabled="!selectedVehicle.yearName && !selectedVehicle.yearSlug" class="w-full h-14 px-2 flex items-center justify-center gap-1.5 sm:gap-2 bg-action text-white text-xs xl:text-sm font-bold rounded-xl hover:bg-red-700 transition-all shadow-[0_4px_14px_0_rgb(220,38,38,0.39)] hover:shadow-[0_6px_20px_rgba(220,38,38,0.23)] cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none relative z-30 pointer-events-auto leading-tight text-center">
                       <Search class="w-4 h-4 shrink-0 pointer-events-none" />
                       <span>VER COMPATIBLES</span>
@@ -793,15 +797,15 @@ onUnmounted(() => {
         </div>
         
         <!-- Barra de Características (Features Bar) merged into Hero -->
-        <div class="relative z-10 text-white w-full">
-          <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-[320px] sm:pt-[280px] md:pt-[220px] lg:pt-[160px] pb-16 sm:pb-16">
+        <div class="relative z-10 text-white w-full transform translate-y-45 sm:translate-y-0">
+          <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 sm:pt-36 lg:pt-40 pb-12 sm:pb-16">
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-0">
             <!-- Feature 1 -->
             <div class="flex items-center gap-4 px-2 lg:px-6 py-6 sm:py-0 justify-center lg:justify-start border-b border-white/50 sm:border-b-0 sm:border-r">
               <Truck class="w-8 h-8 text-white shrink-0" stroke-width="1.5" />
               <div>
                 <h4 class="font-black text-sm uppercase tracking-wide">Envíos a todo el Perú</h4>
-                <p class="text-xs text-gray-400 mt-0.5">Rápidos y seguros</p>
+                <p class="text-xs text-gray-100 mt-0.5">Rápidos y seguros</p>
               </div>
             </div>
             <!-- Feature 2 -->
@@ -809,7 +813,7 @@ onUnmounted(() => {
               <ShieldCheck class="w-8 h-8 text-white shrink-0" stroke-width="1.5" />
               <div>
                 <h4 class="font-black text-sm uppercase tracking-wide">Neumáticos Certificados</h4>
-                <p class="text-xs text-gray-400 mt-0.5">Calidad garantizada</p>
+                <p class="text-xs text-gray-100 mt-0.5">Calidad garantizada</p>
               </div>
             </div>
             <!-- Feature 3 -->
@@ -819,7 +823,7 @@ onUnmounted(() => {
               </svg>
               <div>
                 <h4 class="font-black text-sm uppercase tracking-wide">Asesoría por WhatsApp</h4>
-                <p class="text-xs text-gray-400 mt-0.5">Te ayudamos a elegir</p>
+                <p class="text-xs text-gray-100 mt-0.5">Te ayudamos a elegir</p>
               </div>
             </div>
             <!-- Feature 4 -->
@@ -827,7 +831,7 @@ onUnmounted(() => {
               <CheckCircle class="w-8 h-8 text-white shrink-0" stroke-width="1.5" />
               <div>
                 <h4 class="font-black text-sm uppercase tracking-wide">Garantía de fábrica</h4>
-                <p class="text-xs text-gray-400 mt-0.5">Respaldo total</p>
+                <p class="text-xs text-gray-100 mt-0.5">Respaldo total</p>
               </div>
             </div>
           </div>
@@ -835,7 +839,7 @@ onUnmounted(() => {
         </div>
       </section>
       <!-- Carrusel de Marcas (Estilo Píldora) -->
-      <section v-if="brands && brands.length > 0" class="bg-gray-50 pb-8 pt-4 sm:-mt-12 relative z-20">
+      <section v-if="brands && brands.length > 0" class="bg-gray-50 pb-8 mt-48 sm:mt-0 pt-4 sm:-mt-12 relative z-20">
         <div class="w-11/12 max-w-[1600px] mx-auto">
           <div 
             class="bg-white rounded-[2.5rem] shadow-lg border border-gray-100 p-2 sm:p-4 flex items-center relative"
@@ -881,8 +885,8 @@ onUnmounted(() => {
               <div class="inline-block bg-blue-50 text-primary font-bold text-xs px-3 py-1 rounded-md mb-4 uppercase tracking-wider">
                 OFERTAS ESPECIALES
               </div>
-              <h2 class="text-4xl md:text-5xl lg:text-4xl xl:text-5xl font-black text-gray-900 leading-tight mb-4">
-                Aprovecha nuestras <br class="hidden xl:block"> promociones&nbsp;exclusivas
+              <h2 class="text-4xl md:text-5xl lg:text-4xl xl:text-5xl font-black text-gray-900 leading-tight mb-4 break-words">
+                Aprovecha nuestras <br class="hidden xl:block"> promociones exclusivas
               </h2>
               <p class="text-black-500 font-medium mb-8 text-lg">
                 Descuentos por tiempo limitado en las mejores marcas.
