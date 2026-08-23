@@ -21,7 +21,7 @@ watch(searchQuery, (value) => {
       preserveScroll: true,
       replace: true
     });
-  }, 300);
+  }, 800);
 });
 
 const selectedItems = ref([]);
@@ -87,7 +87,7 @@ watch(searchInventoryQuery, () => {
   clearTimeout(inventorySearchTimeout);
   inventorySearchTimeout = setTimeout(() => {
     fetchInventoryTires();
-  }, 300);
+  }, 800);
 });
 
 const addToPromotions = (tire) => {

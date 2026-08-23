@@ -16,7 +16,7 @@ class HomeController extends Controller
         });
         
         $promotions = \Illuminate\Support\Facades\Cache::remember('promotions.home', 86400, function() {
-            return Tire::with('brand')
+            return Tire::with(['brand', 'category'])
                 ->where('is_promoted', true)
                 ->where('status', true)
                 ->latest()

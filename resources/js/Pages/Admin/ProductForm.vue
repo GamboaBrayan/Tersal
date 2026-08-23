@@ -150,7 +150,7 @@ const submit = () => {
               <div class="grid grid-cols-3 gap-4 sm:gap-7 mb-5 sm:mb-7">
                 <div>
                   <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Ancho <span class="text-red-500">*</span></label>
-                  <input type="number" min="0" v-model="form.width" required class="w-full h-12 px-3 sm:px-4 rounded-xl border border-gray-200/60 bg-gray-50/50 hover:bg-gray-50 transition-colors focus:ring-2 focus:ring-primary/20 focus:border-primary text-sm sm:text-base text-gray-700">
+                  <input type="number" min="0" step="any" v-model="form.width" required class="w-full h-12 px-3 sm:px-4 rounded-xl border border-gray-200/60 bg-gray-50/50 hover:bg-gray-50 transition-colors focus:ring-2 focus:ring-primary/20 focus:border-primary text-sm sm:text-base text-gray-700">
                   <div v-if="form.errors.width" class="text-red-500 text-xs mt-1">{{ form.errors.width }}</div>
                 </div>
                 <div>

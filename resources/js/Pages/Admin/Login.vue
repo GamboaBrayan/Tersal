@@ -12,6 +12,12 @@ const submit = () => {
     onFinish: () => form.reset('password'),
   });
 };
+
+const handleEmailInput = (e) => {
+  // Remove any character that is not typically valid in standard emails, particularly quotes and special characters
+  const val = e.target.value;
+  form.email = val.replace(/['"´`!%\s]/g, '');
+};
 </script>
 
 <template>
@@ -32,7 +38,7 @@ const submit = () => {
         <div class="space-y-4">
           <div>
             <label for="email" class="block text-sm font-medium text-gray-700">Correo Electrónico</label>
-            <input id="email" type="email" v-model="form.email" required 
+            <input id="email" type="email" v-model="form.email" @input="handleEmailInput" required 
               class="mt-1 block w-full px-4 py-3 rounded-xl border border-gray-200 text-sm focus:ring-2 focus:ring-primary focus:border-transparent bg-gray-50 transition-all" 
               placeholder="admin@tersal.com" />
             <div v-if="form.errors.email" class="text-red-500 text-xs mt-1">{{ form.errors.email }}</div>

@@ -114,16 +114,14 @@ const getDiscountPercentage = (price, offerPrice) => {
             {{ tire.description || 'Neumático de alto rendimiento diseñado para proporcionar agarre excepcional, seguridad en condiciones húmedas y secas, y una experiencia de conducción superior para los conductores más exigentes.' }}
           </p>
 
-          <!--
-          <div class="mb-8">
-            <div v-if="tire.has_discount" class="text-sm text-gray-400 line-through mb-1">Precio Regular: S/. {{ tire.price }}</div>
+          <div v-if="tire.is_promoted" class="mb-8">
+            <div v-if="tire.has_discount" class="text-sm text-gray-400 line-through mb-1">Precio Regular: {{ tire.category?.name === 'TBR' ? '$' : 'S/.' }} {{ tire.price }}</div>
             <div class="flex items-end gap-2">
-              <span class="text-4xl font-black text-primary">S/. {{ tire.has_discount ? tire.offer_price : tire.price }}</span>
+              <span class="text-4xl font-black text-primary">{{ tire.category?.name === 'TBR' ? '$' : 'S/.' }} {{ tire.has_discount ? tire.offer_price : tire.price }}</span>
               <span class="text-gray-500 font-medium mb-1">c/u</span>
             </div>
             <div class="text-xs text-gray-400 mt-1">Precio incluye IGV</div>
           </div>
-          -->
 
           <div class="bg-gray-50 p-6 rounded-xl border border-gray-100 mb-8">
             <div class="flex items-center justify-between">
@@ -134,12 +132,10 @@ const getDiscountPercentage = (price, offerPrice) => {
                 <button @click="increaseQuantity" class="w-10 h-10 flex items-center justify-center text-gray-500 hover:bg-gray-100 hover:text-gray-900 transition-colors focus:outline-none">+</button>
               </div>
             </div>
-            <!--
-            <div class="flex items-center justify-between pt-4 border-t border-gray-200">
+            <div v-if="tire.is_promoted" class="flex items-center justify-between pt-4 border-t border-gray-200">
               <div class="text-sm text-gray-600 font-medium">Total a pagar:</div>
-              <div class="text-xl font-bold text-gray-900">S/. {{ totalAmount() }}</div>
+              <div class="text-xl font-bold text-gray-900">{{ tire.category?.name === 'TBR' ? '$' : 'S/.' }} {{ totalAmount() }}</div>
             </div>
-            -->
           </div>
 
           <a :href="'https://wa.me/' + $page.props.global_whatsapp + '?text=' + whatsappText()" target="_blank" class="w-full h-14 flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2 bg-action text-white font-bold text-sm sm:text-lg rounded-xl hover:bg-red-700 transition-colors shadow-lg mb-6 leading-tight px-4 text-center">
@@ -210,14 +206,12 @@ const getDiscountPercentage = (price, offerPrice) => {
               <div class="p-5">
                 <div class="text-xs font-black text-gray-400 uppercase tracking-wider mb-1">{{ relTire.brand?.name }}</div>
                 <h3 class="text-lg font-bold text-gray-900 mb-2 truncate">{{ relTire.model }}</h3>
-                <div class="text-sm text-gray-600 font-medium mb-3">{{ relTire.width }}/{{ relTire.profile }} R{{ relTire.rim }}</div>
+                <div class="text-sm text-gray-600 font-medium mb-3">{{ relTire.width }}{{ relTire.profile && relTire.profile > 0 ? '/' + relTire.profile : '' }} R{{ relTire.rim }}</div>
                 
-                <!--
-                <div class="flex items-end gap-2">
-                  <span class="text-xl font-black text-primary">S/. {{ relTire.has_discount ? relTire.offer_price : relTire.price }}</span>
-                  <span v-if="relTire.has_discount" class="text-xs text-gray-400 line-through mb-1">S/. {{ relTire.price }}</span>
+                <div v-if="relTire.is_promoted" class="flex items-end gap-2">
+                  <span class="text-xl font-black text-primary">{{ relTire.category?.name === 'TBR' ? '$' : 'S/.' }} {{ relTire.has_discount ? relTire.offer_price : relTire.price }}</span>
+                  <span v-if="relTire.has_discount" class="text-xs text-gray-400 line-through mb-1">{{ relTire.category?.name === 'TBR' ? '$' : 'S/.' }} {{ relTire.price }}</span>
                 </div>
-                -->
               </div>
             </Link>
           </div>

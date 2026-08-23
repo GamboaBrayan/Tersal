@@ -917,12 +917,12 @@ onUnmounted(() => {
                 <div class="w-full md:w-7/12 flex flex-col justify-center h-full">
                   <div class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">{{ promotions[currentPromoIndex].brand?.name || 'Marca' }}</div>
                   <h3 class="text-2xl font-black text-gray-800 mb-2 leading-tight uppercase">{{ promotions[currentPromoIndex].model }}</h3>
-                  <div class="text-sm text-gray-500 mb-8">{{ promotions[currentPromoIndex].width }}/{{ promotions[currentPromoIndex].profile }} R{{ promotions[currentPromoIndex].rim }}</div>
+                  <div class="text-sm text-gray-500 mb-8">{{ promotions[currentPromoIndex].width }}{{ promotions[currentPromoIndex].profile && promotions[currentPromoIndex].profile > 0 ? '/' + promotions[currentPromoIndex].profile : '' }} R{{ promotions[currentPromoIndex].rim }}</div>
                   
                   <div class="flex flex-col mt-auto">
                     <div class="flex items-end gap-3 mb-4 md:mb-0 md:absolute md:bottom-8">
-                      <div class="text-3xl font-black text-action leading-none">S/ {{ promotions[currentPromoIndex].offer_price }}</div>
-                      <div class="text-sm text-gray-400 line-through mb-1">S/ {{ promotions[currentPromoIndex].price }}</div>
+                      <div class="text-3xl font-black text-action leading-none">{{ promotions[currentPromoIndex].category?.name === 'TBR' ? '$' : 'S/.' }} {{ promotions[currentPromoIndex].offer_price }}</div>
+                      <div class="text-sm text-gray-400 line-through mb-1">{{ promotions[currentPromoIndex].category?.name === 'TBR' ? '$' : 'S/.' }} {{ promotions[currentPromoIndex].price }}</div>
                     </div>
                   </div>
                 </div>

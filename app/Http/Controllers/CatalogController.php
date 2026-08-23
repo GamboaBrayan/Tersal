@@ -12,7 +12,7 @@ class CatalogController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Tire::with('brand')->where('status', true);
+        $query = Tire::with(['brand', 'category'])->where('status', true);
 
         if ($request->filled('search')) {
             $search = $request->search;
@@ -128,7 +128,7 @@ class CatalogController extends Controller
             
             // Fetch tires for recommended
             if (count($recommendedSizes) > 0) {
-                $recQuery = Tire::with('brand')->where('status', true);
+                $recQuery = Tire::with(['brand', 'category'])->where('status', true);
                 $recQuery->where(function($q) use ($recommendedSizes) {
                     foreach ($recommendedSizes as $size) {
                         $q->orWhere(function($sub) use ($size) {
@@ -151,7 +151,7 @@ class CatalogController extends Controller
             
             // Fetch tires for alternatives
             if (count($alternativeSizes) > 0) {
-                $altQuery = Tire::with('brand')->where('status', true);
+                $altQuery = Tire::with(['brand', 'category'])->where('status', true);
                 $altQuery->where(function($q) use ($alternativeSizes) {
                     foreach ($alternativeSizes as $size) {
                         $q->orWhere(function($sub) use ($size) {
@@ -214,9 +214,9 @@ class CatalogController extends Controller
 
     public function show(Tire $tire)
     {
-        $tire->load('brand');
+        $tire->load(['brand', 'category']);
         
-        $relatedTires = Tire::with('brand')
+        $relatedTires = Tire::with(['brand', 'category'])
             ->where('status', true)
             ->where('id', '!=', $tire->id)
             ->where(function($q) use ($tire) {
