@@ -14,8 +14,8 @@ import { Phone, Mail, Clock, MessageCircle } from 'lucide-vue-next';
 
     <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 w-full">
       <div class="max-w-3xl mb-12">
-        <h1 class="text-4xl font-black text-gray-900 mb-4">Información de Contacto</h1>
-        <p class="text-lg text-gray-600">
+        <h1 class="text-4xl font-bold text-gray-900 mb-4">Información de Contacto</h1>
+        <p class="text-lg text-gray-900 font-normal">
           Estamos aquí para ayudarte. Contáctanos para cotizaciones, disponibilidad de neumáticos o asesoramiento técnico. Nuestro equipo especializado te atenderá con velocidad y precisión.
         </p>
       </div>
@@ -34,8 +34,8 @@ import { Phone, Mail, Clock, MessageCircle } from 'lucide-vue-next';
                   <Phone class="w-6 h-6" />
                 </div>
                 <div>
-                  <div class="text-sm text-gray-500 font-medium">Llamada Directa</div>
-                  <div class="text-xl text-gray-900">+51 904830422</div>
+                  <div class="text-sm text-gray-900 font-bold">Llamada Directa</div>
+                  <div class="text-xl text-gray-800 font-normal">+51 904830422</div>
                 </div>
               </div>
 
@@ -44,8 +44,8 @@ import { Phone, Mail, Clock, MessageCircle } from 'lucide-vue-next';
                   <Mail class="w-6 h-6" />
                 </div>
                 <div>
-                  <div class="text-sm text-gray-500 font-medium">Correo Electrónico</div>
-                  <div class="text-xl text-gray-900">Llantastersal@gmail.com</div>
+                  <div class="text-sm text-gray-900 font-bold">Correo Electrónico</div>
+                  <div class="text-xl text-gray-900 font-normal">Llantastersal@gmail.com</div>
                 </div>
               </div>
             </div>
@@ -64,15 +64,15 @@ import { Phone, Mail, Clock, MessageCircle } from 'lucide-vue-next';
           
           <div class="space-y-4 text-gray-600">
             <div class="flex justify-between items-center py-2 border-b border-gray-50">
-              <span>Lunes - Viernes</span>
+              <span class="text-gray-900 font-normal">Lunes - Viernes</span>
               <span class="font-bold text-gray-900">09:00 - 18:00</span>
             </div>
             <div class="flex justify-between items-center py-2 border-b border-gray-50">
-              <span>Sábado</span>
+              <span class="text-gray-900 font-normal">Sábado</span>
               <span class="font-bold text-gray-900">09:00 - 13:00</span>
             </div>
             <div class="flex justify-between items-center py-2">
-              <span>Domingo</span>
+              <span class="text-gray-900 font-normal">Domingo</span>
               <span class="bg-red-50 text-action text-xs font-bold px-2 py-1 rounded">Cerrado</span>
             </div>
           </div>
