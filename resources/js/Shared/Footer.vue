@@ -15,7 +15,7 @@ import { Facebook, Instagram } from 'lucide-vue-next';
           <div class="flex items-center gap-2 mb-6">
             <img src="/images/logo.png" alt="Tersal Logo" class="h-16 w-auto object-contain" />
           </div>
-          <p class="text-white-200 text-sm">Encuentra el ajuste perfecto para tu vehículo con nuestra búsqueda técnica avanzada. Marcas premium, instalación experta, sin complicaciones.</p>
+          <p class="text-white-200 text-sm">Especialistas en neumáticos, comprometidos con recomendar la opción adecuada para cada vehículo y propósito.</p>
         </div>
         
         <!-- Col 2 -->
@@ -45,9 +45,9 @@ import { Facebook, Instagram } from 'lucide-vue-next';
         <div>
           <h3 class="font-bold uppercase tracking-wider mb-4 text-sm">Legal</h3>
           <ul class="space-y-3 text-gray-200 text-sm">
-            <li><span class="text-white-200 cursor-not-allowed opacity-75">Términos y condiciones</span></li>
-            <li><span class="text-white-200 cursor-not-allowed opacity-75">Política de Privacidad</span></li>
-            <li class="pt-4">
+            <li class="hidden"><span class="text-white-200 cursor-not-allowed opacity-75">Términos y condiciones</span></li>
+            <li class="hidden"><span class="text-white-200 cursor-not-allowed opacity-75">Política de Privacidad</span></li>
+            <li>
               <a href="/libro-reclamaciones" target="_blank" class="inline-block transition-transform hover:scale-105">
                 <img src="/images/libroreclamaciones.jpg" alt="Libro de Reclamaciones" class="h-12 w-auto object-contain bg-white rounded p-1" />
               </a>

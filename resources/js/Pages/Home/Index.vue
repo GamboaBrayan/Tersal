@@ -326,16 +326,16 @@ onUnmounted(() => {
     <main class="flex-grow relative z-10">
       <!-- Sección Principal (Hero) -->
       <section class="relative flex flex-col bg-transparent sm:bg-black">
-        <div class="absolute top-0 left-0 right-0 h-[320px] sm:h-auto sm:inset-0 z-0 bg-black overflow-hidden">
+        <div class="absolute top-0 left-0 right-0 h-[350px] sm:h-auto sm:inset-0 z-0 bg-black overflow-hidden">
           <template v-if="heroImages && heroImages.length > 0">
             <div v-for="(img, index) in heroImages" :key="img"
                  class="absolute inset-0 w-full h-full transition-opacity duration-1000 ease-in-out"
                  :class="index === currentHeroImageIndex ? 'opacity-100 z-0' : 'opacity-0 -z-10'">
-              <img :src="img" class="w-full h-full object-cover object-[80%_top] sm:object-[75%_top] lg:object-top" alt="Tire Background">
+              <img :src="img" class="w-full h-full object-cover object-[50%_top] sm:object-[75%_top] lg:object-top" alt="Tire Background">
             </div>
           </template>
           <template v-else>
-            <img src="/images/hero3.png" class="absolute inset-0 w-full h-full object-cover object-[80%_top] sm:object-[75%_top] lg:object-top" alt="Tire Background">
+            <img src="/images/hero3.png" class="absolute inset-0 w-full h-full object-cover object-[50%_top] sm:object-[75%_top] lg:object-top" alt="Tire Background">
           </template>
         </div>
         <!-- Overlay gradients -->
@@ -418,9 +418,11 @@ onUnmounted(() => {
             <div class="max-w-[1050px] mx-auto px-6 py-4 sm:px-8 sm:py-5 text-left bg-white sm:bg-white/80 backdrop-blur-none shadow-[0_8px_40px_rgb(0,0,0,0.08)] rounded-[1rem] border border-gray-100/50">
 
             <!-- Título Principal del Buscador -->
-            <h2 class="text-xl sm:text-2xl font-black text-action mb-4 uppercase tracking-wide text-left">
-              Encuentra tus Neumáticos aquí:
+            <h2 class="text-[1.35rem] sm:text-2xl font-black mb-2 uppercase tracking-wide text-left leading-tight">
+              <span class="text-black">ENCUENTRA EL</span><br>
+              <span class="text-action">NEUMÁTICO IDEAL</span>
             </h2>
+            <p class="text-[13px] sm:text-sm text-gray-600 mb-5 font-medium">Busca por medida o por vehículo.</p>
 
             <!-- Tabs and Help Link Header -->
             <div class="relative flex justify-start items-end border-b border-gray-100 mb-6">
@@ -789,54 +791,52 @@ onUnmounted(() => {
                 </div>
               </form>
             </div>
+
+            <!-- Features Bar Inside White Card -->
+            <div class="mt-8 mx-auto w-full">
+              <div class="grid grid-cols-4 gap-2 sm:gap-4 divide-x divide-gray-200">
+                <!-- Feature 1 -->
+                <div class="flex flex-col items-center text-center gap-1 sm:gap-2 px-1">
+                  <Truck class="w-5 h-5 sm:w-6 sm:h-6 text-gray-800 shrink-0" stroke-width="1.5" />
+                  <div>
+                    <h4 class="font-black text-[8px] sm:text-[10px] uppercase tracking-tighter text-gray-900 leading-[1.1]">Envíos a<br>todo el Perú</h4>
+                    <p class="text-[7px] sm:text-[9px] text-black font-normal mt-0.5 leading-tight">Rápidos y seguros</p>
+                  </div>
+                </div>
+                <!-- Feature 2 -->
+                <div class="flex flex-col items-center text-center gap-1 sm:gap-2 px-1">
+                  <ShieldCheck class="w-5 h-5 sm:w-6 sm:h-6 text-gray-800 shrink-0" stroke-width="1.5" />
+                  <div>
+                    <h4 class="font-black text-[8px] sm:text-[10px] uppercase tracking-tighter text-gray-900 leading-[1.1]">Productos<br>de calidad</h4>
+                    <p class="text-[7px] sm:text-[9px] text-black font-normal mt-0.5 leading-tight">Marcas líderes</p>
+                  </div>
+                </div>
+                <!-- Feature 3 -->
+                <div class="flex flex-col items-center text-center gap-1 sm:gap-2 px-1">
+                  <svg class="w-5 h-5 sm:w-6 sm:h-6 text-gray-800 shrink-0" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
+                  </svg>
+                  <div>
+                    <h4 class="font-black text-[8px] sm:text-[10px] uppercase tracking-tighter text-gray-900 leading-[1.1]">Asesoría<br>especializada</h4>
+                    <p class="text-[7px] sm:text-[9px] text-black font-normal mt-0.5 leading-tight">Te ayudamos a elegir</p>
+                  </div>
+                </div>
+                <!-- Feature 4 -->
+                <div class="flex flex-col items-center text-center gap-1 sm:gap-2 px-1">
+                  <CheckCircle class="w-5 h-5 sm:w-6 sm:h-6 text-gray-800 shrink-0" stroke-width="1.5" />
+                  <div>
+                    <h4 class="font-black text-[8px] sm:text-[10px] uppercase tracking-tighter text-gray-900 leading-[1.1]">Compra<br>segura</h4>
+                    <p class="text-[7px] sm:text-[9px] text-black font-normal mt-0.5 leading-tight">100% confiable</p>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-        </div>
-        
-        <!-- Barra de Características (Features Bar) merged into Hero -->
-        <div class="relative z-10 text-gray-900 sm:text-white w-full transform sm:translate-y-0 pt-4 sm:pt-0">
-          <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12 sm:pb-16 pt-8 sm:pt-36 lg:pt-40">
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-0">
-            <!-- Feature 1 -->
-            <div class="flex items-center gap-4 px-2 lg:px-6 py-6 sm:py-0 justify-center lg:justify-start border-b border-gray-200 sm:border-white/50 sm:border-b-0 sm:border-r">
-              <Truck class="w-8 h-8 shrink-0" stroke-width="1.5" />
-              <div>
-                <h4 class="font-black text-sm uppercase tracking-wide">Envíos a todo el Perú</h4>
-                <p class="text-xs text-gray-500 sm:text-gray-100 mt-0.5">Rápidos y seguros</p>
-              </div>
-            </div>
-            <!-- Feature 2 -->
-            <div class="flex items-center gap-4 px-2 lg:px-6 py-6 sm:py-0 justify-center lg:justify-start border-b border-gray-200 sm:border-white/50 sm:border-b-0 lg:border-r">
-              <ShieldCheck class="w-8 h-8 shrink-0" stroke-width="1.5" />
-              <div>
-                <h4 class="font-black text-sm uppercase tracking-wide">Neumáticos Certificados</h4>
-                <p class="text-xs text-gray-500 sm:text-gray-100 mt-0.5">Calidad garantizada</p>
-              </div>
-            </div>
-            <!-- Feature 3 -->
-            <div class="flex items-center gap-4 px-2 lg:px-6 py-6 sm:py-0 justify-center lg:justify-start border-b border-gray-200 sm:border-white/50 sm:border-b-0 sm:border-r">
-              <svg class="w-8 h-8 shrink-0" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
-              </svg>
-              <div>
-                <h4 class="font-black text-sm uppercase tracking-wide">Asesoría por WhatsApp</h4>
-                <p class="text-xs text-gray-500 sm:text-gray-100 mt-0.5">Te ayudamos a elegir</p>
-              </div>
-            </div>
-            <!-- Feature 4 -->
-            <div class="flex items-center gap-4 px-2 lg:px-6 py-6 sm:py-0 justify-center lg:justify-start">
-              <CheckCircle class="w-8 h-8 shrink-0" stroke-width="1.5" />
-              <div>
-                <h4 class="font-black text-sm uppercase tracking-wide">Garantía de fábrica</h4>
-                <p class="text-xs text-gray-500 sm:text-gray-100 mt-0.5">Respaldo total</p>
-              </div>
-            </div>
-          </div>
-        </div>
-        </div>
+      </div>
       </section>
       <!-- Carrusel de Marcas (Estilo Píldora) -->
-      <section v-if="brands && brands.length > 0" class="bg-gray-50 pb-8 mt-0 sm:mt-0 pt-4 sm:-mt-12 relative z-20">
+      <section v-if="brands && brands.length > 0" class="bg-gray-50 pb-2 sm:pb-8 mt-0 sm:mt-0 pt-4 sm:-mt-12 relative z-20">
         <div class="w-11/12 max-w-[1600px] mx-auto">
           <div 
             class="bg-white rounded-[2.5rem] shadow-lg border border-gray-100 p-2 sm:p-4 flex items-center relative"
@@ -873,7 +873,7 @@ onUnmounted(() => {
       </section>
 
       <!-- Promociones -->
-      <section class="py-16 bg-gray-50 relative z-20">
+      <section class="pt-6 pb-12 sm:py-16 bg-gray-50 relative z-20">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           
           <div v-if="promotions && promotions.length > 0" class="flex flex-col lg:flex-row items-center gap-8 lg:gap-12">
