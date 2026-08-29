@@ -326,7 +326,7 @@ onUnmounted(() => {
     <main class="flex-grow relative z-10">
       <!-- Sección Principal (Hero) -->
       <section class="relative flex flex-col bg-transparent sm:bg-black">
-        <div class="absolute top-0 left-0 right-0 h-[350px] sm:h-auto sm:inset-0 z-0 bg-black overflow-hidden">
+        <div class="absolute top-0 left-0 right-0 h-[210px] sm:h-auto sm:inset-0 z-0 bg-black overflow-hidden">
           <template v-if="heroImages && heroImages.length > 0">
             <div v-for="(img, index) in heroImages" :key="img"
                  class="absolute inset-0 w-full h-full transition-opacity duration-1000 ease-in-out"
@@ -339,18 +339,22 @@ onUnmounted(() => {
           </template>
         </div>
         <!-- Overlay gradients -->
-        <div class="absolute top-0 left-0 right-0 h-[320px] sm:h-auto sm:inset-0 bg-gradient-to-t from-black via-black/0 to-transparent z-0"></div>
+        <div class="absolute top-0 left-0 right-0 h-[210px] sm:h-auto sm:inset-0 bg-gradient-to-t from-black via-black/0 to-transparent z-0"></div>
         <div class="hidden sm:block absolute inset-0 bg-gradient-to-r from-black/10 via-black/10 to-transparent z-0"></div>
 
         <!-- Spacer Block -->
         <div class="relative w-full">
           <!-- Text Overlay (Desktop and Mobile) -->
-          <div class="flex absolute top-0 left-0 right-0 h-[280px] sm:h-auto sm:inset-0 w-full pointer-events-none z-10">
+          <div class="flex absolute top-0 left-0 right-0 h-[200px] sm:h-auto sm:inset-0 w-full pointer-events-none z-10">
             
             <!-- Slide 1 Text -->
             <div class="absolute inset-0 w-full px-4 sm:px-6 md:pl-[1%] lg:pl-[2%] xl:pl-[3%] 2xl:pl-[4%] flex flex-col justify-center items-start transition-all duration-700 ease-out transform pt-0 sm:pt-12" :class="currentHeroImageIndex === 0 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'">
-              <span class="text-red-600 font-extrabold uppercase tracking-wide text-[10px] sm:text-sm lg:text-base mb-1 sm:mb-3 drop-shadow-sm">LÍNEA PCR | AUTO, SUV Y CAMIONETA</span>
-              <h1 class="text-white font-black text-2xl sm:text-4xl lg:text-5xl xl:text-6xl 2xl:text-[4rem] leading-[1.05] uppercase tracking-tight drop-shadow-lg">
+              <!-- Desktop Overline -->
+              <span class="hidden sm:block text-red-600 font-extrabold uppercase tracking-wide sm:text-sm lg:text-base mb-1 sm:mb-3 drop-shadow-sm">LÍNEA PCR | AUTO, SUV Y CAMIONETA</span>
+              <!-- Mobile Overline -->
+              <span class="block sm:hidden text-red-600 font-extrabold uppercase tracking-wide text-[8px] drop-shadow-sm">LÍNEA PCR</span>
+              <span class="block sm:hidden text-white font-extrabold uppercase tracking-wide text-[8px] mb-2 drop-shadow-sm">AUTO, SUV Y CAMIONETA</span>
+              <h1 class="text-white font-black text-l sm:text-4xl lg:text-5xl xl:text-6xl 2xl:text-[4rem] leading-[1.05] uppercase tracking-tight drop-shadow-lg">
                 Encuentra el <br>
                 neumático perfecto <br>
                 <span class="text-red-600">para tu vehículo</span>
@@ -385,37 +389,44 @@ onUnmounted(() => {
 
             <!-- Slide 2 Text -->
             <div class="absolute inset-0 w-full px-4 sm:px-6 md:pl-[1%] lg:pl-[2%] xl:pl-[3%] 2xl:pl-[4%] flex flex-col justify-center items-start transition-all duration-700 ease-out transform pt-0 sm:pt-12" :class="currentHeroImageIndex === 1 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'">
-              <span class="text-action font-extrabold uppercase tracking-wide text-[10px] sm:text-sm lg:text-base drop-shadow-sm">LÍNEA TBR</span>
-              <span class="text-white font-extrabold uppercase tracking-wide text-[10px] sm:text-sm lg:text-base mb-1 sm:mb-3 drop-shadow-sm">TRANSPORTE, CARGA Y PASAJEROS</span>
-              <h1 class="text-white font-black text-2xl sm:text-4xl lg:text-5xl xl:text-6xl 2xl:text-[4rem] leading-[1.05] uppercase tracking-tight drop-shadow-lg">
+              <!-- Desktop Overline -->
+              <span class="hidden sm:block text-action font-extrabold uppercase tracking-wide sm:text-sm lg:text-base mb-1 sm:mb-3 drop-shadow-sm">LÍNEA TBR | TRANSPORTE, CARGA Y PASAJEROS</span>
+              <!-- Mobile Overline -->
+              <span class="block sm:hidden text-action font-extrabold uppercase tracking-wide text-[7px] drop-shadow-sm">LÍNEA TBR</span>
+              <span class="block sm:hidden text-white font-extrabold uppercase tracking-wide text-[7px] mb-2 drop-shadow-sm">TRANSPORTE, CARGA Y PASAJEROS</span>
+              <h1 class="text-white font-black text-l sm:text-4xl lg:text-5xl xl:text-6xl 2xl:text-[4rem] leading-[1.05] uppercase tracking-tight drop-shadow-lg">
                 NEUMÁTICOS<br>
                 PARA FLOTAS QUE <br>
                 <span class="text-action">NO SE DETIENEN</span>
               </h1>
-              <span class="text-white font-semibold text-xs sm:text-lg lg:text-xl drop-shadow-md mt-2 sm:mt-6">Mayor rendimiento en cada kilómetro.</span>
+              <span class="inline-block text-white font-semibold text-xs sm:text-lg lg:text-xl drop-shadow-md mt-2 sm:mt-6 scale-[0.8] sm:scale-100 origin-left">Mayor rendimiento en cada kilómetro.</span>
             </div>
 
             <!-- Slide 3 Text -->
             <div class="absolute inset-0 w-full px-4 sm:px-6 md:pl-[1%] lg:pl-[2%] xl:pl-[3%] 2xl:pl-[4%] flex flex-col justify-center items-start transition-all duration-700 ease-out transform pt-0 sm:pt-12" :class="currentHeroImageIndex === 2 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'">
-              <span class="text-action font-extrabold uppercase tracking-wide text-[10px] sm:text-sm lg:text-base mb-1 sm:mb-3 drop-shadow-sm">LÍNEA OTR | MINERÍA, CONSTRUCCIÓN Y AGRÍCOLA</span>
-              <h1 class="text-white font-black text-2xl sm:text-4xl lg:text-5xl xl:text-6xl 2xl:text-[4rem] leading-[1.05] uppercase tracking-tight drop-shadow-lg">
+              <!-- Desktop Overline -->
+              <span class="hidden sm:block text-action font-extrabold uppercase tracking-wide sm:text-sm lg:text-base mb-1 sm:mb-3 drop-shadow-sm">LÍNEA OTR | MINERÍA, CONSTRUCCIÓN Y AGRÍCOLA</span>
+              <!-- Mobile Overline -->
+              <span class="block sm:hidden text-action font-extrabold uppercase tracking-wide text-[7px] drop-shadow-sm">LÍNEA OTR</span>
+              <span class="block sm:hidden text-white font-extrabold uppercase tracking-wide text-[7px] mb-2 drop-shadow-sm">MINERÍA, CONSTRUCCIÓN Y AGRÍCOLA</span>
+              <h1 class="text-white font-black text-l sm:text-4xl lg:text-5xl xl:text-6xl 2xl:text-[4rem] leading-[1.05] uppercase tracking-tight drop-shadow-lg">
                 NEUMÁTICOS PARA<br>
                 LAS OPERACIONES <br>
                 <span class="text-action">MÁS EXIGENTES</span>
               </h1>
-              <span class="text-white font-semibold text-xs sm:text-lg lg:text-xl drop-shadow-md mt-2 sm:mt-6">Preparados para cualquier terreno.</span>
+              <span class="inline-block text-white font-semibold text-xs sm:text-lg lg:text-xl drop-shadow-md mt-2 sm:mt-6 scale-[0.8] sm:scale-100 origin-left">Preparados para cualquier terreno.</span>
             </div>
 
           </div>
           
           <!-- Spacer to show the image proporcionalmente -->
-          <div class="w-full h-[320px] sm:h-auto sm:pb-[50%] md:pb-[20%] lg:pb-[29%]"></div>
+          <div class="w-full h-[210px] sm:h-auto sm:pb-[50%] md:pb-[20%] lg:pb-[29%]"></div>
         </div>
         
         <!-- Buscador Block (Pushing the header up) -->
         <div class="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 relative z-40 text-center pointer-events-auto">
           <!-- Buscador overlapping exactly 50% on the bottom border minus 3 pixels on desktop -->
-          <div class="-mt-16 sm:mt-0 transform sm:translate-y-[calc(50%-3px)] relative z-20">
+          <div class="-mt-4 sm:mt-0 transform sm:translate-y-[calc(50%-3px)] relative z-20">
             <div class="max-w-[1050px] mx-auto px-6 py-4 sm:px-8 sm:py-5 text-left bg-white sm:bg-white/80 backdrop-blur-none shadow-[0_8px_40px_rgb(0,0,0,0.08)] rounded-[1rem] border border-gray-100/50">
 
             <!-- Título Principal del Buscador -->
