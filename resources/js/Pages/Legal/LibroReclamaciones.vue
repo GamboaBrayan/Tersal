@@ -1,7 +1,7 @@
 <script setup>
 import { Head, Link } from '@inertiajs/vue3';
 import { ref } from 'vue';
-import { ShieldCheck, Info, ChevronLeft, Send, CheckCircle2 } from 'lucide-vue-next';
+import { Info, ChevronLeft, Send, CheckCircle2 } from 'lucide-vue-next';
 import axios from 'axios';
 
 const form = ref({
