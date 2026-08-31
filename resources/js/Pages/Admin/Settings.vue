@@ -10,9 +10,15 @@ const props = defineProps({
 
 const activeTab = ref('contact');
 
-const form = useForm({
-  whatsapp_number: '',
-  faqs: [{ question: '', answer: '' }],
+const contactForm = useForm({
+  whatsapp_number: ''
+});
+
+const faqsForm = useForm({
+  faqs: [{ question: '', answer: '' }]
+});
+
+const heroForm = useForm({
   hero_images: []
 });
 
@@ -35,71 +41,70 @@ watch(() => props.settings, (newSettings) => {
     initialHeroImages = [];
   }
   
-  form.whatsapp_number = newSettings?.whatsapp_number || '';
-  form.faqs = initialFaqs.length > 0 ? initialFaqs : [{ question: '', answer: '' }];
-  form.hero_images = initialHeroImages;
-  
-  form.defaults({
-    whatsapp_number: form.whatsapp_number,
-    faqs: form.faqs,
-    hero_images: form.hero_images
-  });
+  contactForm.whatsapp_number = newSettings?.whatsapp_number || '';
+  contactForm.defaults({ whatsapp_number: contactForm.whatsapp_number });
+
+  faqsForm.faqs = initialFaqs.length > 0 ? initialFaqs : [{ question: '', answer: '' }];
+  faqsForm.defaults({ faqs: JSON.parse(JSON.stringify(faqsForm.faqs)) });
+
+  heroForm.hero_images = initialHeroImages;
+  heroForm.defaults({ hero_images: [...heroForm.hero_images] });
 }, { deep: true, immediate: true });
 
 const addFaq = () => {
-  form.faqs.push({ question: '', answer: '' });
+  faqsForm.faqs.push({ question: '', answer: '' });
 };
 
 const removeFaq = (index) => {
-  form.faqs.splice(index, 1);
+  faqsForm.faqs.splice(index, 1);
 };
 
 const moveUp = (index) => {
   if (index > 0) {
-    const item = form.faqs[index];
-    form.faqs.splice(index, 1);
-    form.faqs.splice(index - 1, 0, item);
+    const item = faqsForm.faqs[index];
+    faqsForm.faqs.splice(index, 1);
+    faqsForm.faqs.splice(index - 1, 0, item);
   }
 };
 
 const moveDown = (index) => {
-  if (index < form.faqs.length - 1) {
-    const item = form.faqs[index];
-    form.faqs.splice(index, 1);
-    form.faqs.splice(index + 1, 0, item);
+  if (index < faqsForm.faqs.length - 1) {
+    const item = faqsForm.faqs[index];
+    faqsForm.faqs.splice(index, 1);
+    faqsForm.faqs.splice(index + 1, 0, item);
   }
 };
 
 const handleImageUpload = (e) => {
   const files = Array.from(e.target.files);
   if (!files.length) return;
-  form.hero_images = [...form.hero_images, ...files];
+  heroForm.hero_images = [...heroForm.hero_images, ...files];
   e.target.value = '';
 };
 
 const removeHeroImage = (index) => {
-  const newArr = [...form.hero_images];
+  const newArr = [...heroForm.hero_images];
   newArr.splice(index, 1);
-  form.hero_images = newArr;
+  heroForm.hero_images = newArr;
 };
 
 const moveHeroImageUp = (index) => {
   if (index > 0) {
-    const newArr = [...form.hero_images];
+    const newArr = [...heroForm.hero_images];
     const item = newArr[index];
     newArr.splice(index, 1);
     newArr.splice(index - 1, 0, item);
-    form.hero_images = newArr;
+    heroForm.hero_images = newArr;
   }
 };
 
 const moveHeroImageDown = (index) => {
-  if (index < form.hero_images.length - 1) {
-    const newArr = [...form.hero_images];
+  if (index < heroForm.hero_images.length - 1) {
+    const newArr = [...heroForm.hero_images];
     const item = newArr[index];
     newArr.splice(index, 1);
     newArr.splice(index + 1, 0, item);
-    form.hero_images = newArr;
+    heroForm.hero_images = newArr;
   }
 };
 
@@ -112,19 +117,13 @@ const getImageUrl = (image) => {
   }
   return '';
 };
-
-const submit = () => {
-  form.post('/admin/settings', {
-    preserveScroll: true
-  });
-};
 </script>
 
 <template>
   <AdminLayout>
     <Head title="Configuración Web" />
     
-    <form @submit.prevent="submit" class="flex flex-col h-full">
+    <div class="flex flex-col h-full">
       <div class="px-4 sm:px-8 py-6 sm:py-10 flex-grow">
         <div class="mb-6 sm:mb-8">
           <h1 class="text-2xl sm:text-3xl font-black text-gray-900">Configuración Web</h1>
@@ -184,9 +183,9 @@ const submit = () => {
               <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                 <MessageCircle class="h-5 w-5 text-gray-400" />
               </div>
-              <input type="text" v-model="form.whatsapp_number" class="w-full h-12 pl-12 pr-4 rounded-xl border border-gray-200 bg-gray-50 focus:ring-2 focus:ring-primary focus:border-transparent font-bold text-sm sm:text-base">
+              <input type="text" v-model="contactForm.whatsapp_number" class="w-full h-12 pl-12 pr-4 rounded-xl border border-gray-200 bg-gray-50 focus:ring-2 focus:ring-primary focus:border-transparent font-bold text-sm sm:text-base">
             </div>
-            <div v-if="form.errors.whatsapp_number" class="text-red-500 text-xs mt-1">{{ form.errors.whatsapp_number }}</div>
+            <div v-if="contactForm.errors.whatsapp_number" class="text-red-500 text-xs mt-1">{{ contactForm.errors.whatsapp_number }}</div>
           </div>
         </div>
 
@@ -203,7 +202,7 @@ const submit = () => {
           </div>
 
           <div class="space-y-4 sm:space-y-6">
-            <div v-for="(faq, index) in form.faqs" :key="index" class="p-4 sm:p-6 border border-gray-200 rounded-xl bg-gray-50 relative group transition-all hover:border-primary/30">
+            <div v-for="(faq, index) in faqsForm.faqs" :key="index" class="p-4 sm:p-6 border border-gray-200 rounded-xl bg-gray-50 relative group transition-all hover:border-primary/30">
               <div class="flex flex-col sm:flex-row justify-between items-start gap-4">
                 <div class="flex-grow space-y-4 w-full">
                   <div>
@@ -220,7 +219,7 @@ const submit = () => {
                     <button type="button" @click="moveUp(index)" :disabled="index === 0" class="flex-1 h-8 bg-gray-100 text-gray-500 rounded-lg flex items-center justify-center hover:bg-gray-200 transition-colors disabled:opacity-30 disabled:cursor-not-allowed">
                       <ChevronUp class="w-4 h-4" />
                     </button>
-                    <button type="button" @click="moveDown(index)" :disabled="index === form.faqs.length - 1" class="flex-1 h-8 bg-gray-100 text-gray-500 rounded-lg flex items-center justify-center hover:bg-gray-200 transition-colors disabled:opacity-30 disabled:cursor-not-allowed">
+                    <button type="button" @click="moveDown(index)" :disabled="index === faqsForm.faqs.length - 1" class="flex-1 h-8 bg-gray-100 text-gray-500 rounded-lg flex items-center justify-center hover:bg-gray-200 transition-colors disabled:opacity-30 disabled:cursor-not-allowed">
                       <ChevronDown class="w-4 h-4" />
                     </button>
                   </div>
@@ -230,7 +229,7 @@ const submit = () => {
                 </div>
               </div>
             </div>
-            <div v-if="form.faqs.length === 0" class="text-center p-8 text-gray-500 border-2 border-dashed border-gray-200 rounded-xl text-sm sm:text-base">
+            <div v-if="faqsForm.faqs.length === 0" class="text-center p-8 text-gray-500 border-2 border-dashed border-gray-200 rounded-xl text-sm sm:text-base">
               No hay preguntas configuradas. Haz clic en "Añadir Fila".
             </div>
           </div>
@@ -253,7 +252,7 @@ const submit = () => {
           </div>
 
           <div class="space-y-4 sm:space-y-6">
-            <div v-for="(image, index) in form.hero_images" :key="index" class="p-4 sm:p-6 border border-gray-200 rounded-xl bg-gray-50 relative group transition-all hover:border-primary/30 flex flex-col sm:flex-row gap-4 items-center">
+            <div v-for="(image, index) in heroForm.hero_images" :key="index" class="p-4 sm:p-6 border border-gray-200 rounded-xl bg-gray-50 relative group transition-all hover:border-primary/30 flex flex-col sm:flex-row gap-4 items-center">
               <div class="w-full sm:w-48 h-32 bg-gray-200 rounded-lg overflow-hidden flex-shrink-0">
                 <img :src="getImageUrl(image)" class="w-full h-full object-cover" />
               </div>
@@ -267,7 +266,7 @@ const submit = () => {
                   <button type="button" @click="moveHeroImageUp(index)" :disabled="index === 0" class="w-8 h-8 bg-gray-200 text-gray-500 rounded-lg flex items-center justify-center hover:bg-gray-300 transition-colors disabled:opacity-30 disabled:cursor-not-allowed">
                     <ChevronUp class="w-4 h-4" />
                   </button>
-                  <button type="button" @click="moveHeroImageDown(index)" :disabled="index === form.hero_images.length - 1" class="w-8 h-8 bg-gray-200 text-gray-500 rounded-lg flex items-center justify-center hover:bg-gray-300 transition-colors disabled:opacity-30 disabled:cursor-not-allowed">
+                  <button type="button" @click="moveHeroImageDown(index)" :disabled="index === heroForm.hero_images.length - 1" class="w-8 h-8 bg-gray-200 text-gray-500 rounded-lg flex items-center justify-center hover:bg-gray-300 transition-colors disabled:opacity-30 disabled:cursor-not-allowed">
                     <ChevronDown class="w-4 h-4" />
                   </button>
                 </div>
@@ -277,7 +276,7 @@ const submit = () => {
               </div>
             </div>
             
-            <div v-if="form.hero_images.length === 0" class="text-center p-8 text-gray-500 border-2 border-dashed border-gray-200 rounded-xl text-sm sm:text-base">
+            <div v-if="heroForm.hero_images.length === 0" class="text-center p-8 text-gray-500 border-2 border-dashed border-gray-200 rounded-xl text-sm sm:text-base">
               No hay imágenes en el carrusel. Haz clic en "Añadir Imágenes".
             </div>
           </div>
@@ -286,10 +285,34 @@ const submit = () => {
 
       <!-- Sticky Bottom Bar -->
       <div class="bg-white border-t border-gray-200 px-4 sm:px-8 py-4 sticky bottom-0 z-10 flex justify-end gap-4 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
-        <button type="submit" :disabled="form.processing || !form.isDirty" class="inline-flex items-center justify-center gap-2 h-12 px-6 sm:px-8 bg-action text-white font-bold rounded-xl hover:bg-red-700 transition-colors shadow-md cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed w-full sm:w-auto text-sm sm:text-base">
-          <Save class="w-5 h-5" /> Guardar Configuración
+        <button 
+          v-show="activeTab === 'contact'" 
+          type="button" 
+          @click="contactForm.post('/admin/settings', { preserveScroll: true, onSuccess: () => contactForm.defaults({ whatsapp_number: contactForm.whatsapp_number }) })" 
+          :disabled="contactForm.processing || !contactForm.isDirty" 
+          class="inline-flex items-center justify-center gap-2 h-12 px-6 sm:px-8 bg-action text-white font-bold rounded-xl hover:bg-red-700 transition-colors shadow-md cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed w-full sm:w-auto text-sm sm:text-base"
+        >
+          <Save class="w-5 h-5" /> Guardar WhatsApp
+        </button>
+        <button 
+          v-show="activeTab === 'faqs'" 
+          type="button" 
+          @click="faqsForm.post('/admin/settings', { preserveScroll: true, onSuccess: () => faqsForm.defaults({ faqs: JSON.parse(JSON.stringify(faqsForm.faqs)) }) })" 
+          :disabled="faqsForm.processing || !faqsForm.isDirty" 
+          class="inline-flex items-center justify-center gap-2 h-12 px-6 sm:px-8 bg-action text-white font-bold rounded-xl hover:bg-red-700 transition-colors shadow-md cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed w-full sm:w-auto text-sm sm:text-base"
+        >
+          <Save class="w-5 h-5" /> Guardar Preguntas
+        </button>
+        <button 
+          v-show="activeTab === 'hero'" 
+          type="button" 
+          @click="heroForm.post('/admin/settings', { preserveScroll: true, onSuccess: () => heroForm.defaults({ hero_images: [...heroForm.hero_images] }) })" 
+          :disabled="heroForm.processing || !heroForm.isDirty" 
+          class="inline-flex items-center justify-center gap-2 h-12 px-6 sm:px-8 bg-action text-white font-bold rounded-xl hover:bg-red-700 transition-colors shadow-md cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed w-full sm:w-auto text-sm sm:text-base"
+        >
+          <Save class="w-5 h-5" /> Guardar Carrusel
         </button>
       </div>
-    </form>
+    </div>
   </AdminLayout>
 </template>
