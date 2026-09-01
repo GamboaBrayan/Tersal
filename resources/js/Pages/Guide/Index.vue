@@ -133,7 +133,7 @@ const handleMouseLeave = () => {
                   +
                 </span>
               </button>
-              <div v-show="activeFaq === index" class="px-5 sm:px-6 pb-5 sm:pb-6 text-gray-600 text-sm leading-relaxed">
+              <div v-show="activeFaq === index" class="px-5 sm:px-6 pb-5 sm:pb-6 font-medium text-gray-800 text-sm leading-relaxed">
                 {{ faq.answer || faq.a }}
               </div>
             </div>
