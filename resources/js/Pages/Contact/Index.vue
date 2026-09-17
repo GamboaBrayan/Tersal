@@ -45,7 +45,7 @@ import { Phone, Mail, Clock, MessageCircle } from 'lucide-vue-next';
                 </div>
                 <div>
                   <div class="text-sm text-gray-900 font-bold">Correo Electrónico</div>
-                  <div class="text-xl text-gray-900 font-normal">Llantastersal@gmail.com</div>
+                  <div class="text-xl text-gray-900 font-normal">ventas@llantastersal.com.pe</div>
                 </div>
               </div>
             </div>

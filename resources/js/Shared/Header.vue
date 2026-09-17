@@ -37,7 +37,7 @@ watch(() => page.url, () => {
         </div>
         <div class="flex items-center gap-2 font-medium">
           <Mail class="w-4 h-4" /> 
-          <span>Llantastersal@gmail.com</span>
+          <span>ventas@llantastersal.com.pe</span>
         </div>
       </div>
     </div>
@@ -64,10 +64,11 @@ watch(() => page.url, () => {
 
       <!-- Center Nav (Desktop) -->
       <nav class="text-white hidden md:flex justify-center space-x-8 text-sm font-semibold uppercase tracking-wider h-full items-center">
-        <Link href="/" :class="$page.url === '/' ? 'text-action border-action' : 'border-transparent'" class="hover:text-action h-full flex items-center border-b-[3px] transition-colors">Inicio</Link>
-        <Link href="/catalog" :class="$page.url.startsWith('/catalog') ? 'text-action border-action' : 'border-transparent'" class="hover:text-action h-full flex items-center border-b-[3px] transition-colors">Catálogo</Link>
-        <Link href="/guide" :class="$page.url.startsWith('/guide') ? 'text-action border-action' : 'border-transparent'" class="hover:text-action h-full flex items-center border-b-[3px] transition-colors">Guía de Neumáticos</Link>
-        <Link href="/contacto" :class="$page.url.startsWith('/contacto') ? 'text-action border-action' : 'border-transparent'" class="hover:text-action h-full flex items-center border-b-[3px] transition-colors">Contacto</Link>
+        <Link href="/" :class="$page.url === '/' ? 'text-action border-action' : 'border-transparent'" class="hover:text-action h-full flex items-center border-b-[2px] transition-colors">Inicio</Link>
+        <Link href="/catalog" :class="$page.url.startsWith('/catalog') ? 'text-action border-action' : 'border-transparent'" class="hover:text-action h-full flex items-center border-b-[2px] transition-colors">Catálogo</Link>
+        <Link href="/sobre-nosotros" :class="$page.url.startsWith('/sobre-nosotros') ? 'text-action border-action' : 'border-transparent'" class="hover:text-action h-full flex items-center border-b-[2px] transition-colors">Nosotros</Link>
+        <Link href="/guide" :class="$page.url.startsWith('/guide') ? 'text-action border-action' : 'border-transparent'" class="hover:text-action h-full flex items-center border-b-[2px] transition-colors">Guía de Neumáticos</Link>
+        <Link href="/contacto" :class="$page.url.startsWith('/contacto') ? 'text-action border-action' : 'border-transparent'" class="hover:text-action h-full flex items-center border-b-[2px] transition-colors">Contacto</Link>
       </nav>
 
       <!-- Right Spacer (For perfect centering) -->
@@ -92,6 +93,7 @@ watch(() => page.url, () => {
       <nav class="flex flex-col text-white text-sm font-semibold uppercase tracking-wider px-6 py-4 space-y-6">
         <Link href="/" class="hover:text-red-500 transition-colors">Inicio</Link>
         <Link href="/catalog" class="hover:text-red-500 transition-colors">Catálogo</Link>
+        <Link href="/sobre-nosotros" class="hover:text-red-500 transition-colors">Nosotros</Link>
         <Link href="/guide" class="hover:text-red-500 transition-colors">Guía de Neumáticos</Link>
         <Link href="/contacto" class="hover:text-red-500 transition-colors">Contacto</Link>
       </nav>

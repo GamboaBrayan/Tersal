@@ -25,6 +25,10 @@ Route::get('/contacto', function() {
     return Inertia::render('Contact/Index');
 })->name('contacto');
 
+Route::get('/sobre-nosotros', function() {
+    return Inertia::render('About/Index');
+})->name('sobre-nosotros');
+
 Route::get('/legales', function() {
     return Inertia::render('Legal/Terms');
 })->name('legales');

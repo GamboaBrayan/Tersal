@@ -47,13 +47,16 @@ class HomeController extends Controller
             }
         }
 
+        $latestTires = Tire::with(['brand', 'category'])->latest()->take(12)->get();
+
         return Inertia::render('Home/Index', [
             'brands' => $brands,
             'promotions' => $promotions,
             'widths' => $widths,
             'profiles' => $profiles,
             'rims' => $rims,
-            'heroImages' => $heroImages
+            'heroImages' => $heroImages,
+            'latestTires' => $latestTires
         ]);
     }
 }

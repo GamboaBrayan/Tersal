@@ -7,14 +7,19 @@ import WhatsAppFloatingBtn from '../../Shared/WhatsAppFloatingBtn.vue';
 import { Search, HelpCircle, MessageCircle, Truck, ChevronDown, ShieldCheck, CheckCircle, ChevronLeft, ChevronRight } from 'lucide-vue-next';
 import axios from 'axios';
 
+import ProductCard from '../Catalog/Components/ProductCard.vue';
+
 const props = defineProps({
   brands: Array,
   promotions: Array,
   widths: Array,
   profiles: Array,
   rims: Array,
-  heroImages: Array
+  heroImages: Array,
+  latestTires: Array
 });
+
+const showAllLatestTires = ref(false);
 
 const activeTab = ref('medida');
 
@@ -1056,6 +1061,31 @@ onUnmounted(() => {
                 <h4 class="font-bold text-gray-900 text-sm lg:text-base mb-2">3. Coordina la entrega</h4>
                 <p class="text-xs lg:text-sm text-black leading-relaxed">Paga de forma segura y recibe o instala tus neumáticos el mismo día. ¡Así de fácil!</p>
               </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Últimos Ingresos (Catálogo Reducido) -->
+      <section v-if="latestTires && latestTires.length > 0" class="py-20 bg-white border-t border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="text-center mb-12">
+            <h2 class="text-3xl font-black text-gray-900 mb-3 tracking-tight">Explora nuestro <Link href="/catalog" class="text-action hover:underline cursor-pointer">Catálogo</Link></h2>
+            <div class="w-8 h-1 bg-action mx-auto rounded-full"></div>
+          </div>
+          
+          <div class="relative">
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6" :class="{ 'max-h-[850px] sm:max-h-[900px] overflow-hidden': !showAllLatestTires && latestTires.length > 6 }">
+              <template v-for="(tire, index) in latestTires" :key="tire.id">
+                <ProductCard v-if="showAllLatestTires || index < 6" :tire="tire" />
+              </template>
+            </div>
+            
+            <!-- Difuminado (solo si hay más de 6 y no están mostrados todos) -->
+            <div v-if="!showAllLatestTires && latestTires.length > 6" class="absolute bottom-0 left-0 w-full h-48 bg-gradient-to-t from-white via-white/80 to-transparent flex items-end justify-center pb-6 z-10">
+              <button @click="showAllLatestTires = true" class="text-gray-900 font-semibold text-sm hover:text-action cursor-pointer transition-colors flex items-center gap-1">
+                Ver más <ChevronDown class="w-4 h-4" />
+              </button>
             </div>
           </div>
         </div>

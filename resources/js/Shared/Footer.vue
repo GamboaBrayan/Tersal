@@ -22,8 +22,12 @@ import { Facebook, Instagram } from 'lucide-vue-next';
         <div>
           <h3 class="font-bold uppercase tracking-wider mb-4 text-sm">Empresa</h3>
           <ul class="space-y-3 text-white-200 text-sm">
-            <li><Link href="/contacto" class="hover:text-white transition-colors">Sobre Nosotros</Link></li>
-            <li>
+            <li><Link href="/" class="hover:text-white transition-colors">Inicio</Link></li>
+            <li><Link href="/catalog" class="hover:text-white transition-colors">Catálogo</Link></li>
+            <li><Link href="/sobre-nosotros" class="hover:text-white transition-colors">Nosotros</Link></li>
+            <li><Link href="/guide" class="hover:text-white transition-colors">Guía de Neumáticos</Link></li>
+            <li><Link href="/contacto" class="hover:text-white transition-colors">Contacto</Link></li>
+            <li class="pt-1">
               <div class="flex items-center gap-4 mt-2">
                 <a href="https://www.facebook.com/LlantasTersal/" target="_blank" class="hover:text-white transition-colors"><Facebook class="w-5 h-5" /></a>
                 <a href="https://www.instagram.com/llantas.tersal/" target="_blank" class="hover:text-white transition-colors"><Instagram class="w-5 h-5" /></a>

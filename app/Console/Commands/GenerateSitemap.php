@@ -33,6 +33,7 @@ class GenerateSitemap extends Command
             ->add(Url::create('/')->setPriority(1.0)->setChangeFrequency(Url::CHANGE_FREQUENCY_DAILY))
             ->add(Url::create('/catalog')->setPriority(0.9)->setChangeFrequency(Url::CHANGE_FREQUENCY_DAILY))
             ->add(Url::create('/guide')->setPriority(0.8)->setChangeFrequency(Url::CHANGE_FREQUENCY_WEEKLY))
+            ->add(Url::create('/sobre-nosotros')->setPriority(0.8)->setChangeFrequency(Url::CHANGE_FREQUENCY_MONTHLY))
             ->add(Url::create('/contacto')->setPriority(0.8)->setChangeFrequency(Url::CHANGE_FREQUENCY_MONTHLY))
             ->add(Url::create('/legales')->setPriority(0.5)->setChangeFrequency(Url::CHANGE_FREQUENCY_YEARLY))
             ->add(Url::create('/privacidad')->setPriority(0.5)->setChangeFrequency(Url::CHANGE_FREQUENCY_YEARLY))
