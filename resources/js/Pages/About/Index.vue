@@ -3,14 +3,10 @@ import { Head, Link, usePage } from '@inertiajs/vue3';
 import Header from '../../Shared/Header.vue';
 import Footer from '../../Shared/Footer.vue';
 import WhatsAppFloatingBtn from '../../Shared/WhatsAppFloatingBtn.vue';
-import { 
-  ShieldCheck, 
-  Compass, 
-  Award, 
+import {  
   Headphones, 
   CheckCircle, 
-  Sparkles,
-  ArrowRight
+  Sparkles
 } from 'lucide-vue-next';
 </script>
 

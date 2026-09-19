@@ -41,7 +41,7 @@ import { Facebook, Instagram } from 'lucide-vue-next';
           <h3 class="font-bold uppercase tracking-wider mb-4 text-sm">Soporte</h3>
           <ul class="space-y-3 text-sm text-white-400">
             <li><a :href="'https://wa.me/' + usePage().props.global_whatsapp + '?text=' + encodeURIComponent('¡Hola! Estoy navegando en la web de Tersal y necesito ayuda o asesoría con un servicio/neumático.')" target="_blank" class="hover:text-white transition-colors inline-block w-fit">Soporte por WhatsApp</a></li>
-            <li><a href="mailto:ventas@tersal.pe" class="hover:text-white transition-colors inline-block w-fit">Llantastersal@gmail.com</a></li>
+            <li><a href="mailto:ventas@tersal.pe" class="hover:text-white transition-colors inline-block w-fit">ventas@llantastersal.com.pe</a></li>
           </ul>
         </div>
         
