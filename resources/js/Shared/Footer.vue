@@ -64,7 +64,7 @@ import { Facebook, Instagram } from 'lucide-vue-next';
     </div>
 
     <!-- Bottom Section: Medios de pago & Copyright (z-20) -->
-    <div class="bg-black w-full z-20 py-4 relative">
+    <div class="bg-[#1B3BE3] w-full z-20 py-4 relative">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
           <div class="flex justify-center md:justify-start order-2 md:order-1">
