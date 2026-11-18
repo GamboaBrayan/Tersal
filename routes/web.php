@@ -1,48 +1,28 @@
 <?php
 
+use App\Http\Controllers\AdminAuthController;
 use App\Http\Controllers\CatalogController;
+use App\Http\Controllers\ComplaintController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\PageController;
 use App\Http\Controllers\VehicleSearchController;
+use Illuminate\Foundation\Http\Middleware\ValidateCsrfToken;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
-Route::get('/login', function () {
-    return redirect()->route('admin.login');
-})->name('login');
+Route::redirect('/login', '/admin/login')->name('login');
 Route::get('/catalog', [CatalogController::class, 'index'])->name('catalog');
 Route::get('/catalog/{tire}', [CatalogController::class, 'show'])->name('catalog.show');
-Route::get('/guide', function() {
-    $faqsSetting = \App\Models\Setting::where('key', 'faqs')->first();
-    $faqs = $faqsSetting ? json_decode($faqsSetting->value, true) : [];
-    return Inertia::render('Guide/Index', [
-        'faqs' => $faqs
-    ]);
-})->name('guide');
-
-Route::get('/contacto', function() {
-    return Inertia::render('Contact/Index');
-})->name('contacto');
-
-Route::get('/sobre-nosotros', function() {
-    return Inertia::render('About/Index');
-})->name('sobre-nosotros');
-
-Route::get('/legales', function() {
-    return Inertia::render('Legal/Terms');
-})->name('legales');
-
-Route::get('/privacidad', function() {
-    return Inertia::render('Legal/Privacy');
-})->name('privacidad');
-
-Route::get('/libro-reclamaciones', function() {
-    return Inertia::render('Legal/LibroReclamaciones');
-})->name('libro-reclamaciones');
-Route::post('/libro-reclamaciones', [\App\Http\Controllers\ComplaintController::class, 'store'])->middleware('throttle:3,1')->name('libro-reclamaciones.store');
-
-use App\Http\Controllers\AdminAuthController;
+Route::get('/guide', [PageController::class, 'guide'])->name('guide');
+Route::get('/contacto', [PageController::class, 'contact'])->name('contacto');
+Route::get('/sobre-nosotros', [PageController::class, 'about'])->name('sobre-nosotros');
+Route::get('/legales', [PageController::class, 'terms'])->name('legales');
+Route::get('/privacidad', [PageController::class, 'privacy'])->name('privacidad');
+Route::get('/libro-reclamaciones', [PageController::class, 'complaintsBook'])->name('libro-reclamaciones');
+Route::post('/libro-reclamaciones', [ComplaintController::class, 'store'])->middleware('throttle:3,1')->name('libro-reclamaciones.store');
 
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/login', [AdminAuthController::class, 'showLogin'])->name('login');
@@ -96,15 +76,30 @@ Route::prefix('admin')->name('admin.')->group(function () {
     });
 });
 
-Route::prefix('api/vehicles')->group(function () {
+Route::prefix('api/vehicles')->middleware('throttle:30,1')->group(function () {
     Route::get('/makes', [VehicleSearchController::class, 'getMakes']);
     Route::get('/models', [VehicleSearchController::class, 'getModels']);
     Route::get('/years', [VehicleSearchController::class, 'getYears']);
     Route::get('/trims', [VehicleSearchController::class, 'getTrims']);
 });
 
-Route::fallback(function () {
-    return Inertia::render('Error/404');
-});
+Route::post('/api/deploy/migrate', function (Request $request) {
+    $secret = env('DEPLOY_SECRET');
+    if (!$secret || !hash_equals($secret, (string) $request->header('X-Deploy-Token'))) {
+        abort(403, 'No autorizado');
+    }
+
+    Artisan::call('migrate', ['--force' => true]);
+    $migrateOutput = Artisan::output();
+
+    Artisan::call('optimize:clear');
+
+    return response()->json([
+        'ok' => true,
+        'output' => trim($migrateOutput),
+    ]);
+})->withoutMiddleware([ValidateCsrfToken::class]);
+
+Route::fallback([PageController::class, 'fallback']);
 
 
