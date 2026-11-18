@@ -6,7 +6,7 @@ import { Facebook, Instagram } from 'lucide-vue-next';
 <template>
   <footer class="bg-[#1B3BE3] text-white mt-auto relative flex flex-col overflow-hidden">
     <!-- Imagen de la llanta de fondo -->
-    <img src="/images/llantafooter.webp" alt="Tire Background" class="absolute right-[-5%] md:right-0 -bottom-4 h-[95%] md:h-[100%] object-contain object-bottom pointer-events-none z-30 opacity-77" />
+    <img src="/images/llantafooter.webp" alt="Tire Background" loading="lazy" decoding="async" class="absolute right-[-5%] md:right-0 -bottom-4 h-[95%] md:h-[100%] object-contain object-bottom pointer-events-none z-30 opacity-77" />
 
     <!-- Top Section -->
     <div class="pt-16 pb-12 relative z-10">
@@ -16,7 +16,7 @@ import { Facebook, Instagram } from 'lucide-vue-next';
           <!-- Col 1 -->
           <div class="lg:col-span-4">
             <div class="flex items-center gap-2 mb-6">
-              <img src="/images/logo.png" alt="Tersal Logo" class="h-16 w-auto object-contain" />
+              <img src="/images/logo.webp" alt="Tersal Logo" loading="lazy" decoding="async" class="h-16 w-auto object-contain" />
             </div>
             <p class="text-white-200 text-sm leading-relaxed">
               Especialistas en neumáticos, comprometidos<br>
@@ -26,13 +26,13 @@ import { Facebook, Instagram } from 'lucide-vue-next';
             <div class="mt-6">
               <span class="text-sm font-semibold block mb-3">Síguenos en:</span>
               <div class="flex items-center gap-3">
-                <a href="https://www.instagram.com/llantas.tersal/" target="_blank" class="flex items-center justify-center w-10 h-10 rounded-full border border-white hover:bg-white hover:text-[#1B3BE3] transition-colors duration-300">
+                <a href="https://www.instagram.com/llantas.tersal/" target="_blank" rel="noopener noreferrer" aria-label="Instagram de Tersal" class="flex items-center justify-center w-10 h-10 rounded-full border border-white hover:bg-white hover:text-[#1B3BE3] transition-colors duration-300">
                   <Instagram class="w-5 h-5" />
                 </a>
-                <a href="https://www.facebook.com/LlantasTersal/" target="_blank" class="flex items-center justify-center w-10 h-10 rounded-full border border-white hover:bg-white hover:text-[#1B3BE3] transition-colors duration-300">
+                <a href="https://www.facebook.com/LlantasTersal/" target="_blank" rel="noopener noreferrer" aria-label="Facebook de Tersal" class="flex items-center justify-center w-10 h-10 rounded-full border border-white hover:bg-white hover:text-[#1B3BE3] transition-colors duration-300">
                   <Facebook class="w-5 h-5" />
                 </a>
-                <a href="https://www.tiktok.com/@llantas_tersal" target="_blank" class="flex items-center justify-center w-10 h-10 rounded-full border border-white hover:bg-white hover:text-[#1B3BE3] transition-colors duration-300">
+                <a href="https://www.tiktok.com/@llantas_tersal" target="_blank" rel="noopener noreferrer" aria-label="TikTok de Tersal" class="flex items-center justify-center w-10 h-10 rounded-full border border-white hover:bg-white hover:text-[#1B3BE3] transition-colors duration-300">
                   <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
                     <path d="M12.525.02c1.31-.02 2.61-.01 3.91.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 2.23-1.11 4.46-2.9 5.81-1.78 1.34-4.22 1.83-6.4 1.4-2.18-.43-4.14-1.8-5.32-3.69-1.18-1.89-1.46-4.32-.77-6.39.69-2.07 2.37-3.76 4.38-4.57 2.02-.81 4.38-.72 6.32.26v4.11c-1.61-.71-3.63-.49-4.99.71-1.36 1.2-1.76 3.29-.98 4.9.78 1.61 2.7 2.54 4.54 2.18 1.84-.36 3.19-2.03 3.23-3.92V.02h-1.17z"/>
                   </svg>
@@ -60,7 +60,7 @@ import { Facebook, Instagram } from 'lucide-vue-next';
             <ul class="space-y-3 text-sm text-white-400">
               <li><Link href="/contacto" class="hover:text-white transition-colors inline-block w-fit">Contacto</Link></li>
               <li><a :href="'https://wa.me/' + usePage().props.global_whatsapp + '?text=' + encodeURIComponent('¡Hola! Estoy navegando en la web de Tersal y necesito ayuda o asesoría con un servicio/neumático.')" target="_blank" class="hover:text-white transition-colors inline-block w-fit">Soporte por WhatsApp</a></li>
-              <li><a href="mailto:ventas@tersal.pe" class="hover:text-white transition-colors inline-block w-fit">ventas@llantastersal.com.pe</a></li>
+              <li><a href="mailto:ventas@llantastersal.com.pe" class="hover:text-white transition-colors inline-block w-fit">ventas@llantastersal.com.pe</a></li>
             </ul>
           </div>
           
@@ -69,11 +69,11 @@ import { Facebook, Instagram } from 'lucide-vue-next';
             <h3 class="font-bold uppercase tracking-wider mb-2 text-sm">Legal</h3>
             <div class="w-8 h-0.5 bg-white mb-4"></div>
             <ul class="space-y-3 text-gray-200 text-sm">
-              <li class="hidden"><span class="text-white-200 cursor-not-allowed opacity-75">Términos y condiciones</span></li>
-              <li class="hidden"><span class="text-white-200 cursor-not-allowed opacity-75">Política de Privacidad</span></li>
+              <li><Link href="/legales" class="hover:text-white transition-colors inline-block w-fit">Términos y condiciones</Link></li>
+              <li><Link href="/privacidad" class="hover:text-white transition-colors inline-block w-fit">Política de Privacidad</Link></li>
               <li>
                 <a href="/libro-reclamaciones" target="_blank" class="inline-block transition-transform hover:scale-105">
-                  <img src="/images/libroreclamaciones.jpg" alt="Libro de Reclamaciones" class="h-12 w-auto object-contain bg-white rounded p-1" />
+                  <img src="/images/libroreclamaciones.webp" alt="Libro de Reclamaciones" loading="lazy" decoding="async" class="h-12 w-auto object-contain bg-white rounded p-1" />
                 </a>
               </li>
             </ul>
@@ -93,7 +93,7 @@ import { Facebook, Instagram } from 'lucide-vue-next';
           </div>
           <div class="flex justify-center items-center gap-8 order-1 md:order-2">
             <div class="flex items-center justify-center">
-              <img src="/images/VISA.png" alt="Visa" class="h-6 w-auto object-contain transition-transform hover:scale-110 brightness-0 invert" />
+              <img src="/images/visa.webp" alt="Visa" loading="lazy" decoding="async" class="h-6 w-auto object-contain transition-transform hover:scale-110 brightness-0 invert" />
             </div>
             <div class="flex items-center justify-center">
               <img src="/images/mastercard_full.svg" alt="Mastercard" class="h-8 w-auto object-contain transition-transform hover:scale-110" />
