@@ -19,8 +19,8 @@ Route::get('/catalog/{tire}', [CatalogController::class, 'show'])->name('catalog
 Route::get('/guide', [PageController::class, 'guide'])->name('guide');
 Route::get('/contacto', [PageController::class, 'contact'])->name('contacto');
 Route::get('/sobre-nosotros', [PageController::class, 'about'])->name('sobre-nosotros');
-Route::get('/legales', [PageController::class, 'terms'])->name('legales');
-Route::get('/privacidad', [PageController::class, 'privacy'])->name('privacidad');
+// Route::get('/legales', [PageController::class, 'terms'])->name('legales');
+// Route::get('/privacidad', [PageController::class, 'privacy'])->name('privacidad');
 Route::get('/libro-reclamaciones', [PageController::class, 'complaintsBook'])->name('libro-reclamaciones');
 Route::post('/libro-reclamaciones', [ComplaintController::class, 'store'])->middleware('throttle:3,1')->name('libro-reclamaciones.store');
 

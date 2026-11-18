@@ -69,8 +69,8 @@ import { Facebook, Instagram } from 'lucide-vue-next';
             <h3 class="font-bold uppercase tracking-wider mb-2 text-sm">Legal</h3>
             <div class="w-8 h-0.5 bg-white mb-4"></div>
             <ul class="space-y-3 text-gray-200 text-sm">
-              <li><Link href="/legales" class="hover:text-white transition-colors inline-block w-fit">Términos y condiciones</Link></li>
-              <li><Link href="/privacidad" class="hover:text-white transition-colors inline-block w-fit">Política de Privacidad</Link></li>
+              <!-- <li><Link href="/legales" class="hover:text-white transition-colors inline-block w-fit">Términos y condiciones</Link></li>
+              <li><Link href="/privacidad" class="hover:text-white transition-colors inline-block w-fit">Política de Privacidad</Link></li> -->
               <li>
                 <a href="/libro-reclamaciones" target="_blank" class="inline-block transition-transform hover:scale-105">
                   <img src="/images/libroreclamaciones.webp" alt="Libro de Reclamaciones" loading="lazy" decoding="async" class="h-12 w-auto object-contain bg-white rounded p-1" />
