@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from 'vue';
-import { Head, Link } from '@inertiajs/vue3';
+import { Head, Link, router } from '@inertiajs/vue3';
 import { ChevronLeft, ChevronRight, Filter } from 'lucide-vue-next';
 import Header from '../../Shared/Header.vue';
 import Footer from '../../Shared/Footer.vue';
@@ -10,7 +10,7 @@ import FilterSidebar from './Components/FilterSidebar.vue';
 
 const isMobileFiltersOpen = ref(false);
 
-defineProps({
+const props = defineProps({
   tires: Object,
   isVehicleSearch: Boolean,
   recommendedTires: Array,
@@ -24,6 +24,11 @@ defineProps({
   profiles: Array,
   rims: Array
 });
+
+const sortBy = ref(props.filters?.sort || 'recommended');
+const applySort = () => {
+  router.get('/catalog', { ...props.filters, sort: sortBy.value }, { preserveState: true, preserveScroll: true });
+};
 </script>
 
 <template>
@@ -43,11 +48,11 @@ defineProps({
             <Filter class="w-4 h-4" /> Filtros
           </button>
 
-          <span class="text-sm font-medium text-gray-600 hidden sm:inline">Ordenar por:</span>
-          <select class="h-10 px-4 rounded border border-gray-300 text-sm focus:ring-1 focus:ring-primary focus:border-primary bg-white hidden sm:block">
-            <option>Recomendados</option>
-            <option>Menor Precio</option>
-            <option>Mayor Precio</option>
+          <span v-if="!isVehicleSearch" class="text-sm font-medium text-gray-600 hidden sm:inline">Ordenar por:</span>
+          <select v-if="!isVehicleSearch" v-model="sortBy" @change="applySort" class="h-10 px-4 rounded border border-gray-300 text-sm focus:ring-1 focus:ring-primary focus:border-primary bg-white hidden sm:block">
+            <option value="recommended">Recomendados</option>
+            <option value="price_asc">Menor Precio</option>
+            <option value="price_desc">Mayor Precio</option>
           </select>
         </div>
       </div>

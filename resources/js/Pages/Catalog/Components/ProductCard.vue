@@ -32,6 +32,7 @@ const getDiscountPercentage = (price, offerPrice) => {
       </div>
 
       <img :src="tire.image_urls && tire.image_urls.length ? tire.image_urls[0] : defaultImage" 
+           loading="lazy" decoding="async"
            class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" 
            alt="Tire" />
     </Link>

@@ -39,15 +39,16 @@ class GenerateSitemap extends Command
             ->add(Url::create('/privacidad')->setPriority(0.5)->setChangeFrequency(Url::CHANGE_FREQUENCY_YEARLY))
             ->add(Url::create('/libro-reclamaciones')->setPriority(0.5)->setChangeFrequency(Url::CHANGE_FREQUENCY_YEARLY));
 
-        // Aquí puedes agregar páginas dinámicas, por ejemplo, los productos del catálogo:
-        /*
-        \App\Models\Tire::all()->each(function ($tire) use ($sitemap) {
-            // Asumiendo que usas 'slug' o un identificador en la ruta
-            $sitemap->add(Url::create("/catalog/{$tire->id}")
-                ->setPriority(0.8)
-                ->setChangeFrequency(Url::CHANGE_FREQUENCY_WEEKLY));
+        \App\Models\Tire::where('status', true)->select(['id', 'updated_at'])->chunk(200, function ($tires) use ($sitemap) {
+            foreach ($tires as $tire) {
+                $sitemap->add(
+                    Url::create("/catalog/{$tire->id}")
+                        ->setLastModificationDate($tire->updated_at)
+                        ->setPriority(0.8)
+                        ->setChangeFrequency(Url::CHANGE_FREQUENCY_WEEKLY)
+                );
+            }
         });
-        */
 
         $sitemap->writeToFile(public_path('sitemap.xml'));
 

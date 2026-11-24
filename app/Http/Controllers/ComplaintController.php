@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Log;
 
 class ComplaintController extends Controller
@@ -22,7 +22,7 @@ class ComplaintController extends Controller
             'direccion' => 'required|string|max:255',
             'distrito' => 'required|string|max:255',
             'tipo_bien' => 'required|string',
-            'monto_reclamado' => 'required|numeric',
+            'monto_reclamado' => 'required|numeric|min:0',
             'descripcion_bien' => 'required|string',
             'tipo_reclamo' => 'required|string',
             'detalle' => 'required|string',
@@ -43,55 +43,34 @@ class ComplaintController extends Controller
 
         $validated['generated_id'] = $generatedId;
 
-        // Render HTML from blade view
-        $htmlContent = view('emails.complaint', $validated)->render();
-
-        $apiKey = env('BREVO_API_KEY');
-
-        if (empty($apiKey)) {
-            Log::error('BREVO_API_KEY no está configurada.');
-            return response()->json(['error' => 'Error de configuración del servidor.'], 500);
-        }
+        \App\Models\Complaint::create($validated);
 
         try {
-            $response = Http::withHeaders([
-                'api-key' => $apiKey,
-                'Content-Type' => 'application/json',
-                'accept' => 'application/json',
-            ])->post('https://api.brevo.com/v3/smtp/email', [
-                'sender' => [
-                    'name' => 'Libro de Reclamaciones Tersal',
-                    'email' => env('BREVO_SENDER_EMAIL', 'no-reply@tersal.pe') // Use the authenticated domain
-                ],
-                'to' => [
-                    [
-                        'email' => env('ADMIN_EMAIL', 'Llantastersal@gmail.com'),
-                        'name' => 'Tersal'
-                    ],
-                    [
-                        'email' => $validated['email'], // Send a copy to the user
-                        'name' => $validated['nombres'] . ' ' . $validated['apellidos']
-                    ]
-                ],
-                'subject' => 'Nuevo Registro en Libro de Reclamaciones - ' . $generatedId,
-                'htmlContent' => $htmlContent
-            ]);
+            $adminEmail = config('tersal.admin_email', 'Llantastersal@gmail.com');
+            $clientEmail = $validated['email'];
+            $clientName = $validated['nombres'] . ' ' . $validated['apellidos'];
+            $subject = 'Nuevo Registro en Libro de Reclamaciones - ' . $generatedId;
 
-            if ($response->successful()) {
-                return response()->json([
-                    'success' => true,
-                    'generated_id' => $generatedId
-                ]);
-            } else {
-                Log::error('Error al enviar correo con Brevo API', [
-                    'status' => $response->status(),
-                    'body' => $response->body()
-                ]);
-                return response()->json(['error' => 'No se pudo enviar el reclamo.'], 500);
-            }
+            // Encolar correo al administrador y con copia al cliente para evitar bloqueos SMTP
+            Mail::queue('emails.complaint', $validated, function ($message) use ($adminEmail, $clientEmail, $clientName, $subject) {
+                $message->to($adminEmail, 'Administración Tersal')
+                        ->cc($clientEmail, $clientName)
+                        ->subject($subject);
+            });
+
+            return response()->json([
+                'success' => true,
+                'generated_id' => $generatedId
+            ]);
         } catch (\Exception $e) {
-            Log::error('Excepción al enviar correo con Brevo API: ' . $e->getMessage());
-            return response()->json(['error' => 'Error interno del servidor.'], 500);
+            Log::error('Error al enviar correo por SMTP: ' . $e->getMessage(), [
+                'trace' => $e->getTraceAsString()
+            ]);
+            return response()->json([
+                'success' => true,
+                'generated_id' => $generatedId,
+                'warning' => 'Tu reclamo fue registrado correctamente, pero hubo un retraso al enviar la copia por correo.'
+            ]);
         }
     }
 }

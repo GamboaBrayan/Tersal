@@ -28,7 +28,7 @@ import {
         <!-- Imagen nítida alineada a la derecha como en el diseño de referencia -->
         <div class="absolute inset-y-0 right-0 w-full lg:w-3/5 h-full pointer-events-none">
           <img 
-            src="/images/about-workshop.jpg" 
+            src="/images/about-workshop.webp" 
             alt="Tersal Asesoría y Neumáticos" 
             class="w-full h-full object-cover object-right md:object-center"
           />
@@ -101,7 +101,7 @@ import {
                 <!-- 1. PCR -->
                 <div class="group relative h-[320px] sm:h-[380px] rounded-xl overflow-hidden shadow-lg border border-gray-100 flex flex-col justify-end bg-black">
                   <img 
-                    src="/images/category-pcr.jpg" 
+                    src="/images/category-pcr.webp" 
                     alt="PCR - Vehículos particulares, SUV y camionetas" 
                     class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
                   />
@@ -122,7 +122,7 @@ import {
                 <!-- 2. TBR -->
                 <div class="group relative h-[320px] sm:h-[380px] rounded-xl overflow-hidden shadow-lg border border-gray-100 flex flex-col justify-end bg-black">
                   <img 
-                    src="/images/category-tbr.jpg" 
+                    src="/images/category-tbr.webp" 
                     alt="TBR - Camiones y buses" 
                     class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
                   />
@@ -143,7 +143,7 @@ import {
                 <!-- 3. OTR -->
                 <div class="group relative h-[320px] sm:h-[380px] rounded-xl overflow-hidden shadow-lg border border-gray-100 flex flex-col justify-end bg-black">
                   <img 
-                    src="/images/category-otr.jpg" 
+                    src="/images/category-otr.webp" 
                     alt="OTR - Aplicaciones fuera de carretera" 
                     class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
                   />
@@ -276,7 +276,7 @@ import {
             <div class="lg:col-span-7 flex justify-center items-center">
               <div class="relative w-full max-w-lg lg:max-w-xl">
                 <img 
-                  src="/images/about-car-promise.jpg" 
+                  src="/images/about-car-promise.webp" 
                   alt="Vehículo de Nuestra Promesa" 
                   class="w-full h-auto object-contain drop-shadow-md rounded-2xl"
                 />

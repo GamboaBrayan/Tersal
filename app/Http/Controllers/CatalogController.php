@@ -174,7 +174,16 @@ class CatalogController extends Controller
             
             $tires = null; // No normal pagination for vehicle search
         } else {
-            $tires = $query->latest()->paginate(12)->withQueryString();
+            $sort = $request->input('sort', 'recommended');
+            if ($sort === 'price_asc') {
+                $query->orderByRaw('COALESCE(offer_price, price) ASC');
+            } elseif ($sort === 'price_desc') {
+                $query->orderByRaw('COALESCE(offer_price, price) DESC');
+            } else {
+                $query->latest();
+            }
+
+            $tires = $query->paginate(12)->withQueryString();
         }
         $brands = \Illuminate\Support\Facades\Cache::remember('brands.all', 86400, function() {
             return Brand::orderBy('name')->get();
@@ -208,12 +217,14 @@ class CatalogController extends Controller
             'widths' => $widths,
             'profiles' => $profiles,
             'rims' => $rims,
-            'filters' => $request->only(['width', 'profile', 'rim', 'brand_id', 'category_id', 'terrain_type', 'price_min', 'price_max', 'search', 'vehicle_make', 'vehicle_model', 'vehicle_year', 'vehicle_trim'])
+            'filters' => $request->only(['width', 'profile', 'rim', 'brand_id', 'category_id', 'terrain_type', 'price_min', 'price_max', 'search', 'sort', 'vehicle_make', 'vehicle_model', 'vehicle_year', 'vehicle_trim'])
         ]);
     }
 
     public function show(Tire $tire)
     {
+        abort_unless($tire->status, 404);
+
         $tire->load(['brand', 'category']);
         
         $relatedTires = Tire::with(['brand', 'category'])

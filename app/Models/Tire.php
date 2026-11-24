@@ -39,23 +39,11 @@ class Tire extends Model
         });
 
         static::saved(function ($tire) {
-            \Illuminate\Support\Facades\Cache::forget('promotions.home');
-            \Illuminate\Support\Facades\Cache::forget('tires.widths');
-            \Illuminate\Support\Facades\Cache::forget('tires.profiles');
-            \Illuminate\Support\Facades\Cache::forget('tires.rims');
-            \Illuminate\Support\Facades\Cache::forget('tires.widths_active');
-            \Illuminate\Support\Facades\Cache::forget('tires.profiles_active');
-            \Illuminate\Support\Facades\Cache::forget('tires.rims_active');
+            self::clearCaches();
         });
 
         static::deleted(function ($tire) {
-            \Illuminate\Support\Facades\Cache::forget('promotions.home');
-            \Illuminate\Support\Facades\Cache::forget('tires.widths');
-            \Illuminate\Support\Facades\Cache::forget('tires.profiles');
-            \Illuminate\Support\Facades\Cache::forget('tires.rims');
-            \Illuminate\Support\Facades\Cache::forget('tires.widths_active');
-            \Illuminate\Support\Facades\Cache::forget('tires.profiles_active');
-            \Illuminate\Support\Facades\Cache::forget('tires.rims_active');
+            self::clearCaches();
         });
 
         static::forceDeleted(function ($tire) {
@@ -71,6 +59,22 @@ class Tire extends Model
                 }
             }
         });
+    }
+
+    public static function clearCaches(): void
+    {
+        foreach ([
+            'promotions.home',
+            'tires.latest_home',
+            'tires.widths',
+            'tires.profiles',
+            'tires.rims',
+            'tires.widths_active',
+            'tires.profiles_active',
+            'tires.rims_active',
+        ] as $key) {
+            \Illuminate\Support\Facades\Cache::forget($key);
+        }
     }
 
     public function brand()

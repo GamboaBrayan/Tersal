@@ -21,6 +21,7 @@
         
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="Encuentra el neumático perfecto para tu auto, SUV, 4x4 o camión en Tersal. Más de 5,000 medidas disponibles con asesoría inmediata por WhatsApp e instalación en talleres autorizados.">
 
         <title inertia>{{ config('app.name', 'Tersal') }}</title>
         <link rel="icon" type="image/png" href="/images/icono.png" />
@@ -28,7 +29,7 @@
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
 
         <!-- Scripts -->
         @vite(['resources/js/app.js', 'resources/css/app.css'])

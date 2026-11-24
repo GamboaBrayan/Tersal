@@ -27,7 +27,7 @@ const handleEmailInput = (e) => {
     <div class="max-w-md w-full space-y-8 bg-white p-10 rounded-2xl shadow-xl border border-gray-100">
       <div>
         <div class="flex items-center justify-center mb-6">
-          <img src="/images/logo.png" alt="Tersal Logo" class="h-24 w-auto object-contain" />
+          <img src="/images/logo.webp" alt="Tersal Logo" class="h-24 w-auto object-contain" />
         </div>
         <p class="mt-2 text-center text-sm text-gray-600 font-medium uppercase tracking-wider">
           Panel de Administración

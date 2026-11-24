@@ -3,41 +3,73 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Http;
 
 class VehicleSearchController extends Controller
 {
-    private $baseUrl = 'https://api.wheel-size.com/v2';
-    
-    private function getKey()
+    private const BASE_URL = 'https://api.wheel-size.com/v2';
+
+    private static function apiKey(): string
     {
-        return env('WHEEL_SIZE_API_KEY', '');
+        return (string) config('tersal.wheel_size_api_key', '');
+    }
+
+    private static function fetchFromApi(string $endpoint, array $params = []): array
+    {
+        $key = self::apiKey();
+        if ($key === '') {
+            return [];
+        }
+
+        try {
+            $response = Http::connectTimeout(3)
+                ->timeout(6)
+                ->get(self::BASE_URL . $endpoint, array_merge($params, ['user_key' => $key]));
+
+            if (!$response->successful()) {
+                return [];
+            }
+
+            $data = $response->json('data') ?? $response->json();
+
+            return is_array($data) ? $data : [];
+        } catch (\Throwable $e) {
+            return [];
+        }
+    }
+
+    private static function rememberNonEmpty(string $cacheKey, callable $callback): array
+    {
+        $cached = Cache::get($cacheKey);
+        if (is_array($cached) && !empty($cached)) {
+            return $cached;
+        }
+
+        $data = $callback();
+        if (!empty($data)) {
+            Cache::put($cacheKey, $data, now()->addDays(30));
+        }
+
+        return $data;
     }
 
     public function getMakes()
     {
-        return Cache::remember('ws_makes', now()->addDays(30), function () {
-            $response = Http::get("{$this->baseUrl}/makes/", [
-                'user_key' => $this->getKey()
-            ]);
-            if (!$response->successful()) return [];
-            return $response->json('data') ?? $response->json();
+        return self::rememberNonEmpty('ws_makes', function () {
+            return self::fetchFromApi('/makes/');
         });
     }
 
     public function getModels(Request $request)
     {
         $make = $request->make;
-        if (!$make) return response()->json([]);
+        if (!$make) {
+            return response()->json([]);
+        }
 
-        return Cache::remember("ws_models_{$make}", now()->addDays(30), function () use ($make) {
-            $response = Http::get("{$this->baseUrl}/models/", [
-                'make' => $make,
-                'user_key' => $this->getKey()
-            ]);
-            if (!$response->successful()) return [];
-            return $response->json('data') ?? $response->json();
+        return self::rememberNonEmpty("ws_models_{$make}", function () use ($make) {
+            return self::fetchFromApi('/models/', ['make' => $make]);
         });
     }
 
@@ -45,16 +77,12 @@ class VehicleSearchController extends Controller
     {
         $make = $request->make;
         $model = $request->model;
-        if (!$make || !$model) return response()->json([]);
+        if (!$make || !$model) {
+            return response()->json([]);
+        }
 
-        return Cache::remember("ws_years_{$make}_{$model}", now()->addDays(30), function () use ($make, $model) {
-            $response = Http::get("{$this->baseUrl}/years/", [
-                'make' => $make,
-                'model' => $model,
-                'user_key' => $this->getKey()
-            ]);
-            if (!$response->successful()) return [];
-            return $response->json('data') ?? $response->json();
+        return self::rememberNonEmpty("ws_years_{$make}_{$model}", function () use ($make, $model) {
+            return self::fetchFromApi('/years/', ['make' => $make, 'model' => $model]);
         });
     }
 
@@ -63,80 +91,48 @@ class VehicleSearchController extends Controller
         $make = $request->make;
         $model = $request->model;
         $year = $request->year;
-        if (!$make || !$model || !$year) return response()->json([]);
+        if (!$make || !$model || !$year) {
+            return response()->json([]);
+        }
 
-        return Cache::remember("ws_trims_{$make}_{$model}_{$year}", now()->addDays(30), function () use ($make, $model, $year) {
-            $response = Http::get("{$this->baseUrl}/modifications/", [
+        return self::rememberNonEmpty("ws_trims_{$make}_{$model}_{$year}", function () use ($make, $model, $year) {
+            return self::fetchFromApi('/modifications/', [
                 'make' => $make,
                 'model' => $model,
                 'year' => $year,
-                'user_key' => $this->getKey()
             ]);
-            if (!$response->successful()) return [];
-            return $response->json('data') ?? $response->json();
         });
     }
 
     public static function getTiresForVehicle($make, $model, $year, $trim = null)
     {
-        $key = env('WHEEL_SIZE_API_KEY', '');
-        if (!$key) return [];
-        
-        $trimKey = $trim ? "_{$trim}" : "";
+        if (self::apiKey() === '') {
+            return [];
+        }
+
+        $trimKey = $trim ? "_{$trim}" : '';
         $cacheKey = "ws_tires_{$make}_{$model}_{$year}{$trimKey}";
 
-        $data = Cache::remember($cacheKey, now()->addDays(30), function () use ($make, $model, $year, $trim, $key) {
+        return self::rememberNonEmpty($cacheKey, function () use ($make, $model, $year, $trim) {
             $params = [
                 'make' => $make,
                 'model' => $model,
                 'year' => $year,
-                'user_key' => $key
             ];
-            
+
             if ($trim) {
                 $params['modification'] = $trim;
-                $response = Http::get("https://api.wheel-size.com/v2/search/by_model/", $params);
-                if ($response->successful()) {
-                    return $response->json('data') ?? [];
-                }
-            } else {
-                // Optimize: query by default usdm region, fallback to eudm
-                $params['region'] = 'usdm';
-                $response = Http::get("https://api.wheel-size.com/v2/search/by_model/", $params);
-                if ($response->successful() && !empty($response->json('data'))) {
-                    return $response->json('data');
-                }
-                
-                // Fallback 1: EUDM (Europe)
-                $params['region'] = 'eudm';
-                $res2 = Http::get("https://api.wheel-size.com/v2/search/by_model/", $params);
-                if ($res2->successful() && !empty($res2->json('data'))) {
-                    return $res2->json('data');
-                }
-                
-                // Fallback 2: SADM (South America)
-                $params['region'] = 'sadm';
-                $res3 = Http::get("https://api.wheel-size.com/v2/search/by_model/", $params);
-                if ($res3->successful() && !empty($res3->json('data'))) {
-                    return $res3->json('data');
-                }
-                
-                // Fallback 3: LADM (Latin America)
-                $params['region'] = 'ladm';
-                $res4 = Http::get("https://api.wheel-size.com/v2/search/by_model/", $params);
-                if ($res4->successful()) {
-                    return $res4->json('data') ?? [];
+                return self::fetchFromApi('/search/by_model/', $params);
+            }
+
+            foreach (['usdm', 'eudm', 'sadm', 'ladm'] as $region) {
+                $data = self::fetchFromApi('/search/by_model/', array_merge($params, ['region' => $region]));
+                if (!empty($data)) {
+                    return $data;
                 }
             }
-            
+
             return [];
         });
-
-        // Si falló la API y trajo vacío, lo borramos de caché para que reintente luego
-        if (empty($data)) {
-            Cache::forget($cacheKey);
-        }
-
-        return $data;
     }
 }

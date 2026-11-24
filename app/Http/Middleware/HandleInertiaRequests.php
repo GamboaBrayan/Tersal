@@ -35,13 +35,17 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
-        $whatsappSetting = \App\Models\Setting::where('key', 'whatsapp_number')->first();
-        
+        $whatsappNumber = \Illuminate\Support\Facades\Cache::rememberForever('settings.whatsapp_number', function () {
+            $setting = \App\Models\Setting::where('key', 'whatsapp_number')->first();
+            return $setting ? $setting->value : '123456789';
+        });
+
         return [
             ...parent::share($request),
-            'global_whatsapp' => $whatsappSetting ? $whatsappSetting->value : '123456789',
-            'storage_url' => env('R2_URL', asset('storage')),
-            'ga_id' => env('GOOGLE_ANALYTICS_ID'),
+            'global_whatsapp' => $whatsappNumber ?: '123456789',
+            'storage_url' => config('tersal.r2_url') ?: asset('storage'),
+            'ga_id' => config('tersal.google_analytics_id'),
+            'company' => config('tersal.company'),
             'flash' => [
                 'success' => fn () => $request->session()->get('success'),
                 'error' => fn () => $request->session()->get('error')

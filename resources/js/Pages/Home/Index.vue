@@ -133,7 +133,6 @@ const currentHeroImageIndex = ref(0);
 let heroInterval;
 
 onMounted(() => {
-  fetchMakes();
   if (props.heroImages && props.heroImages.length > 1) {
     heroInterval = setInterval(() => {
       currentHeroImageIndex.value = (currentHeroImageIndex.value + 1) % props.heroImages.length;
@@ -148,12 +147,18 @@ onUnmounted(() => {
 });
 
 const fetchMakes = async () => {
+  if (vehicleMakes.value.length > 0) return;
   try {
     const response = await axios.get('/api/vehicles/makes');
     vehicleMakes.value = response.data;
   } catch (error) {
     console.error('Error fetching makes:', error);
   }
+};
+
+const selectVehicleTab = () => {
+  activeTab.value = 'vehiculo';
+  fetchMakes();
 };
 
 const selectMake = async (make) => {
@@ -340,7 +345,7 @@ onUnmounted(() => {
             </div>
           </template>
           <template v-else>
-            <img src="/images/hero3.png" class="absolute inset-0 w-full h-full object-cover object-[50%_top] sm:object-[75%_top] lg:object-top" alt="Tire Background">
+            <img src="/images/hero3.webp" fetchpriority="high" decoding="async" class="absolute inset-0 w-full h-full object-cover object-[50%_top] sm:object-[75%_top] lg:object-top" alt="Tire Background">
           </template>
         </div>
         <!-- Overlay gradients -->
@@ -454,7 +459,7 @@ onUnmounted(() => {
                 <button @click="activeTab = 'medida'" :class="{'border-action text-action': activeTab === 'medida', 'border-transparent text-black hover:text-gray-600': activeTab !== 'medida'}" class="flex-1 pb-4 text-sm font-extrabold uppercase tracking-wider border-b-2 transition-all text-left">
                   Por Medida
                 </button>
-                <button @click="activeTab = 'vehiculo'" :class="{'border-action text-action': activeTab === 'vehiculo', 'border-transparent text-black hover:text-gray-600': activeTab !== 'vehiculo'}" class="flex-1 pb-4 text-sm font-extrabold uppercase tracking-wider border-b-2 transition-all text-left">
+                <button @click="selectVehicleTab" :class="{'border-action text-action': activeTab === 'vehiculo', 'border-transparent text-black hover:text-gray-600': activeTab !== 'vehiculo'}" class="flex-1 pb-4 text-sm font-extrabold uppercase tracking-wider border-b-2 transition-all text-left">
                   Por Vehículo
                 </button>
               </div>

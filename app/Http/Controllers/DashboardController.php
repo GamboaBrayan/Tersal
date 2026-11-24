@@ -245,6 +245,7 @@ class DashboardController extends Controller
                 ['key' => $key],
                 ['value' => is_array($value) ? json_encode($value) : $value]
             );
+            Cache::forget("settings.{$key}");
         }
 
         return redirect()->back()->with('success', 'Configuración actualizada exitosamente.');
@@ -576,24 +577,23 @@ class DashboardController extends Controller
         $request->validate(['file' => 'required|file|mimes:xlsx,xls,csv,txt']);
         
         $filePath = $request->file('file')->getRealPath();
-        
-        // Detectar si la primera hoja es de Instrucciones
+        set_time_limit(120);
+
+        // Detectar si la primera hoja es de Instrucciones sin leer todo el archivo múltiples veces
         $sheetIndex = 1;
         try {
             (new FastExcel)->import($filePath, function ($row) use (&$sheetIndex) {
                 if (isset($row['CAMPO']) || isset($row['EXPLICACIÓN'])) {
                     $sheetIndex = 2;
                 }
-                throw new \Exception("StopLoop"); // Cortar iteración luego de la primera fila
+                throw new \Exception("StopLoop");
             });
         } catch (\Exception $e) {
-            // Ignorar excepción de corte
+            // Corte intencional tras inspeccionar la primera fila
         }
 
-        $totalRows = 0;
-        (new FastExcel)->sheet($sheetIndex)->import($filePath, function ($line) use (&$totalRows) {
-            $totalRows++;
-        });
+        $rows = (new FastExcel)->sheet($sheetIndex)->import($filePath);
+        $totalRows = $rows->count();
 
         $cacheKey = 'import_progress_' . auth()->id();
         Cache::put($cacheKey, 0);
@@ -602,42 +602,47 @@ class DashboardController extends Controller
             return [strtoupper(trim($name)) => $id];
         })->toArray();
 
+        $brandsMap = Brand::all()->keyBy(function ($brand) {
+            return strtoupper(trim($brand->name));
+        });
+
         $currentRow = 0;
         $errors = [];
-        (new FastExcel)->sheet($sheetIndex)->import($filePath, function ($row) use ($totalRows, &$currentRow, $cacheKey, $categoriesMap, &$errors) {
-            $currentRow++;
-            if ($currentRow % 10 === 0 || $currentRow === $totalRows) {
-                Cache::put($cacheKey, round(($currentRow / max(1, $totalRows)) * 100));
-            }
 
-            if ($currentRow === 1) {
-                \Log::info("Row 1 keys: ", array_keys((array)$row));
-            }
+        \Illuminate\Support\Facades\DB::transaction(function () use ($rows, $totalRows, &$currentRow, $cacheKey, $categoriesMap, &$brandsMap, &$errors) {
+            foreach ($rows as $row) {
+                $currentRow++;
+                if ($currentRow % 10 === 0 || $currentRow === $totalRows) {
+                    Cache::put($cacheKey, round(($currentRow / max(1, $totalRows)) * 100));
+                }
 
-            $brandName = $row['MARCA *'] ?? $row['MARCA (Obligatorio)'] ?? $row['MARCA'] ?? null;
-            if (empty($brandName)) {
-                $errors[] = "Fila $currentRow: La columna de Marca está vacía o el archivo tiene un formato inválido.";
-                return;
-            }
+                $brandName = $row['MARCA *'] ?? $row['MARCA (Obligatorio)'] ?? $row['MARCA'] ?? null;
+                if (empty($brandName)) {
+                    $errors[] = "Fila $currentRow: La columna de Marca está vacía o el archivo tiene un formato inválido.";
+                    continue;
+                }
 
-            $categoryName = $row['CATEGORIA *'] ?? $row['CATEGORIA (Obligatorio - Autos, Camionetas, Camiones, OTR)'] ?? $row['CATEGORIA (Opcional - Autos, Camionetas, Camiones, OTR)'] ?? $row['CATEGORIA'] ?? $row['TIPO'] ?? $row['TIPO *'] ?? null;
-            $categoryId = null;
-            if (empty($categoryName)) {
-                $errors[] = "Fila $currentRow: La categoría es obligatoria.";
-                return;
-            } else {
+                $categoryName = $row['CATEGORIA *'] ?? $row['CATEGORIA (Obligatorio - Autos, Camionetas, Camiones, OTR)'] ?? $row['CATEGORIA (Opcional - Autos, Camionetas, Camiones, OTR)'] ?? $row['CATEGORIA'] ?? $row['TIPO'] ?? $row['TIPO *'] ?? null;
+                if (empty($categoryName)) {
+                    $errors[] = "Fila $currentRow: La categoría es obligatoria.";
+                    continue;
+                }
+
                 $cleanCat = strtoupper(trim($categoryName));
                 if (!isset($categoriesMap[$cleanCat])) {
                     $errors[] = "Fila $currentRow: Categoría '{$categoryName}' no existe. Solo se permite: " . implode(', ', array_keys($categoriesMap));
-                    return;
+                    continue;
                 }
                 $categoryId = $categoriesMap[$cleanCat];
-            }
-            
-            $brand = Brand::firstOrCreate(
-                ['name' => trim($brandName)],
-                ['show_on_home' => true]
-            );
+
+                $cleanBrand = strtoupper(trim($brandName));
+                if (!isset($brandsMap[$cleanBrand])) {
+                    $brandsMap[$cleanBrand] = Brand::create([
+                        'name' => trim($brandName),
+                        'show_on_home' => true,
+                    ]);
+                }
+                $brand = $brandsMap[$cleanBrand];
             
             $model = $row['MODELO *'] ?? $row['MODELO (Obligatorio)'] ?? $row['MODELO'] ?? 'S/M';
             $version = $row['VERSIÓN'] ?? $row['VERSIÓN (Opcional)'] ?? null;
@@ -673,7 +678,7 @@ class DashboardController extends Controller
                 $tire = Tire::find($id);
                 if (!$tire) {
                     $errors[] = "Fila $currentRow: El neumático con ID $id no existe.";
-                    return;
+                    continue;
                 }
                 $tire->update([
                     'brand_id' => $brand->id,
@@ -719,14 +724,12 @@ class DashboardController extends Controller
                     'images_json' => $images
                 ]);
             }
+            }
         });
-        
+
         Cache::forget($cacheKey);
-        Cache::forget('promotions.home');
+        Tire::clearCaches();
         Cache::forget('brands.home');
-        Cache::forget('tires.widths');
-        Cache::forget('tires.profiles');
-        Cache::forget('tires.rims');
         
         if (count($errors) > 0) {
             return redirect()->back()->with('error', 'Se importaron algunos registros, pero hubo errores: ' . implode(' | ', array_slice($errors, 0, 5)));

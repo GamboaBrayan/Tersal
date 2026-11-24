@@ -30,7 +30,7 @@ const getFirstImage = (t) => {
 
 const images = props.tire.image_urls && props.tire.image_urls.length 
   ? props.tire.image_urls
-  : [defaultImage, defaultImage, defaultImage]; // Mock multiple images if missing
+  : [defaultImage];
 
 const totalAmount = () => {
   const price = props.tire.has_discount ? props.tire.offer_price : props.tire.price;
@@ -49,7 +49,13 @@ const getDiscountPercentage = (price, offerPrice) => {
 
 <template>
   <div class="min-h-screen flex flex-col bg-gray-50">
-    <Head :title="`${tire.brand?.name} ${tire.model}`" />
+    <Head :title="`${tire.brand?.name || ''} ${tire.model}`">
+      <meta name="description" :content="`Neumático ${tire.brand?.name || ''} ${tire.model} medida ${tire.width}${tire.profile && tire.profile > 0 ? '/' + tire.profile : ''} R${tire.rim}. Cotiza y coordina instalación por WhatsApp en Tersal.`" />
+      <meta property="og:title" :content="`${tire.brand?.name || ''} ${tire.model} ${tire.width}${tire.profile && tire.profile > 0 ? '/' + tire.profile : ''} R${tire.rim} - Tersal`" />
+      <meta property="og:description" :content="tire.description || `Neumático ${tire.brand?.name || ''} ${tire.model} disponible en Tersal. Asesoría inmediata por WhatsApp.`" />
+      <meta property="og:image" :content="images[0]" />
+      <meta property="og:type" content="product" />
+    </Head>
     <Header />
     <WhatsAppFloatingBtn />
 
@@ -105,8 +111,11 @@ const getDiscountPercentage = (price, offerPrice) => {
               <h1 class="text-3xl md:text-4xl font-black text-gray-900 leading-tight mb-2">{{ tire.model }}</h1>
               <div class="text-xl text-gray-600 font-medium">{{ tire.width }}{{ tire.profile && tire.profile > 0 ? '/' + tire.profile : '' }} R{{ tire.rim }} {{ tire.load_index }}{{ tire.speed_rating }}</div>
             </div>
-            <div class="bg-green-50 text-green-700 px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1 border border-green-200 shadow-sm">
+            <div v-if="tire.is_available" class="bg-green-50 text-green-700 px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1 border border-green-200 shadow-sm">
               <CheckCircle2 class="w-3 h-3" /> Stock Disponible
+            </div>
+            <div v-else class="bg-amber-50 text-amber-700 px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1 border border-amber-200 shadow-sm">
+              Consultar disponibilidad
             </div>
           </div>
 

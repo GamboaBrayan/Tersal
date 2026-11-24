@@ -35,19 +35,24 @@ class HomeController extends Controller
             return Tire::select('rim')->distinct()->orderBy('rim')->pluck('rim');
         });
 
-        $heroImagesSetting = \App\Models\Setting::where('key', 'hero_images')->first();
-        $heroImages = [];
-        if ($heroImagesSetting) {
-            $paths = json_decode($heroImagesSetting->value, true);
-            if (is_array($paths)) {
-                $heroImages = array_map(function($path) {
-                    if (str_starts_with($path, 'http')) return $path;
-                    return \Illuminate\Support\Facades\Storage::disk('r2')->url($path);
-                }, $paths);
+        $heroImages = \Illuminate\Support\Facades\Cache::rememberForever('settings.hero_images', function() {
+            $heroImagesSetting = \App\Models\Setting::where('key', 'hero_images')->first();
+            if (!$heroImagesSetting) {
+                return [];
             }
-        }
+            $paths = json_decode($heroImagesSetting->value, true);
+            if (!is_array($paths)) {
+                return [];
+            }
+            return array_map(function($path) {
+                if (str_starts_with($path, 'http')) return $path;
+                return \Illuminate\Support\Facades\Storage::disk('r2')->url($path);
+            }, $paths);
+        });
 
-        $latestTires = Tire::with(['brand', 'category'])->latest()->take(12)->get();
+        $latestTires = \Illuminate\Support\Facades\Cache::remember('tires.latest_home', 3600, function() {
+            return Tire::with(['brand', 'category'])->where('status', true)->latest()->take(12)->get();
+        });
 
         return Inertia::render('Home/Index', [
             'brands' => $brands,
