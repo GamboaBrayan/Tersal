@@ -6,13 +6,15 @@ import Footer from '../../Shared/Footer.vue';
 import WhatsAppFloatingBtn from '../../Shared/WhatsAppFloatingBtn.vue';
 
 const page = usePage();
-const company = computed(() => page.props.company || {
-  legal_name: 'TERSAL PERFORMANCE S.A.C.',
-  ruc: '20616772296',
-  address: 'Jr. Flora Tristán 485, Magdalena del Mar, Lima - Perú',
+const company = computed(() => ({
+  ...(page.props.company || {
+    legal_name: 'TERSAL PERFORMANCE S.A.C.',
+    ruc: '20616772296',
+    address: 'Jr. Flora Tristán 485, Magdalena del Mar, Lima - Perú',
+    phone: '+51 902211919',
+  }),
   email: 'administración@llantastersal.com.pe',
-  phone: '+51 902211919',
-});
+}));
 
 const updatedAt = new Date().toLocaleDateString('es-PE', { year: 'numeric', month: 'long' });
 </script>

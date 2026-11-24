@@ -5,14 +5,16 @@ import { Info, ChevronLeft, Send, CheckCircle2 } from 'lucide-vue-next';
 import axios from 'axios';
 
 const page = usePage();
-const company = computed(() => page.props.company || {
-  legal_name: 'TERSAL PERFORMANCE S.A.C.',
-  ruc: '20616772296',
-  address: 'Jr. Flora Tristán 485, Magdalena del Mar, Lima - Perú',
+const company = computed(() => ({
+  ...(page.props.company || {
+    legal_name: 'TERSAL PERFORMANCE S.A.C.',
+    ruc: '20616772296',
+    address: 'Jr. Flora Tristán 485, Magdalena del Mar, Lima - Perú',
+    phone: '+51 902211919',
+    hours: 'Lunes a Viernes 09:00 - 18:00 | Sábado 09:00 - 13:00',
+  }),
   email: 'administración@llantastersal.com.pe',
-  phone: '+51 902211919',
-  hours: 'Lunes a Viernes 09:00 - 18:00 | Sábado 09:00 - 13:00',
-});
+}));
 
 const form = ref({
   es_menor: false,
