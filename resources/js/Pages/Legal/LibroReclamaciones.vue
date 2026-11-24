@@ -1,8 +1,18 @@
 <script setup>
-import { Head, Link } from '@inertiajs/vue3';
-import { ref } from 'vue';
+import { Head, Link, usePage } from '@inertiajs/vue3';
+import { ref, computed } from 'vue';
 import { Info, ChevronLeft, Send, CheckCircle2 } from 'lucide-vue-next';
 import axios from 'axios';
+
+const page = usePage();
+const company = computed(() => page.props.company || {
+  legal_name: 'TERSAL PERFORMANCE S.A.C.',
+  ruc: '20616772296',
+  address: 'Jr. Flora Tristán 485, Magdalena del Mar, Lima - Perú',
+  email: 'administración@llantastersal.com.pe',
+  phone: '+51 902211919',
+  hours: 'Lunes a Viernes 09:00 - 18:00 | Sábado 09:00 - 13:00',
+});
 
 const form = ref({
   es_menor: false,
@@ -54,7 +64,7 @@ const submitForm = async () => {
     <Head title="Libro de Reclamaciones - TERSAL" />
 
     <!-- Banner Principal -->
-    <div class="bg-[#1B3BE3] text-white py-16 px-4 relative overflow-hidden shrink-0">
+    <div class="bg-[#1B3BE3] text-white py-16 px-4 relative overflow-hidden shrink-0 print:hidden">
       <div class="absolute inset-0 opacity-10"></div>
       <div class="max-w-4xl mx-auto relative z-10 text-center">
         <h1 class="text-3xl md:text-5xl font-black mb-4 uppercase tracking-tight">Libro de Reclamaciones</h1>
@@ -69,33 +79,85 @@ const submitForm = async () => {
       <div class="max-w-4xl mx-auto">
         
         <!-- Estado de Éxito -->
-        <div v-if="isSubmitted" class="w-full text-center flex flex-col items-center justify-center min-h-[400px]">
+        <div v-if="isSubmitted" class="w-full text-center flex flex-col items-center justify-center min-h-[400px] bg-white rounded-2xl shadow-sm border border-gray-100 p-8 md:p-12">
           <div class="w-20 h-20 bg-green-100 text-green-600 rounded-full flex items-center justify-center mb-6">
             <CheckCircle2 class="w-10 h-10" />
           </div>
           <h2 class="text-3xl font-black text-gray-900 mb-2">¡Hoja de Reclamación Enviada!</h2>
-          <div class="bg-gray-50 border border-gray-200 px-6 py-4 rounded-xl mb-6">
-            <p class="text-sm text-gray-500 uppercase font-bold tracking-wider mb-1">Código de Seguimiento</p>
-            <p class="text-2xl font-black text-primary tracking-widest">{{ generatedId }}</p>
+          <div class="bg-blue-50/50 border border-blue-200 px-6 py-4 rounded-xl mb-4">
+            <p class="text-xs text-gray-500 uppercase font-bold tracking-wider mb-1">Código de Seguimiento</p>
+            <p class="text-3xl font-black text-primary tracking-widest">{{ generatedId }}</p>
           </div>
-          <p class="text-gray-500 mb-8 max-w-md">Hemos recibido tu solicitud. Se ha enviado una copia del reclamo a tu correo electrónico. Nos pondremos en contacto contigo en un plazo máximo de 15 días hábiles.</p>
-          <button @click="isSubmitted = false; form.nombres = ''; form.apellidos = ''; form.numero_documento = ''; form.detalle = ''; form.monto_reclamado = ''; form.descripcion_bien = ''; form.acepta_privacidad = false;" class="text-primary font-bold hover:underline">
-            Enviar otro reclamo
-          </button>
+          <p class="text-gray-600 mb-6 max-w-lg text-sm leading-relaxed">
+            Hemos recibido tu solicitud satisfactoriamente. Se ha enviado una copia íntegra a tu correo electrónico (<strong class="text-gray-900">{{ form.email }}</strong>). Conforme a la normativa de INDECOPI, nos pondremos en contacto contigo en un plazo máximo de 15 días hábiles.
+          </p>
+          
+          <div class="flex flex-wrap items-center justify-center gap-4 mb-6 print:hidden">
+            <button @click="window.print()" class="px-5 py-2.5 bg-gray-900 text-white text-sm font-bold rounded-xl hover:bg-gray-800 transition-colors flex items-center gap-2">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
+              Imprimir / Guardar Constancia
+            </button>
+            <button @click="isSubmitted = false; form.nombres = ''; form.apellidos = ''; form.numero_documento = ''; form.detalle = ''; form.monto_reclamado = ''; form.descripcion_bien = ''; form.acepta_privacidad = false;" class="px-5 py-2.5 border border-gray-300 text-gray-700 text-sm font-bold rounded-xl hover:bg-gray-50 transition-colors">
+              Registrar otro reclamo
+            </button>
+          </div>
         </div>
 
         <!-- Formulario -->
-        <div v-else class="w-full">
+        <div v-else class="w-full bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
           
           <div class="px-6 pt-6 md:px-10 md:pt-10 pb-4">
-            <Link href="/" class="inline-flex items-center gap-2 text-gray-500 hover:text-gray-800 font-bold transition-colors mb-6">
+            <Link href="/" class="inline-flex items-center gap-2 text-gray-500 hover:text-gray-800 font-bold transition-colors mb-6 text-sm">
               <ChevronLeft class="w-4 h-4" /> Volver al Inicio
             </Link>
           </div>
 
-          <div class="px-6 pb-6 md:px-10 md:pb-10 border-b border-gray-200">
-            <h2 class="text-xl font-bold text-gray-800">Hoja de Reclamación</h2>
-            <p class="text-sm text-gray-500 mt-2">Por favor, completa el siguiente formulario con información veraz y detallada. Todos los campos con asterisco (<span class="text-red-500">*</span>) son obligatorios.</p>
+          <!-- Cabecera Informativa Legal del Proveedor -->
+          <div class="px-6 pb-6 md:px-10 border-b border-gray-200">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4">
+              <div>
+                <h2 class="text-2xl font-black text-gray-900 tracking-tight">Hoja de Reclamación Virtual</h2>
+                <p class="text-xs text-gray-500 mt-0.5">Libro de Reclamaciones conforme al D.S. N° 011-2011-PCM y modificatorias</p>
+              </div>
+              <div class="bg-gray-100 text-gray-700 text-xs px-3 py-1.5 rounded-lg font-mono font-bold w-fit">
+                Fecha: {{ new Date().toLocaleDateString('es-PE') }}
+              </div>
+            </div>
+
+            <!-- Ficha informativa estática del establecimiento / proveedor -->
+            <div class="bg-gray-50 rounded-xl p-4 sm:p-5 border border-gray-200 space-y-3">
+              <p class="text-[11px] font-bold uppercase tracking-wider text-gray-500">1. Identificación del Proveedor</p>
+              <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 text-xs">
+                <div>
+                  <span class="text-gray-500 block font-semibold uppercase tracking-wider text-[10px]">Razón Social</span>
+                  <span class="font-bold text-gray-900 text-sm">{{ company.legal_name }}</span>
+                </div>
+                <div>
+                  <span class="text-gray-500 block font-semibold uppercase tracking-wider text-[10px]">RUC</span>
+                  <span class="font-bold text-gray-900 text-sm">{{ company.ruc }}</span>
+                </div>
+                <div>
+                  <span class="text-gray-500 block font-semibold uppercase tracking-wider text-[10px]">Dirección Comercial</span>
+                  <span class="font-medium text-gray-800">{{ company.address }}</span>
+                </div>
+                <div>
+                  <span class="text-gray-500 block font-semibold uppercase tracking-wider text-[10px]">Correo Electrónico</span>
+                  <span class="font-medium text-gray-800">{{ company.email }}</span>
+                </div>
+                <div>
+                  <span class="text-gray-500 block font-semibold uppercase tracking-wider text-[10px]">Teléfono de Contacto</span>
+                  <span class="font-medium text-gray-800">{{ company.phone }}</span>
+                </div>
+                <div>
+                  <span class="text-gray-500 block font-semibold uppercase tracking-wider text-[10px]">Horario de Atención</span>
+                  <span class="font-medium text-gray-800">{{ company.hours }}</span>
+                </div>
+              </div>
+            </div>
+
+            <p class="text-xs text-gray-500 mt-4 leading-relaxed">
+              Por favor, completa el siguiente formulario con información veraz y detallada. Todos los campos marcados con (<span class="text-red-500">*</span>) son obligatorios.
+            </p>
           </div>
 
           <form @submit.prevent="submitForm" class="p-6 md:p-10">

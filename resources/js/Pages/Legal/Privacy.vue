@@ -7,11 +7,11 @@ import WhatsAppFloatingBtn from '../../Shared/WhatsAppFloatingBtn.vue';
 
 const page = usePage();
 const company = computed(() => page.props.company || {
-  legal_name: 'Tersal Performance S.A.C.',
-  ruc: '20600000000',
-  address: 'Jr. Tacna 1150, Magdalena del Mar, Lima - Perú',
-  email: 'ventas@llantastersal.com.pe',
-  phone: '+51 904830422',
+  legal_name: 'TERSAL PERFORMANCE S.A.C.',
+  ruc: '20616772296',
+  address: 'Jr. Flora Tristán 485, Magdalena del Mar, Lima - Perú',
+  email: 'administración@llantastersal.com.pe',
+  phone: '+51 902211919',
 });
 
 const updatedAt = new Date().toLocaleDateString('es-PE', { year: 'numeric', month: 'long' });

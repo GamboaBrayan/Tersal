@@ -15,10 +15,17 @@
 </head>
 <body>
     <div class="container">
-        <h1>Nuevo Registro: Libro de Reclamaciones</h1>
+        <h1>Hoja de Reclamación Virtual</h1>
         
+        <div style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 12px; margin-bottom: 20px; font-size: 13px; color: #475569;">
+            <p style="margin: 0 0 4px 0;"><strong style="color: #0f172a;">Razón Social:</strong> TERSAL PERFORMANCE S.A.C.</p>
+            <p style="margin: 0 0 4px 0;"><strong style="color: #0f172a;">RUC:</strong> 20616772296</p>
+            <p style="margin: 0 0 4px 0;"><strong style="color: #0f172a;">Dirección:</strong> Jr. Flora Tristán 485, Magdalena del Mar, Lima - Perú</p>
+            <p style="margin: 0;"><strong style="color: #0f172a;">Correo de Contacto:</strong> administración@llantastersal.com.pe</p>
+        </div>
+
         <div class="highlight">
-            CÓDIGO: {{ $generated_id }}
+            CÓDIGO DE RECLAMACIÓN: {{ $generated_id }}
         </div>
 
         <div class="section">
